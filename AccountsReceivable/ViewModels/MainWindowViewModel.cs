@@ -29,6 +29,10 @@ namespace AccountsReceivable.ViewModels
         public ICommand ShowAccointsViewCommand { get; }
         public ICommand ShowArchiveCommand { get; }
         public ICommand ShowReconciliationCommand { get; }
+        public ICommand ToggleReferencesCommand { get; }
+        public ICommand ShowCounterpartyCommand { get; }
+        public ICommand ShowContractCommand { get; }
+        public ICommand ShowNomenclatureCommand { get; }
 
         public MainWindowViewModel()
         {
@@ -37,7 +41,10 @@ namespace AccountsReceivable.ViewModels
             ShowAccointsViewCommand = new RelayCommand(_ => ShowPage<AccountsView>());
             ShowArchiveCommand = new RelayCommand(_ => ShowPage<ArchiveAccountView>());
             ShowReconciliationCommand = new RelayCommand(_ => ShowPage<ReconciliationReport>());
-
+            ToggleReferencesCommand = new RelayCommand(_ => IsDropdownOpen = true, _ => !IsDropdownOpen);
+            ShowCounterpartyCommand = new RelayCommand(_ => { ShowPage<Counterparties>(); IsDropdownOpen = false; });
+            ShowContractCommand = new RelayCommand(_ => { ShowPage<ContractData>(); IsDropdownOpen = false; });
+            ShowNomenclatureCommand = new RelayCommand(_ => { ShowPage<Nomenclature>(); IsDropdownOpen = false; });
         }
         private void ShowPage<T>(bool reset = false) where T : new()
         {
@@ -50,6 +57,7 @@ namespace AccountsReceivable.ViewModels
                 pages[type] = page;
             }
             CurrentView = page;
+            IsDropdownOpen = false;
         }
     }
 }

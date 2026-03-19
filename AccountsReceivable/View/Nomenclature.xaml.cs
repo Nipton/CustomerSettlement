@@ -28,6 +28,12 @@ namespace AccountsReceivable.View
             fileIOService= new FileIOService();
             nomenclatureList = new List<string>();
         }
+        public Nomenclature()
+        {
+            InitializeComponent();
+            fileIOService = new FileIOService();
+            nomenclatureList = new List<string>();
+        }
 
         private void Add_Nomenclature(object sender, RoutedEventArgs e)
         {

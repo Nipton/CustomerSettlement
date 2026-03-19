@@ -29,6 +29,10 @@ namespace AccountsReceivable.View
             InitializeComponent();
             _main = main;
         }
+        public Counterparties()
+        {
+            InitializeComponent();
+        }
         private void AddButton(object sender, RoutedEventArgs e)
         {
             AddCounterparty addCounterparty = new AddCounterparty(companiesList, null); 

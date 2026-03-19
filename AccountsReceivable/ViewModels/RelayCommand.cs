@@ -16,7 +16,7 @@ namespace AccountsReceivable.ViewModels
             this.execute = execute;
             this.canExecute = canExecute;
         }
-        public event EventHandler? CanExecuteChanged
+        public event EventHandler? CanExecuteChanged  // по сути прокси-событие, которое просто передает подписки от кнопки к CommandManager.
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
