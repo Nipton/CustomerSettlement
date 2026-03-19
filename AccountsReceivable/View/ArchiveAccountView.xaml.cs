@@ -1,4 +1,4 @@
-﻿using AccountsReceivable.Model;
+﻿using AccountsReceivable.Models;
 using AccountsReceivable.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;

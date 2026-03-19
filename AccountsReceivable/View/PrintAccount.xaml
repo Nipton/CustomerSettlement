@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AccountsReceivable.View" xmlns:model="clr-namespace:AccountsReceivable.Model" d:DataContext="{d:DesignInstance Type=model:AccountPartOne}"
+        xmlns:local="clr-namespace:AccountsReceivable.View" xmlns:model="clr-namespace:AccountsReceivable.Models" d:DataContext="{d:DesignInstance Type=model:AccountPartOne}"
         mc:Ignorable="d" SizeToContent="Height"
         Title="Печать счёта" Background="Gray"
         WindowStartupLocation ="CenterScreen" Loaded="PrintAccount_Loaded" Language="ru-RU">

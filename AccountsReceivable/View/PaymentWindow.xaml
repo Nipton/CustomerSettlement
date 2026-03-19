@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:AccountsReceivable.View"
-        xmlns:m="clr-namespace:AccountsReceivable.Model" d:DataContext="{d:DesignInstance Type=m:Payment}"
+        xmlns:m="clr-namespace:AccountsReceivable.Models" d:DataContext="{d:DesignInstance Type=m:Payment}"
         mc:Ignorable="d"
         Title="Оплата" Width="330" SizeToContent="Height" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Language="ru-RU">
     <Window.Resources>

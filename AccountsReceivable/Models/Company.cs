@@ -12,7 +12,7 @@ using System.Windows.Navigation;
 using System.Xml.Serialization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace AccountsReceivable.Model
+namespace AccountsReceivable.Models
 {
     [Serializable]
     public class Company : IDataErrorInfo, INotifyPropertyChanged, ICloneable

@@ -1,4 +1,4 @@
-﻿using AccountsReceivable.Model;
+﻿using AccountsReceivable.Models;
 using AccountsReceivable.View;
 using System;
 using System.Collections.Generic;

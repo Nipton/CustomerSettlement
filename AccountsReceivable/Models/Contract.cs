@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace AccountsReceivable.Model
+namespace AccountsReceivable.Models
 {
     public class Contract : IDataErrorInfo, INotifyPropertyChanged
     {

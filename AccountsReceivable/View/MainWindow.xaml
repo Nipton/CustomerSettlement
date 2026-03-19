@@ -3,9 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AccountsReceivable"
+        xmlns:local="clr-namespace:AccountsReceivable.ViewModels"
         mc:Ignorable="d"
         Title="Дебиторская задолженность" Height="720" Width="1280" MinHeight="350" MinWidth="760" WindowStartupLocation ="CenterScreen" Background="#E5D9EA" Language="ru-RU">
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
     <Window.Resources>
         <Style x:Key="PopupButton" TargetType="Button">
             <Setter Property="FontSize" Value="22"/>
@@ -101,11 +104,15 @@
                     <GradientStop Color="#B564D4" Offset="1" />
                 </LinearGradientBrush>
             </StackPanel.Background>
-            <Button Template="{StaticResource ResourceKey=HeaderButtons}" Click="Button_Organization">Организация</Button>
+            <!--<Button Template="{StaticResource ResourceKey=HeaderButtons}" Click="Button_Organization">Организация</Button>
             <Button Template="{StaticResource ResourceKey=HeaderButtons}" Click="AccountsButton_Click">Счета</Button>
-            <!--<Button Template="{StaticResource ResourceKey=HeaderButtons}">Оплата</Button>-->
-            <Button Template="{StaticResource ResourceKey=HeaderButtons}" Click="ReportButton_Click">Отчет</Button>
-            <Button Template="{StaticResource ResourceKey=HeaderButtons}" PreviewMouseLeftButtonDown="References_MouseDown" MouseLeave="References_MouseLeave" Name="ReferencesButton">Справочники</Button>
+            --><!--<Button Template="{StaticResource ResourceKey=HeaderButtons}">Оплата</Button>--><!--
+            <Button Template="{StaticResource ResourceKey=HeaderButtons}" Click="ReportButton_Click">Отчет</Button>-->
+            <!--<Button Template="{StaticResource ResourceKey=HeaderButtons}" PreviewMouseLeftButtonDown="References_MouseDown" MouseLeave="References_MouseLeave" Name="ReferencesButton">Справочники</Button>-->
+            <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowOrganizationCommand}">Организация</Button>
+            <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowAccointsViewCommand}">Счета</Button>
+            <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReportViewCommand}">Отчет</Button>
+            <Button Template="{StaticResource ResourceKey=HeaderButtons}" Name="ReferencesButton">Справочники</Button>
             <Popup x:Name="popup"  MaxWidth="180" StaysOpen="True"
          AllowsTransparency="True" Placement="Bottom" PlacementTarget="{Binding ElementName=ReferencesButton}">
                 <StackPanel x:Name="st"   HorizontalAlignment="Center" Width="175">
@@ -115,15 +122,20 @@
                             <GradientStop Color="#F5DCFF" Offset="1" />
                         </LinearGradientBrush>
                     </StackPanel.Background>
-                    <Button Style="{StaticResource PopupButton}" Click="Counterparty_Button">Контрагенты</Button>
+                    <!--<Button Style="{StaticResource PopupButton}" Click="Counterparty_Button">Контрагенты</Button>
                     <Button Style="{StaticResource PopupButton}" Click="Contract_Button">Договоры</Button>
-                    <!--<Button Style="{StaticResource PopupButton}">Шаблоны</Button>-->
-                    <Button Style="{StaticResource PopupButton}" Click="Nomenclature_Button">Номенклатура</Button>
+                    <Button Style="{StaticResource PopupButton}" Click="Nomenclature_Button">Номенклатура</Button>-->
+                    <Button Style="{StaticResource PopupButton}">Контрагенты</Button>
+                    <Button Style="{StaticResource PopupButton}">Договоры</Button>
+                    <Button Style="{StaticResource PopupButton}">Номенклатура</Button>
                 </StackPanel>
             </Popup>
-            <Button Content="Архив" Template="{StaticResource ResourceKey=HeaderButtons}" Click="ArchiveButton_Click"/>
-            <Button Content="Акт сверки" Template="{StaticResource ResourceKey=HeaderButtons}" Click="ReconciliationRreport_Click"/>
+            <!--<Button Content="Архив" Template="{StaticResource ResourceKey=HeaderButtons}" Click="ArchiveButton_Click"/>
+            <Button Content="Акт сверки" Template="{StaticResource ResourceKey=HeaderButtons}" Click="ReconciliationRreport_Click"/>-->
+            <Button Content="Архив" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowArchiveCommand}"/>
+            <Button Content="Акт сверки" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReconciliationCommand}"/>
         </StackPanel>
-        <Border Name="MainSpace" Grid.Row="1"></Border>
+        <!--<Border Name="MainSpace" Grid.Row="1"></Border>-->
+        <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
     </Grid>
 </Window>

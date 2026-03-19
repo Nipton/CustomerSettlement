@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AccountsReceivable.View"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:Model="clr-namespace:AccountsReceivable.Model" xmlns:AccountsReceivable="clr-namespace:AccountsReceivable" x:Name="userControl" x:Class="AccountsReceivable.View.ContractData"
+             xmlns:Model="clr-namespace:AccountsReceivable.Models" xmlns:AccountsReceivable="clr-namespace:AccountsReceivable" x:Name="userControl" x:Class="AccountsReceivable.View.ContractData"
              mc:Ignorable="d" 
              d:DesignHeight="660" d:DesignWidth="1280" Background="#E5D9EA" Loaded="Contract_Loaded">
     <UserControl.Resources>
