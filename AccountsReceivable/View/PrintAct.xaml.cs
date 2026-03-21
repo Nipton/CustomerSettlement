@@ -25,8 +25,8 @@ namespace AccountsReceivable.View
         private AccountPartOne accOne;
         private List<AccountPartTwo> accTwo;
         private FileIOService fileIOService;
-        private ObservableCollection<Company>? companiesList;
-        private Company organization;
+        private ObservableCollection<CompanyOld>? companiesList;
+        private CompanyOld organization;
         private bool printStatus = false;
         public bool PrintStatus
         {
@@ -37,7 +37,7 @@ namespace AccountsReceivable.View
         {
             InitializeComponent();
             fileIOService = new FileIOService();
-            organization = new Company();
+            organization = new CompanyOld();
             accOne = selectedAccOne;
             accTwo = accOne.AccountsList;
             DataContext = accOne;
@@ -69,7 +69,7 @@ namespace AccountsReceivable.View
             try
             {
                 companiesList = fileIOService.LoadData();
-                organization = fileIOService.LoadOrganization();
+                organization = fileIOService.LoadOrganization();   
             }
             catch(Exception ex)
             {

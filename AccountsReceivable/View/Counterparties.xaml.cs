@@ -22,7 +22,7 @@ namespace AccountsReceivable.View
     public partial class Counterparties : UserControl
     { 
         private MainWindow _main;
-        private ObservableCollection<Company> companiesList;
+        private ObservableCollection<CompanyOld> companiesList;
         private FileIOService fileIOService;
         public Counterparties(MainWindow main)
         {
@@ -45,7 +45,7 @@ namespace AccountsReceivable.View
                 MessageBox.Show("Для редактирования необходимо выделить только один элемент.", "", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
-            Company company = (Company)conterpariesList.SelectedItem;
+            CompanyOld company = (CompanyOld)conterpariesList.SelectedItem;
             AddCounterparty addCounterparty = new AddCounterparty(companiesList, company);
             addCounterparty.Title = "Редактировать контрагента";
             addCounterparty.ShowDialog();
@@ -53,7 +53,7 @@ namespace AccountsReceivable.View
         }
         private void RemoveButton(object sender, RoutedEventArgs e)
         {
-            List<Company> selectedList = conterpariesList.SelectedItems.OfType<Company>().ToList();
+            List<CompanyOld> selectedList = conterpariesList.SelectedItems.OfType<CompanyOld>().ToList();
             if (MessageBox.Show($"Вы действительно хотите удалить выделенные элементы в количестве {selectedList.Count} шт.? Отменить действие будет невозможно.", "Внимание!", 
                 MessageBoxButton.YesNo, MessageBoxImage.Question ) == MessageBoxResult.Yes)
             {

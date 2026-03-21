@@ -25,7 +25,7 @@ namespace AccountsReceivable.View
     {
         private ApplicationContext db;
         private FileIOService fileIOService;
-        ObservableCollection<Company> companyList;
+        ObservableCollection<CompanyOld> companyList;
         List<string> nomenclatureList;
         Contract contract; 
         public ContractData()

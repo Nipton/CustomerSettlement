@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="AccountsReceivable.View.CreatingСounterparty"
+﻿<Window x:Class="AccountsReceivable.View.CompanyEditView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,8 +6,9 @@
              xmlns:local="clr-namespace:AccountsReceivable.View"
              xmlns:m="clr-namespace:AccountsReceivable.Models"
              mc:Ignorable="d" 
-             d:DesignWidth="720" Background="White" Loaded="UserControl_Loaded">
-    <UserControl.Resources>
+             d:DesignWidth="720" Background="White" Loaded="UserControl_Loaded" 
+             Title="Добавить контрагента" SizeToContent="Height" Width="720" WindowStartupLocation ="CenterScreen">
+    <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="Margin" Value="0 0 15 0"/>
@@ -29,10 +30,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-    </UserControl.Resources>
-    <UserControl.DataContext>
-        <m:Company/>
-    </UserControl.DataContext>
+    </Window.Resources>
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="20" Orientation="Vertical">
@@ -136,4 +134,4 @@
             </Border>
         </StackPanel>
     </Grid>
-</UserControl>
+</Window>

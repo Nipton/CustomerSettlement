@@ -85,7 +85,7 @@ namespace AccountsReceivable.Models
         //{
         //    ContractID = newAccOne.ContractID;
         //    Contract = newAccOne.Contract;
-        //    Company = newAccOne.Company;
+        //    CompanyOld = newAccOne.CompanyOld;
         //    ID = newAccOne.ID;
         //    Sum = newAccOne.Sum;
         //    errorCollection = new Dictionary<string, string?>();

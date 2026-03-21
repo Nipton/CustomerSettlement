@@ -23,7 +23,7 @@ namespace AccountsReceivable.View
     {
         private FileIOService fileIOService;
         private ApplicationContext db;
-        private ObservableCollection<Company> companiesList;
+        private ObservableCollection<CompanyOld> companiesList;
         private List<string> nomenclatureList;
         private List<string> categoryList;
         private List<AccountPartOne> accountsPartOneList;

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountsReceivable.ViewModels
+namespace AccountsReceivable.Interfaces
 {
-    public class ReportViewModel : ViewModelBase
+    internal interface ILoadable
     {
+        Task LoadAsync();
     }
 }

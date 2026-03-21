@@ -22,16 +22,16 @@ namespace AccountsReceivable.View
     public partial class AddCounterparty : Window
     {
         private ContentControl creatingCounterparty;
-        public AddCounterparty(ObservableCollection<Company> companiesList, Company? selectedCompany)
+        public AddCounterparty(ObservableCollection<CompanyOld> companiesList, CompanyOld? selectedCompany)
         {
             InitializeComponent();
-            creatingCounterparty = new CreatingСounterparty(this, companiesList, selectedCompany);
+            creatingCounterparty = new CompanyEditView(this, companiesList, selectedCompany);
             addCParty.Child = creatingCounterparty;
         }
-        public AddCounterparty(Company? company)
+        public AddCounterparty(CompanyOld? company)
         {
             InitializeComponent();
-            creatingCounterparty = new CreatingСounterparty(this, company);
+            creatingCounterparty = new CompanyEditView(this, company);
             addCParty.Child = creatingCounterparty;
         }
     }

@@ -19,18 +19,18 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace AccountsReceivable.View
 {
-    public partial class CreatingСounterparty : UserControl
+    public partial class CompanyEditView : Window
     {
         private FileIOService fileIOService = new FileIOService();
         private Window _window;
-        private ObservableCollection<Company> _companiesList;
-        private Company currentCompany;
-        private Company original;
+        private ObservableCollection<CompanyOld> _companiesList;
+        private CompanyOld currentCompany;
+        private CompanyOld original;
         private ObservableCollection<string>? categoryList;
-        public CreatingСounterparty(Window window, ObservableCollection<Company> companiesList, Company? selectedCompany)
+        public CompanyEditView(Window window, ObservableCollection<CompanyOld> companiesList, CompanyOld? selectedCompany)
         {
             InitializeComponent();
-            original = new Company();
+            original = new CompanyOld();
             _window = window;
             _companiesList= companiesList;
             if(selectedCompany != null)
@@ -38,21 +38,25 @@ namespace AccountsReceivable.View
                 original = selectedCompany;
                 original.errorCollection = new Dictionary<string, string?>();
             }
-            currentCompany = (Company)original.Clone();
+            currentCompany = (CompanyOld)original.Clone();
             DataContext = currentCompany;
         }
-        public CreatingСounterparty(Window window, Company? organization) 
+        public CompanyEditView()
+        {
+            InitializeComponent();
+        }
+        public CompanyEditView(Window window, CompanyOld? organization) 
         {
             InitializeComponent();
             chapterTextBlock.Text = "Организация";
-            original = new Company();
+            original = new CompanyOld();
             _window = window;
             if(organization != null)
             {
                 original = organization;
                 original.errorCollection = new Dictionary<string, string?>();
             }
-            currentCompany = (Company)original.Clone();
+            currentCompany = (CompanyOld)original.Clone();
             DataContext = currentCompany;
         }
 

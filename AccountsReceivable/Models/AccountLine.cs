@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -7,18 +8,22 @@ using System.Threading.Tasks;
 
 namespace AccountsReceivable.Models
 {
+    [Table("AccountLines")]
     public class AccountLine
     {
         public int Id { get; set; }
-        public int Number { get; set; }
-        public string? Nomenclature { get; set; }
-        public string? Unit { get; set; }
+        public int NomenclatureId { get; set; }
+        public virtual Nomenclature Nomenclature { get; set; } = null!;
+        [Precision(18, 3)]
         public decimal Quantity { get; set; } = 1m;
+        [Precision(18, 2)]
         public decimal Price { get; set; } = 0m;
+        [Precision(5, 2)]
         public decimal VatRate { get; set; } = 0m;
+        [Precision(18, 2)]
         public decimal Sum { get; set; }
-        public DateTime? Period { get; set; } = null;
-        public decimal? SumWithoutVat { get; set; }
-        public decimal? SumVat { get; set; }
+        public DateTime? Period { get; set; }
+        public int AccountHeaderId { get; set; }
+        public virtual AccountHeader? AccountHeader { get; set; }
     }
 }

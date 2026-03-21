@@ -25,7 +25,7 @@ namespace AccountsReceivable.View
     {
         private ApplicationContext db;
         private FileIOService fileIOService;
-        private ObservableCollection<Company>? companiesList;
+        private ObservableCollection<CompanyOld>? companiesList;
         private ObservableCollection<AccountPartOne>? accountsPartOneList;
         private ObservableCollection<Payment>? paymentsList;
         private AccountPartOne? accOne;
@@ -157,7 +157,7 @@ namespace AccountsReceivable.View
 
         private void SearchByCompanies(object sender, SelectionChangedEventArgs e)
         {
-            if (companyComboBox.SelectedItem is Company selectedCompany)
+            if (companyComboBox.SelectedItem is CompanyOld selectedCompany)
             {
                 var filtredList = accountsPartOneList?.Where(x => x.Company == selectedCompany.Name).OrderByDescending(x => x.ID);
                 accounts1DataGrid.ItemsSource = null;

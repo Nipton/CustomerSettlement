@@ -24,8 +24,8 @@ namespace AccountsReceivable.View
         private List<Payment>? paymentsList;
         private ObservableCollection<DataForTable> dataForTableList;
         private FileIOService fileIOService;
-        private Company organization;
-        private ObservableCollection<Company>? companiesList;
+        private CompanyOld organization;
+        private ObservableCollection<CompanyOld>? companiesList;
         private DateTime minDate;
         private DateTime maxDate;
         private double? finalDebitBalance;
@@ -36,7 +36,7 @@ namespace AccountsReceivable.View
             InitializeComponent();
             dataForTableList = new ObservableCollection<DataForTable>();
             fileIOService = new FileIOService();
-            organization = new Company();
+            organization = new CompanyOld();
             DataContext = dataForTableList;
             minDate = dateTime;
             accOneList = selectedAccOne;
@@ -50,14 +50,14 @@ namespace AccountsReceivable.View
             try
             {
                 companiesList = fileIOService.LoadData();
-                organization = fileIOService.LoadOrganization();
+                organization = fileIOService.LoadOrganization(); 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 this.Close();
             }
-            Company? company = companiesList?.FirstOrDefault(x => x.ShortName == accOneList[0].Company);
+            CompanyOld? company = companiesList?.FirstOrDefault(x => x.ShortName == accOneList[0].Company);
             dateTextBlock.Text = $"взаимных расчётов по состоянию на {maxDate:d}";
             companiesTextBlock.Text = $"между {organization.ShortName} и {accOneList[0].Company} по договору № {accOneList[0].Contract?.Number} от {accOneList[0].Contract?.Date:d}";
             textTextBlock.Text = $"Мы, нижеподписавшиеся, {organization.Position} {organization.ShortName} {organization.DirectorFullName}, с одной стороны, и {company?.Position} {company?.ShortName} {company?.DirectorFullName}, с другой стороны, составили настоящий акт сверки в том, что состояние взаимных расчетов по данным учета следующее: ";

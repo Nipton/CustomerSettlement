@@ -23,7 +23,7 @@ namespace AccountsReceivable.View
     {
         private ApplicationContext db;
         private FileIOService fileIOService;
-        private ObservableCollection<Company>? companiesList;
+        private ObservableCollection<CompanyOld>? companiesList;
         private ObservableCollection<AccountPartOne>? accountsPartOneList;
         private List<Payment>? paymentsList;
         public ReconciliationReport()
@@ -72,7 +72,7 @@ namespace AccountsReceivable.View
             {
                 filtredList = accountsPartOneList?.Where(x => x.Date <= toDatePecker.SelectedDate);
             }
-            if(companyComboBox.SelectedItem is Company selectedCompany)
+            if(companyComboBox.SelectedItem is CompanyOld selectedCompany)
             {
                 filtredList = filtredList?.Where(x => x.Company == selectedCompany.Name);
             }

@@ -6,9 +6,6 @@
         xmlns:local="clr-namespace:AccountsReceivable.ViewModels"
         mc:Ignorable="d"
         Title="Дебиторская задолженность" Height="720" Width="1280" MinHeight="350" MinWidth="760" WindowStartupLocation ="CenterScreen" Background="#E5D9EA" Language="ru-RU">
-    <Window.DataContext>
-        <local:MainWindowViewModel/>
-    </Window.DataContext>
     <Window.Resources>
         <Style x:Key="PopupButton" TargetType="Button">
             <Setter Property="FontSize" Value="22"/>
@@ -104,7 +101,7 @@
                     <GradientStop Color="#B564D4" Offset="1" />
                 </LinearGradientBrush>
             </StackPanel.Background>
-            <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowOrganizationCommand}">Организация</Button>
+            <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowOrganizationViewCommand}">Организация</Button>
             <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowAccointsViewCommand}">Счета</Button>
             <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReportViewCommand}">Отчет</Button>
             <Button Template="{StaticResource ResourceKey=HeaderButtons}" Name="ReferencesButton" Command="{Binding ToggleReferencesCommand}">Справочники</Button>
@@ -117,14 +114,14 @@
                             <GradientStop Color="#F5DCFF" Offset="1" />
                         </LinearGradientBrush>
                     </StackPanel.Background>
-                    <Button Style="{StaticResource PopupButton}" Command="{Binding ShowCounterpartyCommand}">Контрагенты</Button>
-                    <Button Style="{StaticResource PopupButton}" Command="{Binding ShowContractCommand}">Договоры</Button>
-                    <Button Style="{StaticResource PopupButton}" Command="{Binding ShowNomenclatureCommand}">Номенклатура</Button>
+                    <Button Style="{StaticResource PopupButton}" Command="{Binding ShowCounterpartyViewCommand}">Контрагенты</Button>
+                    <Button Style="{StaticResource PopupButton}" Command="{Binding ShowContractViewCommand}">Договоры</Button>
+                    <Button Style="{StaticResource PopupButton}" Command="{Binding ShowNomenclatureViewCommand}">Номенклатура</Button>
                 </StackPanel>
             </Popup>
-            <Button Content="Архив" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowArchiveCommand}"/>
-            <Button Content="Акт сверки" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReconciliationCommand}"/>
+            <Button Content="Архив" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowArchiveViewCommand}"/>
+            <Button Content="Акт сверки" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReconciliationViewCommand}"/>
         </StackPanel>
-        <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
+        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}"/>
     </Grid>
 </Window>

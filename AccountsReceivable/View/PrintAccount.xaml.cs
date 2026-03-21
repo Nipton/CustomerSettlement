@@ -26,13 +26,13 @@ namespace AccountsReceivable.View
         private AccountPartOne accOne;
         private List<AccountPartTwo> accTwo;
         private FileIOService fileIOService;
-        private ObservableCollection<Company>? companiesList;
-        private Company organization;
+        private ObservableCollection<CompanyOld>? companiesList;
+        private CompanyOld organization;
         public PrintAccount(AccountPartOne selectedAccOne)
         {
             InitializeComponent();
             fileIOService = new FileIOService();
-            organization = new Company();
+            organization = new CompanyOld();
             accOne = selectedAccOne;
             accTwo = accOne.AccountsList;
             DataContext = accOne;
@@ -64,7 +64,7 @@ namespace AccountsReceivable.View
                 companiesList = fileIOService.LoadData();
                 organization = fileIOService.LoadOrganization();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 this.Close();
@@ -129,7 +129,7 @@ namespace AccountsReceivable.View
 
     public static class FormationStrings
     {
-        public static string GenerateCompanyData(Company company)
+        public static string GenerateCompanyData(CompanyOld company)
         {
             string counterparty = "";
             if (company != null)
@@ -154,7 +154,7 @@ namespace AccountsReceivable.View
             }
             return counterparty;
         }
-        public static string GenerateFIO(Company company)
+        public static string GenerateFIO(CompanyOld company)
         {
             string fio = "";
             if (company != null)

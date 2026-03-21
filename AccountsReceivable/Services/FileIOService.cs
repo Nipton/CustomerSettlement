@@ -28,7 +28,7 @@ namespace AccountsReceivable.Services
         //private readonly string PATH_NOMENCLATURE = $"{Environment.CurrentDirectory}\\nomenclature.txt";
         //private readonly string PATH_UNIT = $"{Environment.CurrentDirectory}\\unit.txt";
         private static int MaxID;      
-        public void SaveData(Company company)
+        public void SaveData(CompanyOld company)
         {
             XDocument xDocument;
 
@@ -38,7 +38,7 @@ namespace AccountsReceivable.Services
                 MaxID = 1;
                 company.ID = 1;
                 xDocument = new XDocument(new XElement("Companies",
-                    new XElement("Company",
+                    new XElement("CompanyOld",
                     new XElement("ID", MaxID),
                     new XElement("Name", company.Name),
                     new XElement("ShortName", company.ShortName),
@@ -61,7 +61,7 @@ namespace AccountsReceivable.Services
                 MaxID += 1;
                 company.ID = MaxID;
                 xDocument = XDocument.Load(PATH);
-                xDocument.Root?.Add(new XElement("Company",
+                xDocument.Root?.Add(new XElement("CompanyOld",
                     new XElement("ID", MaxID),
                     new XElement("Name", company.Name),
                     new XElement("ShortName", company.ShortName),
@@ -82,18 +82,18 @@ namespace AccountsReceivable.Services
             xDocument.Save(PATH);
         }
 
-        public ObservableCollection<Company> LoadData()
+        public ObservableCollection<CompanyOld> LoadData()
         {
             bool fileExists = File.Exists(PATH);
             if (!fileExists)
             {
-                return new ObservableCollection<Company>();
+                return new ObservableCollection<CompanyOld>();
             }
             else
             {
                 XDocument xDocument = XDocument.Load(PATH);
 
-                var tempList = xDocument.Root?.Elements("Company").Select(x => new Company
+                var tempList = xDocument.Root?.Elements("CompanyOld").Select(x => new CompanyOld
                 {
                     ID = x.Element("ID")?.Value == null ? 0 : int.Parse(x.Element("ID")?.Value),
                     Name = x.Element("Name")?.Value,
@@ -115,14 +115,14 @@ namespace AccountsReceivable.Services
 
 
                 MaxID = tempList.LastOrDefault().ID;
-                return new ObservableCollection<Company>(tempList);
+                return new ObservableCollection<CompanyOld>(tempList);
             }
         }
 
-        public void EditData(Company company)
+        public void EditData(CompanyOld company)
         {
             XDocument xDocument = XDocument.Load(PATH);
-            var editableCompany = xDocument.Root?.Elements("Company").FirstOrDefault(x => x.Element("ID")?.Value == company.ID.ToString());
+            var editableCompany = xDocument.Root?.Elements("CompanyOld").FirstOrDefault(x => x.Element("ID")?.Value == company.ID.ToString());
 
             if (editableCompany != null)
             {
@@ -144,12 +144,12 @@ namespace AccountsReceivable.Services
                 xDocument.Save(PATH);
             }
         }
-        public void RemoveData(ObservableCollection<Company> entireCollection, List<Company> selectedList)
+        public void RemoveData(ObservableCollection<CompanyOld> entireCollection, List<CompanyOld> selectedList)
         {
             XDocument xDocument = XDocument.Load(PATH);
-            foreach (Company company in selectedList)
+            foreach (CompanyOld company in selectedList)
             {
-                var deletedCompany = xDocument.Root?.Elements("Company").FirstOrDefault(x => x.Element("ID")?.Value == company.ID.ToString());
+                var deletedCompany = xDocument.Root?.Elements("CompanyOld").FirstOrDefault(x => x.Element("ID")?.Value == company.ID.ToString());
                 if(deletedCompany != null)
                 {
                     deletedCompany.Remove();
@@ -160,15 +160,30 @@ namespace AccountsReceivable.Services
             xDocument.Save(PATH);
         }
 
-        public void SaveOrganization(Company company)
+        public void SaveOrganization(CompanyOld company)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Company));
+            XmlSerializer serializer = new XmlSerializer(typeof(CompanyOld));
             using(FileStream fs = new FileStream(PATH_ORGANIZATION, FileMode.Create))
             {
                 serializer.Serialize(fs, company);
             }
         }
-        public Company LoadOrganization()
+        public CompanyOld LoadOrganization()
+        {
+            CompanyOld company = new CompanyOld();
+            bool fileExists = File.Exists(PATH_ORGANIZATION);
+            if (!fileExists)
+            {
+                return new CompanyOld();
+            }
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(CompanyOld));
+            using(FileStream fs = new FileStream(PATH_ORGANIZATION, FileMode.OpenOrCreate))
+            {
+                company = xmlSerializer.Deserialize(fs) as CompanyOld;
+            }
+            return company;
+        }
+        public Company LoadOrganization2()
         {
             Company company = new Company();
             bool fileExists = File.Exists(PATH_ORGANIZATION);
@@ -177,7 +192,7 @@ namespace AccountsReceivable.Services
                 return new Company();
             }
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Company));
-            using(FileStream fs = new FileStream(PATH_ORGANIZATION, FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream(PATH_ORGANIZATION, FileMode.OpenOrCreate))
             {
                 company = xmlSerializer.Deserialize(fs) as Company;
             }

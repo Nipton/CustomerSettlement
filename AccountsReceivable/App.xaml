@@ -1,14 +1,22 @@
 ﻿<Application x:Class="AccountsReceivable.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:AccountsReceivable"
-             StartupUri="View/MainWindow.xaml">
+             xmlns:local="clr-namespace:AccountsReceivable" xmlns:vm="clr-namespace:AccountsReceivable.ViewModels" xmlns:views="clr-namespace:AccountsReceivable.View">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/View/ResourceDictionaryColors.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/View/ResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type vm:OrganizationViewModel}">
+                <views:OrganizationView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ReportViewModel}">
+                <views:ReportView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:CompanyEditViewModel}">
+                <views:CompanyEditView/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

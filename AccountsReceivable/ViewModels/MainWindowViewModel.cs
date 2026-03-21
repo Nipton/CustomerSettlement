@@ -1,4 +1,6 @@
-﻿using AccountsReceivable.View;
+﻿using AccountsReceivable.Interfaces;
+using AccountsReceivable.View;
+using AccountsReceivable.ViewModels.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,53 +13,54 @@ namespace AccountsReceivable.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private object? currentView;
-        private bool isDropdownOpen;
-        private readonly Dictionary<Type, object> pages = new();
-        public object? CurrentView
+        private ViewModelBase currentViewModel;
+        private bool isDropdownOpen;       
+        public ViewModelBase CurrentViewModel
         {
-            get => currentView;
-            set => Set(ref currentView, value);
+            get => currentViewModel;
+            set => Set(ref currentViewModel, value);
         }
         public bool IsDropdownOpen
         {
             get => isDropdownOpen;
             set => Set(ref isDropdownOpen, value);
         }
-        public ICommand ShowOrganizationCommand { get; }
+
+        private readonly IViewModelFactory factory;
+        public ICommand ShowOrganizationViewCommand { get; }
         public ICommand ShowReportViewCommand { get; }
         public ICommand ShowAccointsViewCommand { get; }
-        public ICommand ShowArchiveCommand { get; }
-        public ICommand ShowReconciliationCommand { get; }
+        public ICommand ShowArchiveViewCommand { get; }
+        public ICommand ShowReconciliationViewCommand { get; }
         public ICommand ToggleReferencesCommand { get; }
-        public ICommand ShowCounterpartyCommand { get; }
-        public ICommand ShowContractCommand { get; }
-        public ICommand ShowNomenclatureCommand { get; }
+        public ICommand ShowCounterpartyViewCommand { get; }
+        public ICommand ShowContractViewCommand { get; }
+        public ICommand ShowNomenclatureViewCommand { get; }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(IViewModelFactory factory)
         {
-            ShowOrganizationCommand = new RelayCommand(_ => ShowPage<Organization>());
-            ShowReportViewCommand = new RelayCommand(_ => ShowPage<ReportView>());
-            ShowAccointsViewCommand = new RelayCommand(_ => ShowPage<AccountsView>());
-            ShowArchiveCommand = new RelayCommand(_ => ShowPage<ArchiveAccountView>());
-            ShowReconciliationCommand = new RelayCommand(_ => ShowPage<ReconciliationReport>());
-            ToggleReferencesCommand = new RelayCommand(_ => IsDropdownOpen = true, _ => !IsDropdownOpen);
-            ShowCounterpartyCommand = new RelayCommand(_ => { ShowPage<Counterparties>(); IsDropdownOpen = false; });
-            ShowContractCommand = new RelayCommand(_ => { ShowPage<ContractData>(); IsDropdownOpen = false; });
-            ShowNomenclatureCommand = new RelayCommand(_ => { ShowPage<Nomenclature>(); IsDropdownOpen = false; });
+            this.factory = factory;
+
+            ShowOrganizationViewCommand = new RelayCommand(async _ => await ShowPageAsync<OrganizationViewModel>());
+            ShowReportViewCommand = new RelayCommand(async _ => await ShowPageAsync<ReportViewModel>());
+            //ShowAccointsViewCommand = new RelayCommand(_ => ShowPage<AccountsView>());
+            //ShowArchiveViewCommand = new RelayCommand(_ => ShowPage<ArchiveAccountView>());
+            //ShowReconciliationViewCommand = new RelayCommand(_ => ShowPage<ReconciliationReport>());
+            //ToggleReferencesCommand = new RelayCommand(_ => IsDropdownOpen = true, _ => !IsDropdownOpen);
+            //ShowCounterpartyViewCommand = new RelayCommand(_ => { ShowPage<Counterparties>(); IsDropdownOpen = false; });
+            //ShowContractViewCommand = new RelayCommand(_ => { ShowPage<ContractData>(); IsDropdownOpen = false; });
+            //ShowNomenclatureViewCommand = new RelayCommand(_ => { ShowPage<Nomenclature>(); IsDropdownOpen = false; });
         }
-        private void ShowPage<T>(bool reset = false) where T : new()
+        private async Task ShowPageAsync<T>() where T : ViewModelBase
         {
-            var type = typeof(T);
-            if (CurrentView != null && CurrentView.GetType() == type && !reset)
-                return;
-            if (reset || !pages.TryGetValue(type, out var page))
+            var vm = factory.Create<T>();
+
+            CurrentViewModel = vm;
+
+            if (vm is ILoadable loadable)
             {
-                page = new T();
-                pages[type] = page;
+                await loadable.LoadAsync();
             }
-            CurrentView = page;
-            IsDropdownOpen = false;
         }
     }
 }

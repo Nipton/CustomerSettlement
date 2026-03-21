@@ -26,7 +26,7 @@ namespace AccountsReceivable.View
     {
         private ApplicationContext db;
         private FileIOService fileIOService;
-        ObservableCollection<Company>? companiesList;
+        ObservableCollection<CompanyOld>? companiesList;
         AccountPartOne currentAccountOne;
         int option = 0;
         public AccountsView()
