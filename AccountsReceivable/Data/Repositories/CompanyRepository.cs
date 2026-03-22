@@ -19,8 +19,20 @@ namespace AccountsReceivable.Data.Repositories
         }
         public async Task<Company?> GetCompanyAsync(int id)
         {  
-            using var context = factory.CreateDbContext();
+            using var context = await factory.CreateDbContextAsync();
             return await context.Companies.FindAsync(id);
         }
+        public async Task<int> AddCompanyAsync(Company company)
+        {
+            using var context = await factory.CreateDbContextAsync();
+            await context.Companies.AddAsync(company);
+            return company.Id;
+        }
+        public async Task UpdateCompanyAsync(Company company)
+        {
+            using var context = await factory.CreateDbContextAsync();
+            context.Update(company);
+            await context.SaveChangesAsync();
+        }        
     }
 }

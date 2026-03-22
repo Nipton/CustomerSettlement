@@ -60,129 +60,74 @@ namespace AccountsReceivable.View
             DataContext = currentCompany;
         }
 
-        private void SaveButton(object sender, RoutedEventArgs e)
-        {
-            if (currentCompany.ID == 0)
-            {
-                try
-                {
-                    fileIOService.SaveData(currentCompany);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    _window.Close();
-                    return;
-                }
-                _companiesList.Add(currentCompany);
-                MessageBox.Show("Контрагент добавлен.");
-            }
-            else if (currentCompany.ID == -1)
-            {
-                try
-                {
-                    fileIOService.SaveOrganization(currentCompany);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    _window.Close();
-                    return;
-                }
-                MessageBox.Show("Данные обновлены.");
-            }
-            else
-            {
-                try
-                {
-                    fileIOService.EditData(currentCompany);
-                    _companiesList[_companiesList.IndexOf(original)] = currentCompany;
-                }
-                catch(Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    _window.Close();
-                    return;
-                }
-                
-                MessageBox.Show("Контрагент изменён.");
-            }
-            _window.Close();
-        }
-
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            _window.Close();
-        }
-
         // для категорий все последующие 
-        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                await Task.Run(() =>
-                {
-                    categoryList = new ObservableCollection<string>(fileIOService.LoadFromTextFile(PathFile.category));
-                });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                _window.Close();
-            }
-            category.ItemsSource = categoryList;
-        }
-        private void AddUnit_Click(object sender, RoutedEventArgs e)
-        {
-            var selectedText = category.Text;
-            hiddenStackPanel.Visibility = Visibility.Collapsed;
-            if (categoryList != null && !categoryList.Contains(selectedText) && !string.IsNullOrEmpty(selectedText))
-            {
-                try
-                {
-                    fileIOService.AddToTextFile(selectedText, PathFile.category);
-                    categoryList.Add(selectedText);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    _window.Close();
-                }
-            }
-        }
+        //private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        await Task.Run(() =>
+        //        {
+        //            categoryList = new ObservableCollection<string>(fileIOService.LoadFromTextFile(PathFile.category));
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message);
+        //        _window.Close();
+        //    }
+        //    category.ItemsSource = categoryList;
+        //}
+        //private void AddUnit_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var selectedText = category.Text;
+        //    hiddenStackPanel.Visibility = Visibility.Collapsed;
+        //    if (categoryList != null && !categoryList.Contains(selectedText) && !string.IsNullOrEmpty(selectedText))
+        //    {
+        //        try
+        //        {
+        //            fileIOService.AddToTextFile(selectedText, PathFile.category);
+        //            categoryList.Add(selectedText);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show(ex.Message);
+        //            _window.Close();
+        //        }
+        //    }
+        //}
 
-        private void DeleteUnit_Click(object sender, RoutedEventArgs e)
-        {
-            var selectedText = category.Text;
-            hiddenStackPanel.Visibility = Visibility.Collapsed;
-            if (categoryList != null && categoryList.Contains(selectedText) && !string.IsNullOrEmpty(selectedText))
-            {
-                categoryList.Remove(selectedText);
-                try
-                {
-                    fileIOService.DeleteFromTextFile(categoryList.ToList<string>(), PathFile.category);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    _window.Close();
-                }
-            }
-            category.Text = "";
-        }
+        //private void DeleteUnit_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var selectedText = category.Text;
+        //    hiddenStackPanel.Visibility = Visibility.Collapsed;
+        //    if (categoryList != null && categoryList.Contains(selectedText) && !string.IsNullOrEmpty(selectedText))
+        //    {
+        //        categoryList.Remove(selectedText);
+        //        try
+        //        {
+        //            fileIOService.DeleteFromTextFile(categoryList.ToList<string>(), PathFile.category);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show(ex.Message);
+        //            _window.Close();
+        //        }
+        //    }
+        //    category.Text = "";
+        //}
 
-        private void OptionUnit_Click(object sender, RoutedEventArgs e)
-        {
-            hiddenStackPanel.Visibility = Visibility.Visible;
-            hiddenStackPanel.Focusable = true;
-            hiddenStackPanel.Focus();
-        }
+        //private void OptionUnit_Click(object sender, RoutedEventArgs e)
+        //{
+        //    hiddenStackPanel.Visibility = Visibility.Visible;
+        //    hiddenStackPanel.Focusable = true;
+        //    hiddenStackPanel.Focus();
+        //}
 
-        private void hiddenStackPanel_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if(!hiddenStackPanel.IsMouseOver)
-                hiddenStackPanel.Visibility = Visibility.Collapsed;
-        }
+        //private void hiddenStackPanel_LostFocus(object sender, RoutedEventArgs e)
+        //{
+        //    if(!hiddenStackPanel.IsMouseOver)
+        //        hiddenStackPanel.Visibility = Visibility.Collapsed;
+        //}
 
     }
 }

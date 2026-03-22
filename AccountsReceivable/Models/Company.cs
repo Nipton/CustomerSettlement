@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace AccountsReceivable.Models
 {
     [Table("Companies")]
-    public class Company
+    public class Company : ICloneable
     {
         public int Id { get; set; }
         [Required]
@@ -44,7 +44,32 @@ namespace AccountsReceivable.Models
         [MaxLength(200)]
         public string DirectorFullName { get; set; } = string.Empty;
 
-        public int CategoryId { get; set; }
-        public virtual Category Category { get; set; } = null!;
+        public int? CategoryId { get; set; }
+        public virtual Category? Category { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
+        public void CopyFrom(Company edited)
+        {
+            Id = edited.Id;
+            Name = edited.Name;
+            ShortName = edited.ShortName;
+            LegalAddress = edited.LegalAddress;
+            ActualAddress = edited.ActualAddress;
+            Inn = edited.Inn;
+            Kpp = edited.Kpp;
+            Ogrn = edited.Ogrn;
+            Bank = edited.Bank;
+            Rs = edited.Rs;
+            Ks = edited.Ks;
+            Bik = edited.Bik;
+            Phone = edited.Phone;
+            Position = edited.Position;
+            DirectorFullName = edited.DirectorFullName;
+            CategoryId = edited.CategoryId;
+            Category = edited.Category;
+        }
     }
 }

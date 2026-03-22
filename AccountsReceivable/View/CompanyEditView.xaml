@@ -2,13 +2,17 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:AccountsReceivable.View"
-             xmlns:m="clr-namespace:AccountsReceivable.Models"
-             mc:Ignorable="d" 
-             d:DesignWidth="720" Background="White" Loaded="UserControl_Loaded" 
-             Title="Добавить контрагента" SizeToContent="Height" Width="720" WindowStartupLocation ="CenterScreen">
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:CompanyEditViewModel}"
+        mc:Ignorable="d" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             d:DesignWidth="720" Background="White" 
+             Title="Редактирование компании" SizeToContent="Height" Width="720" WindowStartupLocation ="CenterScreen">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadEditViewCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="Margin" Value="0 0 15 0"/>
@@ -35,28 +39,16 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="20" Orientation="Vertical">
                 <StackPanel>
-                    <TextBlock x:Name="chapterTextBlock" FontWeight="Bold" FontSize="18" MinWidth="0" TextAlignment="Center">Контрагент</TextBlock>
+                    <TextBlock x:Name="chapterTextBlock" FontWeight="Bold" FontSize="18" MinWidth="0" TextAlignment="Center" Text="{Binding Header}"></TextBlock>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock>Наименование</TextBlock>
-                    <TextBox x:Name="name">
-                        <Binding Path="Name" ValidatesOnExceptions="True">
-                            <Binding.ValidationRules>
-                                <DataErrorValidationRule ValidatesOnTargetUpdated="False"/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox>
+                    <TextBox x:Name="name" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                     <TextBlock Style="{x:Null}" Foreground="#71547D" Text="*" Padding="6 0 0 0" FontWeight="Bold" FontSize="13" ToolTip="Обязательное поле для заполнения"></TextBlock>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock>Краткое наименование</TextBlock>
-                    <TextBox x:Name="shortName">
-                        <Binding Path="ShortName" ValidatesOnExceptions="True">
-                            <Binding.ValidationRules>
-                                <DataErrorValidationRule ValidatesOnTargetUpdated="False"/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox>
+                    <TextBox x:Name="shortName" Text="{Binding ShortName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                     <TextBlock Style="{x:Null}" Foreground="#71547D" Text="*" Padding="6 0 0 0" FontWeight="Bold" FontSize="13" ToolTip="Обязательное поле для заполнения"></TextBlock>
                 </StackPanel>
                 <StackPanel>
@@ -69,15 +61,15 @@
                 </StackPanel>
                 <StackPanel>
                     <TextBlock>ИНН</TextBlock>
-                    <TextBox x:Name="inn" Text="{Binding Path=Inn, ValidatesOnDataErrors=True}"></TextBox>
+                    <TextBox x:Name="inn" Text="{Binding Path=Inn, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"></TextBox>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock>КПП</TextBlock>
-                    <TextBox x:Name="kpp" Text="{Binding Path=Kpp, ValidatesOnDataErrors=True}"></TextBox>
+                    <TextBox x:Name="kpp" Text="{Binding Path=Kpp, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"></TextBox>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock>ОГРН</TextBlock>
-                    <TextBox x:Name="ogrn" Text="{Binding Path=Ogrn, ValidatesOnDataErrors=True}"></TextBox>
+                    <TextBox x:Name="ogrn" Text="{Binding Path=Ogrn, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"></TextBox>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock>Банк</TextBlock>
@@ -85,7 +77,7 @@
                 </StackPanel>
                 <StackPanel>
                     <TextBlock>р/с</TextBlock>
-                    <TextBox x:Name="rs" Text="{Binding Path=Rs, ValidatesOnDataErrors=True}">
+                    <TextBox x:Name="rs" Text="{Binding Path=Rs, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
                     </TextBox>
                 </StackPanel>
                 <StackPanel>
@@ -94,16 +86,16 @@
                 </StackPanel>
                 <StackPanel>
                     <TextBlock>к/с</TextBlock>
-                    <TextBox x:Name="ks" Text="{Binding Path=Ks, ValidatesOnDataErrors=True}"></TextBox>
+                    <TextBox x:Name="ks" Text="{Binding Path=Ks, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"></TextBox>
                 </StackPanel>
-                <StackPanel>
+                <StackPanel> 
                     <TextBlock>Телефон</TextBlock>
-                    <TextBox x:Name="phone" Text="{Binding Path=Phone, ValidatesOnDataErrors=True}"></TextBox>
+                    <TextBox x:Name="phone" Text="{Binding Path=Phone, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"></TextBox>
                 </StackPanel>
-                <StackPanel x:Name="stackPanel1">
+                <StackPanel Visibility="{Binding IsShowCategory, Converter={StaticResource BoolToVisibilityConverter}}">
                     <TextBlock>Категория потребителей</TextBlock>
-                    <ComboBox Text="{Binding Category}" x:Name="category" Style="{StaticResource MainComboBox}" Width="330" BorderThickness="1.9" FontSize="14" IsEditable="True" Height="{Binding ActualHeight, ElementName=phone, Mode=OneWay}"/>
-                    <Button Style="{StaticResource OptionButton}" Margin="-1 0 0 0" x:Name="optionsButton" Click="OptionUnit_Click" Width="20" Height="{Binding ActualHeight, ElementName=category, Mode=OneWay}" />
+                    <ComboBox SelectedItem="{Binding Category}" ItemsSource="{Binding CategoryList}" DisplayMemberPath="Name" SelectedValuePath="Id" x:Name="category" Style="{StaticResource MainComboBox}" Width="350" BorderThickness="1.9" FontSize="14" Height="{Binding ActualHeight, ElementName=phone, Mode=OneWay}"/>
+                    <!--<Button Style="{StaticResource OptionButton}" Margin="-1 0 0 0" x:Name="optionsButton" Width="20" Height="{Binding ActualHeight, ElementName=category, Mode=OneWay}" />-->
                 </StackPanel>
                 <StackPanel>
                     <TextBlock FontWeight="Bold" FontSize="18" MinWidth="0" TextAlignment="Center">Руководитель</TextBlock>
@@ -117,12 +109,12 @@
                     <TextBox x:Name="fullName" Text="{Binding Path=DirectorFullName}"></TextBox>
                 </StackPanel>
                 <StackPanel>
-                    <Button Style="{StaticResource SaveButton}" Margin="400 25 15 0" HorizontalAlignment="Right" Content="Сохранить" Click="SaveButton"/>
-                    <Button Style="{StaticResource PrimaryButtonStyle}" Content="Отмена" VerticalAlignment="Bottom" Click="CancelButton_Click"/>
+                    <Button Style="{StaticResource SaveButton}" Margin="400 25 15 0" HorizontalAlignment="Right" Content="Сохранить" Command="{Binding SaveCommand}"/>
+                    <Button Style="{StaticResource PrimaryButtonStyle}" Content="Отмена" VerticalAlignment="Bottom" Command="{Binding CancelCommand}"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
-        <StackPanel LostFocus="hiddenStackPanel_LostFocus" x:Name="hiddenStackPanel" Visibility="Collapsed"  HorizontalAlignment="Left" Orientation="Vertical" Margin="607,546,0,180">
+        <!--<StackPanel LostFocus="hiddenStackPanel_LostFocus" x:Name="hiddenStackPanel" Visibility="Collapsed"  HorizontalAlignment="Left" Orientation="Vertical" Margin="607,546,0,180">
             <Border BorderBrush="#50026E" BorderThickness="1.8" Background="#996ca9" Height="55" Width="93">
                 <Border.Effect>
                     <DropShadowEffect Opacity="0.7" />
@@ -132,6 +124,6 @@
                     <Button Style="{StaticResource UnitButton}" Content="Удалить" Click ="DeleteUnit_Click"/>
                 </StackPanel>
             </Border>
-        </StackPanel>
+        </StackPanel>-->
     </Grid>
 </Window>

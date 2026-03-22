@@ -149,7 +149,7 @@
                             <Setter Property="Border.BorderBrush" TargetName="border" Value="#E567F2"/>
                         </Trigger>
                         <Trigger Property="Validation.HasError" Value="True">
-                            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource  Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource  Self}, Path=(Validation.Errors).CurrentItem.ErrorContent}"/>
                             <Setter Property="Foreground" Value="Red"/>
                             <Setter Property="Validation.ErrorTemplate">
                                 <Setter.Value>

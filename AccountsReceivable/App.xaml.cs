@@ -1,5 +1,6 @@
 ﻿using AccountsReceivable.Data.Interfaces;
 using AccountsReceivable.Data.Repositories;
+using AccountsReceivable.Models;
 using AccountsReceivable.Services;
 using AccountsReceivable.View;
 using AccountsReceivable.ViewModels;
@@ -18,7 +19,7 @@ namespace AccountsReceivable
 {
     public partial class App : Application
     {
-        public IServiceProvider Services { get; set; }
+        public IServiceProvider Services { get; set; } = null!;
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -32,14 +33,15 @@ namespace AccountsReceivable
 
             services.AddDbContextFactory<ApplicationContext>(option => option.UseSqlite("Data Source=accounts.db"));
             services.AddTransient<ICompanyRepository, CompanyRepository>();
+            services.AddTransient<IRepository<Category>, CategoryRepository>();
             services.AddSingleton<IViewModelFactory, ViewModelFactory>();
             services.AddSingleton<IDialogService, DialogService>();
 
-            services.AddSingleton<MainWindow>();
             services.AddSingleton<MainWindowViewModel>();
-            services.AddSingleton<OrganizationViewModel>();
+            services.AddSingleton<MainWindow>();                     
             services.AddSingleton<ReportViewModel>();
-
+            services.AddTransient<ReportView>();
+            services.AddSingleton<OrganizationViewModel>();
             services.AddTransient<OrganizationView>();
             services.AddTransient<CompanyEditViewModel>();           
             services.AddTransient<CompanyEditView>();

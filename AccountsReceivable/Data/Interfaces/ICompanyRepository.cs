@@ -10,5 +10,7 @@ namespace AccountsReceivable.Data.Interfaces
     public interface ICompanyRepository
     {
         Task<Company?> GetCompanyAsync(int id);
+        Task<int> AddCompanyAsync(Company company);
+        Task UpdateCompanyAsync(Company company);
     }
 }

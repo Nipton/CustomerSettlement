@@ -17,6 +17,7 @@ namespace AccountsReceivable.Services
         public DbSet<AccountPartOne> AccountsPartOne { get; set; } = null!;
         public DbSet<AccountPartTwo> AccountsPartTwo { get; set; } = null!;
         public DbSet<Payment> Payment { get; set; } = null!;
+        public DbSet<Category> Category { get; set; } = null!;
 
         public ApplicationContext() { }  
 
@@ -33,6 +34,7 @@ namespace AccountsReceivable.Services
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AccountPartOne>().HasData(new AccountPartOne { ID = -1, Company = "" });
+            modelBuilder.Entity<Company>().HasData(new Company { Id = -1, Name = "Моя компания" });
         }
     }
 }

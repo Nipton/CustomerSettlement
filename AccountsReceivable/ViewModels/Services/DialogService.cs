@@ -29,14 +29,19 @@ namespace AccountsReceivable.ViewModels.Factories
             window.DataContext = vm;
             window.ShowDialog();
         }
+        public void CloseWindow<TViewModel>(TViewModel viewModel) where TViewModel : ViewModelBase
+        {
+            var window = Application.Current.Windows.Cast<Window>().FirstOrDefault(w => w.DataContext == viewModel);
+            window?.Close();
+        }
         public void ShowError(string title, string message)
         {
-            MessageBox.Show(message, title, MessageBoxButton.OKCancel, MessageBoxImage.Error);
+            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public void ShowInfo(string title, string message)
         {
-            MessageBox.Show(message, title, MessageBoxButton.OKCancel, MessageBoxImage.Information);
+            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

@@ -23,5 +23,10 @@ namespace AccountsReceivable.ViewModels
             OnPropertyChanged(propertyName);
             return true;
         }
+        protected void SetProperty<T>(Action<T> setter, T value, [CallerMemberName] string propertyName = "")
+        {
+            setter(value);
+            OnPropertyChanged(propertyName);
+        }
     }
 }

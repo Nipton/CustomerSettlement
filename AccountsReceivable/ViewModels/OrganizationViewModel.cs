@@ -1,4 +1,5 @@
 ﻿using AccountsReceivable.Data.Interfaces;
+using AccountsReceivable.Exceptions;
 using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
 using AccountsReceivable.Services;
@@ -38,7 +39,20 @@ namespace AccountsReceivable.ViewModels
         private void EditOrganization()
         {
             if (Organization == null) return;
-            dialogService.ShowWindow<CompanyEditView, CompanyEditViewModel>(Organization);
+            try
+            {
+                dialogService.ShowWindow<CompanyEditView, CompanyEditViewModel>(Organization);
+
+                OnPropertyChanged(nameof(Organization));
+            }
+            catch (CloneException ex)
+            {
+                dialogService.ShowError("Ошибка!", ex.Message);
+            }
+            catch(Exception)
+            {
+                dialogService.ShowError("Ошибка!", "Критическая ошибка.");
+            }
         }
 
         public async Task LoadAsync()
@@ -46,7 +60,7 @@ namespace AccountsReceivable.ViewModels
             if (isLoaded) return;
             try
             {
-                Organization = await repository.GetCompanyAsync(Constants.OWN_COMPANY_ID) ?? new Company();
+                Organization = await repository.GetCompanyAsync(Constants.OWN_COMPANY_ID);
                 isLoaded = true;
             }
             catch (Exception)
