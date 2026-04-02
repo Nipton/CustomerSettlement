@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountsReceivable.ViewModels.Factories
+namespace AccountsReceivable.ViewModels.Services
 {
     public class ViewModelFactory : IViewModelFactory
     {

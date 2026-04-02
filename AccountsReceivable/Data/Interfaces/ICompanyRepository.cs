@@ -12,5 +12,7 @@ namespace AccountsReceivable.Data.Interfaces
         Task<Company?> GetCompanyAsync(int id);
         Task<int> AddCompanyAsync(Company company);
         Task UpdateCompanyAsync(Company company);
+        Task<IEnumerable<Company>> GetAllCounterpartiesAsync();
+        Task RemoveCounterpartiesAsync(List<Company> companies);
     }
 }

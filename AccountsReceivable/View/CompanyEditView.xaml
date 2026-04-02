@@ -88,14 +88,13 @@
                     <TextBlock>к/с</TextBlock>
                     <TextBox x:Name="ks" Text="{Binding Path=Ks, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"></TextBox>
                 </StackPanel>
-                <StackPanel> 
+                <StackPanel>
                     <TextBlock>Телефон</TextBlock>
                     <TextBox x:Name="phone" Text="{Binding Path=Phone, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"></TextBox>
                 </StackPanel>
                 <StackPanel Visibility="{Binding IsShowCategory, Converter={StaticResource BoolToVisibilityConverter}}">
                     <TextBlock>Категория потребителей</TextBlock>
-                    <ComboBox SelectedItem="{Binding Category}" ItemsSource="{Binding CategoryList}" DisplayMemberPath="Name" SelectedValuePath="Id" x:Name="category" Style="{StaticResource MainComboBox}" Width="350" BorderThickness="1.9" FontSize="14" Height="{Binding ActualHeight, ElementName=phone, Mode=OneWay}"/>
-                    <!--<Button Style="{StaticResource OptionButton}" Margin="-1 0 0 0" x:Name="optionsButton" Width="20" Height="{Binding ActualHeight, ElementName=category, Mode=OneWay}" />-->
+                    <ComboBox  SelectedValue="{Binding CategoryId}" ItemsSource="{Binding CategoryList}" DisplayMemberPath="Name" SelectedValuePath="Id" Style="{StaticResource MainComboBox}" Width="350" BorderThickness="1.9" FontSize="14" Height="{Binding ActualHeight, ElementName=phone, Mode=OneWay}"/>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock FontWeight="Bold" FontSize="18" MinWidth="0" TextAlignment="Center">Руководитель</TextBlock>
@@ -114,16 +113,5 @@
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
-        <!--<StackPanel LostFocus="hiddenStackPanel_LostFocus" x:Name="hiddenStackPanel" Visibility="Collapsed"  HorizontalAlignment="Left" Orientation="Vertical" Margin="607,546,0,180">
-            <Border BorderBrush="#50026E" BorderThickness="1.8" Background="#996ca9" Height="55" Width="93">
-                <Border.Effect>
-                    <DropShadowEffect Opacity="0.7" />
-                </Border.Effect>
-                <StackPanel Orientation="Vertical" Margin="0">
-                    <Button Style="{StaticResource UnitButton}" Content="Сохранить" Click="AddUnit_Click"/>
-                    <Button Style="{StaticResource UnitButton}" Content="Удалить" Click ="DeleteUnit_Click"/>
-                </StackPanel>
-            </Border>
-        </StackPanel>-->
     </Grid>
 </Window>

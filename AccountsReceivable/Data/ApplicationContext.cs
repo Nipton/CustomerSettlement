@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace AccountsReceivable.Services
+namespace AccountsReceivable.Data
 {
     public class ApplicationContext : DbContext
     {

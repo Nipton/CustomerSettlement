@@ -1,10 +1,10 @@
-﻿using AccountsReceivable.Data.Interfaces;
+﻿using AccountsReceivable.Data;
+using AccountsReceivable.Data.Interfaces;
 using AccountsReceivable.Data.Repositories;
 using AccountsReceivable.Models;
-using AccountsReceivable.Services;
 using AccountsReceivable.View;
 using AccountsReceivable.ViewModels;
-using AccountsReceivable.ViewModels.Factories;
+using AccountsReceivable.ViewModels.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -45,6 +45,8 @@ namespace AccountsReceivable
             services.AddTransient<OrganizationView>();
             services.AddTransient<CompanyEditViewModel>();           
             services.AddTransient<CompanyEditView>();
+            services.AddSingleton<CounterpartiesViewModel>();
+            services.AddTransient<CounterpartiesView>();
 
             Services = services.BuildServiceProvider();
             

@@ -4,6 +4,7 @@ using AccountsReceivable.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,7 @@ namespace AccountsReceivable.Data.Repositories
         {
             using var context = await factory.CreateDbContextAsync();
             await context.Companies.AddAsync(company);
+            await context.SaveChangesAsync();
             return company.Id;
         }
         public async Task UpdateCompanyAsync(Company company)
@@ -33,6 +35,18 @@ namespace AccountsReceivable.Data.Repositories
             using var context = await factory.CreateDbContextAsync();
             context.Update(company);
             await context.SaveChangesAsync();
-        }        
+        }
+        public async Task<IEnumerable<Company>> GetAllCounterpartiesAsync()
+        {
+            using var context = await factory.CreateDbContextAsync();
+            return await context.Companies.Where(x => x.Id != Constants.OWN_COMPANY_ID).Include(c => c.Category).ToListAsync();           
+        }
+        public async Task RemoveCounterpartiesAsync(List<Company> companies)
+        {
+            using var context = await factory.CreateDbContextAsync();
+            context.Companies.AttachRange(companies);
+            context.Companies.RemoveRange(companies);
+            await context.SaveChangesAsync();
+        }
     }
 }

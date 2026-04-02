@@ -4,7 +4,7 @@ using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
 using AccountsReceivable.Services;
 using AccountsReceivable.View;
-using AccountsReceivable.ViewModels.Factories;
+using AccountsReceivable.ViewModels.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +42,6 @@ namespace AccountsReceivable.ViewModels
             try
             {
                 dialogService.ShowWindow<CompanyEditView, CompanyEditViewModel>(Organization);
-
                 OnPropertyChanged(nameof(Organization));
             }
             catch (CloneException ex)

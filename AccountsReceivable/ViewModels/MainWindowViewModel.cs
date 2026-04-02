@@ -1,6 +1,6 @@
 ﻿using AccountsReceivable.Interfaces;
 using AccountsReceivable.View;
-using AccountsReceivable.ViewModels.Factories;
+using AccountsReceivable.ViewModels.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,12 +42,12 @@ namespace AccountsReceivable.ViewModels
             this.factory = factory;
 
             ShowOrganizationViewCommand = new RelayCommand(async _ => await ShowPageAsync<OrganizationViewModel>());
-            ShowReportViewCommand = new RelayCommand(async _ => await ShowPageAsync<ReportViewModel>());
+            //ShowReportViewCommand = new RelayCommand(async _ => await ShowPageAsync<ReportViewModel>());
             //ShowAccointsViewCommand = new RelayCommand(_ => ShowPage<AccountsView>());
             //ShowArchiveViewCommand = new RelayCommand(_ => ShowPage<ArchiveAccountView>());
             //ShowReconciliationViewCommand = new RelayCommand(_ => ShowPage<ReconciliationReport>());
-            //ToggleReferencesCommand = new RelayCommand(_ => IsDropdownOpen = true, _ => !IsDropdownOpen);
-            //ShowCounterpartyViewCommand = new RelayCommand(_ => { ShowPage<Counterparties>(); IsDropdownOpen = false; });
+            ToggleReferencesCommand = new RelayCommand(_ => IsDropdownOpen = true, _ => !IsDropdownOpen);
+            ShowCounterpartyViewCommand = new RelayCommand(async _ => { await ShowPageAsync<CounterpartiesViewModel>(); IsDropdownOpen = false; });
             //ShowContractViewCommand = new RelayCommand(_ => { ShowPage<ContractData>(); IsDropdownOpen = false; });
             //ShowNomenclatureViewCommand = new RelayCommand(_ => { ShowPage<Nomenclature>(); IsDropdownOpen = false; });
         }

@@ -3,7 +3,7 @@ using AccountsReceivable.Exceptions;
 using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
 using AccountsReceivable.Services;
-using AccountsReceivable.ViewModels.Factories;
+using AccountsReceivable.ViewModels.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -110,6 +110,11 @@ namespace AccountsReceivable.ViewModels
             get => editedСompany.Category;
             set => SetProperty(v => editedСompany.Category = v, value);
         }
+        public int? CategoryId
+        {
+            get => editedСompany.CategoryId;
+            set => SetProperty(v => editedСompany.CategoryId = v, value);
+        }
         #endregion
         public ICommand CancelCommand { get; }
         public ICommand SaveCommand { get; }
@@ -126,12 +131,13 @@ namespace AccountsReceivable.ViewModels
             this.dialogService = dialogService;
             this.originalСompany = originalСompany;
             editedСompany = originalСompany.Clone() as Company ?? throw new CloneException("Не удалось клонировать компанию");
+            editedСompany.Category = null;
             if(originalСompany.Id == Constants.OWN_COMPANY_ID) 
                 isMainCompany = true;
         }
         private void Cancel()
         {
-            dialogService.CloseWindow(this);
+            dialogService.CloseWindow(this, false);
         }
         private async Task Save()
         {
@@ -145,7 +151,8 @@ namespace AccountsReceivable.ViewModels
             else
                 await companyRepository.UpdateCompanyAsync(editedСompany);
             originalСompany.CopyFrom(editedСompany);
-            dialogService.CloseWindow(this);
+            originalСompany.Category = categoryList.FirstOrDefault(c => c.Id == originalСompany.CategoryId);
+            dialogService.CloseWindow(this, true);
         }
 
         public async Task LoadAsync()

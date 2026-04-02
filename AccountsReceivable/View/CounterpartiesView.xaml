@@ -1,40 +1,32 @@
-﻿<UserControl x:Class="AccountsReceivable.View.Counterparties"
+﻿<UserControl x:Class="AccountsReceivable.View.CounterpartiesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:AccountsReceivable.View"
-             mc:Ignorable="d" 
-             d:DesignHeight="660" d:DesignWidth="1280" Background="White" Loaded="UserControl_Loaded">
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:CounterpartiesViewModel}"
+             mc:Ignorable="d"
+             d:DesignHeight="660" d:DesignWidth="1280" Background="White">
     <UserControl.Resources>
-        <Style TargetType="MenuItem" x:Key="disableMenuItem">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=conterpariesList}" Value="{x:Null}">
-                    <Setter Property="IsEnabled" Value="False" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
         <Style x:Key="IsSelectedButtonStyle" BasedOn="{StaticResource SecondaryButtonStyle}" TargetType="{x:Type Button}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=conterpariesList, Path=SelectedItem}" Value="{x:Null}">
-                    <Setter Property="IsEnabled" Value="False"/>
+                <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Foreground" Value="gray"/>
-                </DataTrigger>
+                </Trigger>
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <Grid>
+    <Grid  MouseDown="OnBackgroundClick">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <DockPanel Background="#E5D9EA">
-            <Button Style="{StaticResource SecondaryButtonStyle}" Click="AddButton">Добавить</Button>
-            <Button Style="{StaticResource IsSelectedButtonStyle}" Click="EditButton">Редактировать</Button>
-            <Button Style="{StaticResource IsSelectedButtonStyle}" Click="RemoveButton">Удалить</Button>
+            <Button Style="{StaticResource SecondaryButtonStyle}" Command="{Binding AddCompanyCommand}">Добавить</Button>
+            <Button Style="{StaticResource IsSelectedButtonStyle}" Command="{Binding EditCompanyCommand}">Редактировать</Button>
+            <Button Style="{StaticResource IsSelectedButtonStyle}" Command="{Binding RemoveCompaniesCommand}">Удалить</Button>
             <Grid>
-            <TextBox x:Name="SearchTermTextBox" Width="170" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 40 0" FontSize="16" 
-                     Background="#ceaddc" BorderBrush="#65247F" BorderThickness="1.6" TextChanged="SearchTermTextBox_TextChanged">
+            <TextBox x:Name="SearchTermTextBox" Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                     VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 40 0" FontSize="16" Width="170" 
+                     Background="#ceaddc" BorderBrush="#65247F" BorderThickness="1.6">
                 <TextBox.Style>
                     <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
                         <Setter Property="Template">
@@ -73,22 +65,23 @@
                 </TextBlock>
             </Grid>
         </DockPanel>
-        <DataGrid Margin="0" Name="conterpariesList" Grid.Row="1" Style="{StaticResource MainDataGrid}">
+        <DataGrid Margin="0" x:Name="CompaniesGrid"  Grid.Row="1" Style="{StaticResource MainDataGrid}" ItemsSource="{Binding CompaniesView}" SelectionChanged="Grid_SelectionChanged">
             <DataGrid.ContextMenu>
                 <ContextMenu Name="DataGridContextMenu">
                     <MenuItem Header="Копировать" Command="Copy"></MenuItem>
-                    <MenuItem Header="Редактировать" Click ="EditButton" Style="{StaticResource disableMenuItem}"></MenuItem>
-                    <MenuItem Header="Удалить" Click="RemoveButton" Style="{StaticResource disableMenuItem}"></MenuItem>
+                    <MenuItem Header="Редактировать" Command="{Binding EditCompanyCommand}" ></MenuItem>
+                    <MenuItem Header="Удалить" Command="{Binding RemoveCompaniesCommand}" ></MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=ID}" ElementStyle="{StaticResource WrapText}" Header="ID"/>
+                <DataGridTextColumn Binding="{Binding Path=Id}" ElementStyle="{StaticResource WrapText}" Header="ID"/>
                 <DataGridTextColumn Binding="{Binding Path=Name}" ElementStyle="{StaticResource WrapText}" Header="Наименование" Width="250"/>
                 <DataGridTextColumn Binding="{Binding Path=ShortName}" ElementStyle="{StaticResource WrapText}" Header="Краткое наименование" Width="190"/>
                 <DataGridTextColumn Binding="{Binding Path=Inn}" ElementStyle="{StaticResource WrapText}" Header="ИНН"/>
                 <DataGridTextColumn Binding="{Binding Path=Kpp}" ElementStyle="{StaticResource WrapText}" Header="КПП"/>
                 <DataGridTextColumn Binding="{Binding Path=LegalAddress}" ElementStyle="{StaticResource WrapText}" Header="Юр. адрес" Width="200"/>
                 <DataGridTextColumn Binding="{Binding Path=ActualAddress}" ElementStyle="{StaticResource WrapText}" Header="Физ. адрес" Width="200"/>
+                <DataGridTextColumn Binding="{Binding Path=Category.Name}" ElementStyle="{StaticResource WrapText}" Header="Категория" Width="150"/>
                 <DataGridTextColumn Binding="{Binding Path=Ogrn}" ElementStyle="{StaticResource WrapText}" Header="ОГРН"/>
                 <DataGridTextColumn Binding="{Binding Path=Bank}" ElementStyle="{StaticResource WrapText}" Header="Банк" Width="200"/>
                 <DataGridTextColumn Binding="{Binding Path=Rs}" ElementStyle="{StaticResource WrapText}" Header="р/с"/>

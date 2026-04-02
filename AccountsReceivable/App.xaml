@@ -17,6 +17,9 @@
             <DataTemplate DataType="{x:Type vm:CompanyEditViewModel}">
                 <views:CompanyEditView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:CounterpartiesViewModel}">
+                <views:CounterpartiesView/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

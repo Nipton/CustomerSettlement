@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace AccountsReceivable.ViewModels.Factories
+namespace AccountsReceivable.ViewModels.Services
 {
     public class DialogService : IDialogService
     {
@@ -19,7 +19,7 @@ namespace AccountsReceivable.ViewModels.Factories
             this.factory = factory;
         }
 
-        public void ShowWindow<TView, TViewModel>(params object[] args)
+        public bool ShowWindow<TView, TViewModel>(params object[] args)
             where TView : Window
             where TViewModel : ViewModelBase
         {
@@ -27,12 +27,17 @@ namespace AccountsReceivable.ViewModels.Factories
             var window = serviceProvider.GetRequiredService<TView>();
 
             window.DataContext = vm;
-            window.ShowDialog();
+            return window.ShowDialog() == true;
         }
-        public void CloseWindow<TViewModel>(TViewModel viewModel) where TViewModel : ViewModelBase
+        public void CloseWindow<TViewModel>(TViewModel viewModel, bool? dialogResult = null) where TViewModel : ViewModelBase
         {
             var window = Application.Current.Windows.Cast<Window>().FirstOrDefault(w => w.DataContext == viewModel);
-            window?.Close();
+            if (window != null)
+            {
+                if(dialogResult.HasValue)
+                    window.DialogResult = dialogResult.Value;
+                window.Close();
+            }
         }
         public void ShowError(string title, string message)
         {
@@ -42,6 +47,10 @@ namespace AccountsReceivable.ViewModels.Factories
         public void ShowInfo(string title, string message)
         {
             MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        public bool ShowConfirmation(string title, string message)
+        {
+            return MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
         }
     }
 }
