@@ -6,12 +6,7 @@
         mc:Ignorable="d" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              d:DesignWidth="720" Background="White" 
              Title="Редактирование компании" SizeToContent="Height" Width="720" WindowStartupLocation ="CenterScreen">
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding LoadEditViewCommand}"/>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
-    <Window.Resources>
+        <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="16"/>

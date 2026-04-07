@@ -123,8 +123,8 @@ namespace AccountsReceivable.ViewModels
         public CompanyEditViewModel(Company originalСompany, ICompanyRepository companyRepository, IRepository<Category> categoryRepository, IDialogService dialogService) 
         {
             CancelCommand = new RelayCommand(_ => Cancel());
-            SaveCommand = new RelayCommand(async _ => await Save());
-            LoadEditViewCommand = new RelayCommand(async _  => await LoadAsync());
+            SaveCommand = new AsyncRelayCommand(Save);
+            LoadEditViewCommand = new AsyncRelayCommand(LoadAsync);
 
             this.companyRepository = companyRepository;
             this.categoryRepository = categoryRepository;
@@ -146,18 +146,32 @@ namespace AccountsReceivable.ViewModels
                 dialogService.ShowInfo("Ошибка", "Исправьте ошибки перед сохранением");
                 return;
             }
-            if (editedСompany.Id == 0)
-                await companyRepository.AddCompanyAsync(editedСompany);   
-            else
-                await companyRepository.UpdateCompanyAsync(editedСompany);
-            originalСompany.CopyFrom(editedСompany);
-            originalСompany.Category = categoryList.FirstOrDefault(c => c.Id == originalСompany.CategoryId);
-            dialogService.CloseWindow(this, true);
+            try
+            {
+                if (editedСompany.Id == 0)
+                    await companyRepository.AddCompanyAsync(editedСompany);
+                else
+                    await companyRepository.UpdateCompanyAsync(editedСompany);
+                originalСompany.CopyFrom(editedСompany);
+                originalСompany.Category = categoryList.FirstOrDefault(c => c.Id == originalСompany.CategoryId);
+                dialogService.CloseWindow(this, true);
+            }
+            catch 
+            {
+                dialogService.ShowError("Ошибка", "Произошла ошибка во время сохранения.");
+            }
         }
 
         public async Task LoadAsync()
         {
-            CategoryList = await categoryRepository.GetAllAsync();
+            try
+            {
+                CategoryList = await categoryRepository.GetAllAsync();
+            }
+            catch
+            {
+                dialogService.ShowError("Ошибка", "Не удалось загрузить список категорий.");
+            }
         }
         #region Валидация
         public string Error => null!;

@@ -47,6 +47,8 @@ namespace AccountsReceivable
             services.AddTransient<CompanyEditView>();
             services.AddSingleton<CounterpartiesViewModel>();
             services.AddTransient<CounterpartiesView>();
+            services.AddSingleton<NomenclatureViewModel>();
+            services.AddTransient<NomenclatureView>();
 
             Services = services.BuildServiceProvider();
             

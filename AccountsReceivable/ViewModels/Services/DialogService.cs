@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AccountsReceivable.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace AccountsReceivable.ViewModels.Services
             this.factory = factory;
         }
 
-        public bool ShowWindow<TView, TViewModel>(params object[] args)
+        public async Task<bool> ShowWindowAsync<TView, TViewModel>(params object[] args)
             where TView : Window
             where TViewModel : ViewModelBase
         {
@@ -27,6 +28,11 @@ namespace AccountsReceivable.ViewModels.Services
             var window = serviceProvider.GetRequiredService<TView>();
 
             window.DataContext = vm;
+            if (vm is ILoadable loadable)
+            {
+                await loadable.LoadAsync();
+            }
+
             return window.ShowDialog() == true;
         }
         public void CloseWindow<TViewModel>(TViewModel viewModel, bool? dialogResult = null) where TViewModel : ViewModelBase

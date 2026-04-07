@@ -9,7 +9,7 @@ namespace AccountsReceivable.ViewModels.Services
 {
     public interface IDialogService
     {
-        bool ShowWindow<TView, TViewModel>(params object[] args) where TView : Window where TViewModel : ViewModelBase;
+        Task<bool> ShowWindowAsync<TView, TViewModel>(params object[] args) where TView : Window where TViewModel : ViewModelBase;
         void CloseWindow<TViewModel>(TViewModel viewModel, bool? dialogResult) where TViewModel : ViewModelBase;
         void ShowError(string title, string message);
         void ShowInfo(string title, string message);

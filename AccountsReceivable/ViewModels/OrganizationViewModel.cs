@@ -32,16 +32,16 @@ namespace AccountsReceivable.ViewModels
         {
             repository = companyRepository;
             this.dialogService = dialogService;
-            LoadOrganizationCommand = new RelayCommand(async (_) => await LoadAsync());
-            EditOrganizationCommand = new RelayCommand(_ => EditOrganization());
+            LoadOrganizationCommand = new AsyncRelayCommand(LoadAsync);
+            EditOrganizationCommand = new AsyncRelayCommand(EditOrganization);
         }
 
-        private void EditOrganization()
+        private async Task EditOrganization()
         {
             if (Organization == null) return;
             try
             {
-                dialogService.ShowWindow<CompanyEditView, CompanyEditViewModel>(Organization);
+                await dialogService.ShowWindowAsync<CompanyEditView, CompanyEditViewModel>(Organization);
                 OnPropertyChanged(nameof(Organization));
             }
             catch (CloneException ex)

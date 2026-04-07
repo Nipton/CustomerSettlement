@@ -16,19 +16,19 @@ using System.Windows.Shapes;
 
 namespace AccountsReceivable.View
 {
-    public partial class Nomenclature : UserControl
+    public partial class NomenclatureView : UserControl
     {
         private FileIOService fileIOService;
         private Window _window;
         private List<string> nomenclatureList;
-        public Nomenclature(Window window)
+        public NomenclatureView(Window window)
         {
             InitializeComponent();
             _window = window;
             fileIOService= new FileIOService();
             nomenclatureList = new List<string>();
         }
-        public Nomenclature()
+        public NomenclatureView()
         {
             InitializeComponent();
             fileIOService = new FileIOService();

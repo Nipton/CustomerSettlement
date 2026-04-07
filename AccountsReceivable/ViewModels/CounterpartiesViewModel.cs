@@ -44,9 +44,9 @@ namespace AccountsReceivable.ViewModels
             this.dialogService = dialogService;
             CompaniesView = CollectionViewSource.GetDefaultView(Companies);
             CompaniesView.Filter = FilterCompany;
-            AddCompanyCommand = new RelayCommand(_ => AddCounterparty());
-            EditCompanyCommand = new RelayCommand(_ => EditCounterparty(), _ => SelectedItems.Count == 1);
-            RemoveCompaniesCommand = new RelayCommand(async _ => await RemoveCounterpaties(), _ => SelectedItems.Count != 0);
+            AddCompanyCommand = new AsyncRelayCommand(AddCounterparty);
+            EditCompanyCommand = new AsyncRelayCommand(EditCounterparty, _ => SelectedItems.Count == 1);
+            RemoveCompaniesCommand = new AsyncRelayCommand(RemoveCounterpaties, _ => SelectedItems.Count != 0);
         }       
         public async Task LoadAsync()
         {
@@ -79,12 +79,12 @@ namespace AccountsReceivable.ViewModels
                 return true;
             return false;
         }
-        public void AddCounterparty()
+        public async Task AddCounterparty()
         {
             var newCompany = new Company();
             try
             {
-                var result =  dialogService.ShowWindow<CompanyEditView, CompanyEditViewModel>(newCompany);
+                var result =  await dialogService.ShowWindowAsync<CompanyEditView, CompanyEditViewModel>(newCompany);
                 if (result)
                     Companies.Add(newCompany);
             }
@@ -93,7 +93,7 @@ namespace AccountsReceivable.ViewModels
                 dialogService.ShowError("Ошибка!", "Критическая ошибка.");
             }           
         }
-        public void EditCounterparty()
+        public async Task EditCounterparty()
         {
             if (SelectedItems.Count != 1)
             {
@@ -103,7 +103,7 @@ namespace AccountsReceivable.ViewModels
             var company = SelectedItems[0];
             try
             {
-                dialogService.ShowWindow<CompanyEditView, CompanyEditViewModel>(company);
+                await dialogService.ShowWindowAsync<CompanyEditView, CompanyEditViewModel>(company);
             }
             catch (Exception)
             {
