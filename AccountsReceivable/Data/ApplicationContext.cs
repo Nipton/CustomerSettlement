@@ -18,6 +18,7 @@ namespace AccountsReceivable.Data
         public DbSet<AccountPartTwo> AccountsPartTwo { get; set; } = null!;
         public DbSet<Payment> Payment { get; set; } = null!;
         public DbSet<Category> Category { get; set; } = null!;
+        public DbSet<Nomenclature> Nomenclatures { get; set; } = null!;
 
         public ApplicationContext() { }  
 

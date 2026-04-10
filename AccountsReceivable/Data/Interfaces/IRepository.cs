@@ -10,6 +10,6 @@ namespace AccountsReceivable.Data.Interfaces
     {
         Task<int> AddAsync(T entity);
         Task<IEnumerable<T>> GetAllAsync();
-        Task DeleteAsync(int id);
+        Task DeleteAsync(T entity);
     }
 }

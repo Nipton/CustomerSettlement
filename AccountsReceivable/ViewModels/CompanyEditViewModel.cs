@@ -123,7 +123,7 @@ namespace AccountsReceivable.ViewModels
         public CompanyEditViewModel(Company originalСompany, ICompanyRepository companyRepository, IRepository<Category> categoryRepository, IDialogService dialogService) 
         {
             CancelCommand = new RelayCommand(_ => Cancel());
-            SaveCommand = new AsyncRelayCommand(Save);
+            SaveCommand = new AsyncRelayCommand(Save, _ => IsValid);
             LoadEditViewCommand = new AsyncRelayCommand(LoadAsync);
 
             this.companyRepository = companyRepository;

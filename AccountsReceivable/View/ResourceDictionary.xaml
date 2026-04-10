@@ -37,6 +37,28 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="SecondaryButtonStyle_V2" TargetType="Button">
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Name="btn" TargetType="Button">
+                    <Border x:Name="brd">
+                        <ContentPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="#E5D9EA"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="brd" Property="Margin" Value="0 2 0 0"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="PrimaryButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="#50026E"/>
         <Setter Property="Foreground" Value="White"/>
@@ -57,6 +79,10 @@
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Background" Value="#50026E"/>
                             <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.3"/>
+                            <Setter Property="Foreground" Value="SlateGray"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -135,6 +161,7 @@
                               BorderBrush="{TemplateBinding Border.BorderBrush}"
                               Background="{TemplateBinding Panel.Background}"
                               Name="border"
+                              CornerRadius="4"
                               SnapsToDevicePixels="True">
                         <ScrollViewer HorizontalScrollBarVisibility="Hidden"
                               VerticalScrollBarVisibility="Hidden"
@@ -157,7 +184,7 @@
                                         <DockPanel LastChildFill="True">
                                             <TextBlock DockPanel.Dock="Right" Foreground="Red" FontSize="17" FontWeight="Bold"
                                                        Text="*" Padding="3 0 0 0"/>
-                                            <Border BorderBrush="#50026E" BorderThickness="2">
+                                            <Border BorderBrush="#50026E" BorderThickness="2" CornerRadius="8">
                                                 <AdornedElementPlaceholder/>
                                             </Border>
                                         </DockPanel>
@@ -291,7 +318,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border x:Name="templateRoot" Background="{StaticResource ComboBox.Static.Background}" BorderBrush="{StaticResource ComboBox.Static.Border}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                    <Border x:Name="templateRoot"  CornerRadius="4" Background="{StaticResource ComboBox.Static.Background}" BorderBrush="#C9AFD4" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
                         <Border x:Name="splitBorder" BorderBrush="Transparent" BorderThickness="0" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}">
                             <Path x:Name="arrow" Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z" Fill="{StaticResource ComboBox.Static.Glyph}" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center"/>
                         </Border>

@@ -21,7 +21,7 @@ namespace AccountsReceivable.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(int id)
+        public Task DeleteAsync(Category entity)
         {
             throw new NotImplementedException();
         }

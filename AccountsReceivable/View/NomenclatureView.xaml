@@ -3,59 +3,90 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:AccountsReceivable.View"
+             xmlns:local="clr-namespace:AccountsReceivable.View" xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:NomenclatureViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="660" d:DesignWidth="1280" Background="#E5D9EA" Loaded="Nomenclature_Loaded">
+             d:DesignHeight="660" d:DesignWidth="1280" Background="#E5D9EA">
     <UserControl.Resources>
         <ControlTemplate x:Key="nomTxt" TargetType="TextBox">
-            <Border BorderThickness="{TemplateBinding BorderThickness}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
+            <Border BorderThickness="2"
+                    BorderBrush="Transparent" 
                     Background="{TemplateBinding Background}"
-                    Name="border">
+                    Name="border"
+                    CornerRadius="4">
                 <ScrollViewer Name="PART_ContentHost"/>
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsFocused" Value="True">
                     <Setter TargetName="border" Property="BorderBrush" Value="#65247F"/>
-                    <Setter TargetName="border" Property="BorderThickness" Value="2"/>
-                    <Setter Property="Margin" Value="0 0 0 -1"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="border" Property="BorderBrush" Value="#65247F"/>
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </UserControl.Resources>
-    <Grid>  
-        <StackPanel Margin="30" Width="300" HorizontalAlignment="Left">
-            <TextBox x:Name="nomenclatureTextBox" Template="{StaticResource nomTxt}" FontSize="16"
-                     Background="#ceaddc" BorderBrush="#65247F" BorderThickness="1.6"/>
-            <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
-                <Button Style="{StaticResource PrimaryButtonStyle}" Content="Добавить" Click="Add_Nomenclature"/>
-                <Button Style="{StaticResource PrimaryButtonStyle}" Content="Удалить" Click="Delete_Button" Margin="100 0 0 0"/>
-            </StackPanel>
-            <TextBlock FontSize="19" FontWeight="SemiBold" Margin="0 5 0 10" HorizontalAlignment="Center" Foreground="#16061C">Номенклатура</TextBlock>
-            <ListBox x:Name="nomenclatureListBox" FontSize="18" Background="#ceaddc" BorderThickness="0">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListBoxItem">
-                                    <Border x:Name="borderNom" Background="{TemplateBinding Background}" Height="35">
-                                        <ContentPresenter VerticalAlignment="Center" Margin="5 0 0 0"/>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#996ca9"/>
-                                        </Trigger>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="#65247F"/>
-                                            <Setter Property="Foreground" Value="GhostWhite"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-            </ListBox>
-        </StackPanel>
+    <Grid Margin="15" MouseDown="OnBackgroundClick" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="1.3*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.ColumnSpan="2" FontSize="20" FontWeight="SemiBold" Margin="0 5 0 20" HorizontalAlignment="Center" Foreground="#16061C">Добавление новой услуги</TextBlock>
+        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#16061C" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right">Новая услуга:</TextBlock>
+        <TextBox Text="{Binding Service, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="10" Grid.Row="1" Grid.Column="1" Template="{StaticResource nomTxt}" FontSize="16" 
+                     Background="#ceaddc"/>
+        <TextBlock FontSize="16" FontWeight="SemiBold"  Foreground="#16061C" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">Ед. измерения:</TextBlock>
+        <ComboBox ItemsSource="{Binding Units}" SelectedValue="{Binding Unit}" Margin="10" Grid.Row="2" Grid.Column="1" Style="{StaticResource MainComboBox}" BorderThickness="1.9" FontSize="16"/>
+        <Button Command="{Binding AddNewServiceCommand}" Grid.Row="3" Grid.Column="1" Margin="0 20 10 0" Width="130" Height="35" Style="{StaticResource PrimaryButtonStyle}" Content="Добавить" HorizontalAlignment="Right"/>
+        <TextBlock Grid.Column="2" FontSize="20" FontWeight="SemiBold" Margin="0 5 0 20" HorizontalAlignment="Center" Foreground="#16061C">Существующие услуги</TextBlock>
+        <ListBox Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" Background="Transparent" BorderThickness="0" ItemsSource="{Binding NomenclatureList}" x:Name="NomenclatureListBox">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="12,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding Unit}" FontSize="16" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <Button Command="{Binding DataContext.DeleteServiceCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Grid.Column="1" Content="🗑" Style="{StaticResource SecondaryButtonStyle_V2}"
+                                     Width="30" Height="30" Margin="0 0 20 0"></Button>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="8" Margin="3">
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#996ca9"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#65247F"/>
+                                        <Setter Property="Foreground" Value="#E5D9EA"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
     </Grid>
 </UserControl>

@@ -94,13 +94,14 @@
             <RowDefinition Height="60"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" x:Name="Header" Orientation="Horizontal">
-            <StackPanel.Background>
+        <Grid Grid.Row="0">
+            <Grid.Background>
                 <LinearGradientBrush  StartPoint="0.5,0" EndPoint="0.5,1">
                     <GradientStop Color= "#50026E" Offset="0" />
                     <GradientStop Color="#B564D4" Offset="1" />
                 </LinearGradientBrush>
-            </StackPanel.Background>
+            </Grid.Background>
+            <StackPanel x:Name="Header" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowOrganizationViewCommand}">Организация</Button>
             <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowAccointsViewCommand}">Счета</Button>
             <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReportViewCommand}">Отчет</Button>
@@ -121,7 +122,8 @@
             </Popup>
             <Button Content="Архив" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowArchiveViewCommand}"/>
             <Button Content="Акт сверки" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReconciliationViewCommand}"/>
-        </StackPanel>
+            </StackPanel>
+        </Grid>
         <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}"/>
     </Grid>
 </Window>

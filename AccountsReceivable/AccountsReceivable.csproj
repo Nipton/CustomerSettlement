@@ -9,7 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="units.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="foldermagentafavorites_92982.ico" />
+    <Content Include="units.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

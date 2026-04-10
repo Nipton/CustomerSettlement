@@ -20,15 +20,6 @@
             <Setter Property="Orientation" Value="Horizontal"/>
             <Setter Property="Margin" Value="10 10 0 5"/>
         </Style>
-        <Style x:Key="SaveButton" BasedOn="{ StaticResource PrimaryButtonStyle}" TargetType="Button">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsValid}" Value="False">
-                    <Setter Property="IsEnabled" Value="False"/>
-                    <Setter Property="Opacity" Value="0.3"/>
-                    <Setter Property="Foreground" Value="SlateGray"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
     </Window.Resources>
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -103,7 +94,7 @@
                     <TextBox x:Name="fullName" Text="{Binding Path=DirectorFullName}"></TextBox>
                 </StackPanel>
                 <StackPanel>
-                    <Button Style="{StaticResource SaveButton}" Margin="400 25 15 0" HorizontalAlignment="Right" Content="Сохранить" Command="{Binding SaveCommand}"/>
+                    <Button Style="{StaticResource PrimaryButtonStyle}" Margin="400 25 15 0" HorizontalAlignment="Right" Content="Сохранить" Command="{Binding SaveCommand}"/>
                     <Button Style="{StaticResource PrimaryButtonStyle}" Content="Отмена" VerticalAlignment="Bottom" Command="{Binding CancelCommand}"/>
                 </StackPanel>
             </StackPanel>
