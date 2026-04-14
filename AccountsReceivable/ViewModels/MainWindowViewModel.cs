@@ -1,12 +1,6 @@
 ﻿using AccountsReceivable.Interfaces;
-using AccountsReceivable.View;
-using AccountsReceivable.ViewModels.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using AccountsReceivable.ViewModels.Commands;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace AccountsReceivable.ViewModels
@@ -48,7 +42,7 @@ namespace AccountsReceivable.ViewModels
             //ShowReconciliationViewCommand = new RelayCommand(_ => ShowPage<ReconciliationReport>());
             ToggleReferencesCommand = new RelayCommand(_ => IsDropdownOpen = true, _ => !IsDropdownOpen);
             ShowCounterpartyViewCommand = new AsyncRelayCommand(async _ => { await ShowPageAsync<CounterpartiesViewModel>(); IsDropdownOpen = false; });
-            //ShowContractViewCommand = new RelayCommand(_ => { ShowPage<ContractData>(); IsDropdownOpen = false; });
+            ShowContractViewCommand = new RelayCommand(async _ => { await ShowPageAsync<ContractViewModel>(); IsDropdownOpen = false; });
             ShowNomenclatureViewCommand = new AsyncRelayCommand(async _ => { await ShowPageAsync<NomenclatureViewModel>(); IsDropdownOpen = false; });
         }
         private async Task ShowPageAsync<T>() where T : ViewModelBase

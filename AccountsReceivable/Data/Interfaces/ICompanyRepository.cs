@@ -10,9 +10,10 @@ namespace AccountsReceivable.Data.Interfaces
     public interface ICompanyRepository
     {
         Task<Company?> GetCompanyAsync(int id);
-        Task<int> AddCompanyAsync(Company company);
+        Task<int> CreateCompanyAsync(Company company);
         Task UpdateCompanyAsync(Company company);
-        Task<IEnumerable<Company>> GetAllCounterpartiesAsync();
-        Task RemoveCounterpartiesAsync(List<Company> companies);
+        Task<IEnumerable<Company>> GetAllCompaniesAsync();
+        Task DeleteCompaniesAsync(List<Company> companies);
+        event Func<Task>? DataChanged;
     }
 }

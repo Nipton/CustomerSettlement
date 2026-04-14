@@ -98,7 +98,7 @@ namespace AccountsReceivable.View
             contractComboBox.ItemsSource = db.Contracts.Local.ToObservableCollection();
             ReloadDG();
             if (currentAccountOne.ID!= 0)
-                contractComboBox.SelectedItem = db.Contracts.FirstOrDefault(x => x.ID == currentAccountOne.ContractID);
+                contractComboBox.SelectedItem = db.Contracts.FirstOrDefault(x => x.Id == currentAccountOne.ContractID);
             
         }
 

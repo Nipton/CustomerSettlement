@@ -29,7 +29,7 @@
             </Setter>
         </Style>
         <ControlTemplate x:Key="HeaderButtons" TargetType="Button">
-            <Grid Name="Btn" Margin="15 0 0 0">
+            <Grid Name="Btn" Margin="8 0 8 0">
                 <Border>
                     <Grid>
                         <Label Content="{TemplateBinding Content}" Background="Transparent" VerticalAlignment="Center" FontSize="23"  >

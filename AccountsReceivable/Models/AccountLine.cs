@@ -23,7 +23,7 @@ namespace AccountsReceivable.Models
         [Precision(18, 2)]
         public decimal Sum { get; set; }
         public DateTime? Period { get; set; }
-        public int AccountHeaderId { get; set; }
+        public int? AccountHeaderId { get; set; }
         public virtual AccountHeader? AccountHeader { get; set; }
     }
 }

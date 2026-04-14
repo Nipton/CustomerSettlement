@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace AccountsReceivable.Data.Interfaces
 {
-    public interface INomenclatureRepository : IRepository<Nomenclature>
+    public interface INomenclatureRepository
     {
+        Task<int> AddAsync(Nomenclature entity);
+        Task<IEnumerable<Nomenclature>> GetAllAsync();
+        Task DeleteAsync(Nomenclature entity);
         public List<string> GetAllUnits();
+        event Func<Task>? DataChanged;
     }
 }

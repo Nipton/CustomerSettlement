@@ -1,10 +1,11 @@
 ﻿using AccountsReceivable.Data;
 using AccountsReceivable.Data.Interfaces;
 using AccountsReceivable.Data.Repositories;
+using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
+using AccountsReceivable.Services;
 using AccountsReceivable.View;
 using AccountsReceivable.ViewModels;
-using AccountsReceivable.ViewModels.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -26,15 +27,17 @@ namespace AccountsReceivable
 
             using (var context = new ApplicationContext())
             {
+                //context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
                 context.Companies.Any();
             }
             var services = new ServiceCollection();
 
             services.AddDbContextFactory<ApplicationContext>(option => option.UseSqlite("Data Source=accounts.db"));
-            services.AddTransient<ICompanyRepository, CompanyRepository>();
-            services.AddTransient<IRepository<Category>, CategoryRepository>();
-            services.AddTransient<INomenclatureRepository, NomenclatureRepository>();
+            services.AddSingleton<ICompanyRepository, CompanyRepository>();
+            services.AddSingleton<IRepository<Category>, CategoryRepository>();
+            services.AddSingleton<INomenclatureRepository, NomenclatureRepository>();
+            services.AddSingleton<IRepository<Contract>, ContractRepository>(); 
             services.AddSingleton<IViewModelFactory, ViewModelFactory>();
             services.AddSingleton<IDialogService, DialogService>();
 
@@ -50,6 +53,8 @@ namespace AccountsReceivable
             services.AddTransient<CounterpartiesView>();
             services.AddSingleton<NomenclatureViewModel>();
             services.AddTransient<NomenclatureView>();
+            services.AddSingleton<ContractViewModel>();
+            services.AddTransient<ContractView>();
 
             Services = services.BuildServiceProvider();
             

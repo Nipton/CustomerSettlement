@@ -1,13 +1,11 @@
 ﻿using AccountsReceivable.Data.Interfaces;
+using AccountsReceivable.Exceptions;
 using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
-using AccountsReceivable.ViewModels.Services;
+using AccountsReceivable.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -34,16 +32,19 @@ namespace AccountsReceivable.ViewModels
         }
         public ICommand AddNewServiceCommand { get; } 
         public ICommand DeleteServiceCommand { get; }
+        public ICommand RefreshDataCommand { get; }
         public NomenclatureViewModel(INomenclatureRepository nomenclatureRepository, IDialogService dialogService) 
         {
             this.nomenclatureRepository = nomenclatureRepository;
             this.dialogService = dialogService;
             AddNewServiceCommand = new AsyncRelayCommand(AddServiceAsync, _ => !string.IsNullOrWhiteSpace(Service) && !string.IsNullOrWhiteSpace(Unit));
             DeleteServiceCommand = new AsyncRelayCommand(obj => DeleteServiceAsync(obj));
+            RefreshDataCommand = new AsyncRelayCommand(async _ => { LoadUnits(); await LoadNomenclaturesAsync(); });
         }
         public async Task LoadAsync()
         {
             LoadUnits();
+            if (isLoaded) return;
             await LoadNomenclaturesAsync();
         }
         private void LoadUnits()
@@ -58,8 +59,7 @@ namespace AccountsReceivable.ViewModels
             }
         }
         private async Task LoadNomenclaturesAsync()
-        {
-            if (isLoaded) return;
+        {           
             try
             {
                 var list = await nomenclatureRepository.GetAllAsync();
@@ -108,6 +108,10 @@ namespace AccountsReceivable.ViewModels
             {
                 await nomenclatureRepository.DeleteAsync(serviceToDelete);
                 NomenclatureList.Remove(serviceToDelete);
+            }
+            catch (DeleteRestrictedException ex)
+            {
+                dialogService.ShowError("Ошибка!", ex.Message);
             }
             catch
             {

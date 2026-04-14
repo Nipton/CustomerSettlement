@@ -1,4 +1,5 @@
 ﻿using AccountsReceivable.Interfaces;
+using AccountsReceivable.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -7,32 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace AccountsReceivable.ViewModels.Services
+namespace AccountsReceivable.Services
 {
     public class DialogService : IDialogService
     {
-        private readonly IServiceProvider serviceProvider;
         private readonly IViewModelFactory factory;
 
-        public DialogService(IServiceProvider serviceProvider, IViewModelFactory factory)
+        public DialogService(IViewModelFactory factory)
         {
-            this.serviceProvider = serviceProvider;
             this.factory = factory;
         }
 
-        public async Task<bool> ShowWindowAsync<TView, TViewModel>(params object[] args)
-            where TView : Window
-            where TViewModel : ViewModelBase
+        public async Task<bool> ShowWindowAsync<TView, TViewModel>(params object[] args) where TView : Window where TViewModel : ViewModelBase
         {
-            var vm = factory.Create<TViewModel>(args);
-            var window = serviceProvider.GetRequiredService<TView>();
-
-            window.DataContext = vm;
-            if (vm is ILoadable loadable)
+            var window = factory.CreateWindow<TView, TViewModel>(args);
+            if (window.DataContext is ILoadable loadable)
             {
                 await loadable.LoadAsync();
             }
-
             return window.ShowDialog() == true;
         }
         public void CloseWindow<TViewModel>(TViewModel viewModel, bool? dialogResult = null) where TViewModel : ViewModelBase

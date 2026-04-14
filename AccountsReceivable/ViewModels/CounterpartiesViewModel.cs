@@ -1,15 +1,17 @@
 ﻿using AccountsReceivable.Data.Interfaces;
+using AccountsReceivable.Exceptions;
 using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
 using AccountsReceivable.View;
-using AccountsReceivable.ViewModels.Services;
+using AccountsReceivable.ViewModels.Commands;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -37,6 +39,7 @@ namespace AccountsReceivable.ViewModels
         public ICommand AddCompanyCommand { get; }
         public ICommand EditCompanyCommand { get; }
         public ICommand RemoveCompaniesCommand { get; }
+        public ICommand RefreshCompaniesCommand { get; }
 
         public CounterpartiesViewModel(ICompanyRepository companyRepository, IDialogService dialogService)
         {
@@ -47,13 +50,19 @@ namespace AccountsReceivable.ViewModels
             AddCompanyCommand = new AsyncRelayCommand(AddCounterparty);
             EditCompanyCommand = new AsyncRelayCommand(EditCounterparty, _ => SelectedItems.Count == 1);
             RemoveCompaniesCommand = new AsyncRelayCommand(RemoveCounterpaties, _ => SelectedItems.Count != 0);
+            RefreshCompaniesCommand = new AsyncRelayCommand(LoadCompaniesAsync);
         }       
         public async Task LoadAsync()
         {
             if (isLoaded) return;
+            await LoadCompaniesAsync();
+        }
+        private async Task LoadCompaniesAsync()
+        {
             try
             {
-                var companyList = await companyRepository.GetAllCounterpartiesAsync();
+                Companies.Clear();
+                var companyList = await companyRepository.GetAllCompaniesAsync();
                 foreach (var company in companyList)
                 {
                     Companies.Add(company);
@@ -122,12 +131,16 @@ namespace AccountsReceivable.ViewModels
                 return;
             try
             {
-                await companyRepository.RemoveCounterpartiesAsync(SelectedItems);
+                await companyRepository.DeleteCompaniesAsync(SelectedItems);
                 foreach (var item in SelectedItems.ToList())
                 {
                     Companies.Remove(item);
                 }
                 SelectedItems.Clear();
+            }
+            catch (DeleteRestrictedException ex)
+            {
+                dialogService.ShowError("Ошибка!", ex.Message);
             }
             catch
             {

@@ -14,4 +14,5 @@ namespace AccountsReceivable.Exceptions
     {
         public CloneException(string message) : base(message) { }
     }
+    public class DeleteRestrictedException(string message) : AppException(message) {}
 }

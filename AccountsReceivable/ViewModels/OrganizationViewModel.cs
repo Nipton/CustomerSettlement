@@ -4,13 +4,9 @@ using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
 using AccountsReceivable.Services;
 using AccountsReceivable.View;
-using AccountsReceivable.ViewModels.Services;
+using AccountsReceivable.ViewModels.Commands;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace AccountsReceivable.ViewModels

@@ -5,8 +5,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/View/ResourceDictionaryColors.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/View/ResourceDictionary.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Resources/ResourceDictionaryColors.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Resources/ResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate DataType="{x:Type vm:OrganizationViewModel}">
                 <views:OrganizationView/>
@@ -23,6 +23,9 @@
             <DataTemplate DataType="{x:Type vm:NomenclatureViewModel}">
                 <views:NomenclatureView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ContractViewModel}">
+                <views:ContractView/>
+            </DataTemplate> 
         </ResourceDictionary>
     </Application.Resources>
 </Application>

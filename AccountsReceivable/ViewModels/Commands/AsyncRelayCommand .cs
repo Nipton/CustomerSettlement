@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace AccountsReceivable.ViewModels.Services
+namespace AccountsReceivable.ViewModels.Commands
 {
     public class AsyncRelayCommand : ICommand
     {

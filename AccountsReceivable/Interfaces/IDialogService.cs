@@ -1,11 +1,12 @@
-﻿using System;
+﻿using AccountsReceivable.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace AccountsReceivable.ViewModels.Services
+namespace AccountsReceivable.Interfaces
 {
     public interface IDialogService
     {

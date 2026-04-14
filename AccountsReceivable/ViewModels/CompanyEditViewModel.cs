@@ -3,15 +3,11 @@ using AccountsReceivable.Exceptions;
 using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
 using AccountsReceivable.Services;
-using AccountsReceivable.ViewModels.Services;
+using AccountsReceivable.ViewModels.Commands;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -149,7 +145,7 @@ namespace AccountsReceivable.ViewModels
             try
             {
                 if (editedСompany.Id == 0)
-                    await companyRepository.AddCompanyAsync(editedСompany);
+                    await companyRepository.CreateCompanyAsync(editedСompany);
                 else
                     await companyRepository.UpdateCompanyAsync(editedСompany);
                 originalСompany.CopyFrom(editedСompany);

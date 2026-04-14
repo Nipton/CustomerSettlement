@@ -79,7 +79,7 @@ namespace AccountsReceivable.View
             }
             if(contractComboBox.SelectedItem is Contract selectedContract)
             {
-                filtredList = filtredList?.Where(x => x.ContractID == selectedContract.ID);
+                filtredList = filtredList?.Where(x => x.ContractID == selectedContract.Id);
             }
             debitDataGrid.ItemsSource = null;
             creditDataGrid.ItemsSource = null;

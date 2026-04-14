@@ -1,13 +1,11 @@
-﻿<UserControl
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:AccountsReceivable.View"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:Model="clr-namespace:AccountsReceivable.Models" xmlns:AccountsReceivable="clr-namespace:AccountsReceivable" x:Name="userControl" x:Class="AccountsReceivable.View.ContractData"
-             mc:Ignorable="d" 
-             d:DesignHeight="660" d:DesignWidth="1280" Background="#E5D9EA" Loaded="Contract_Loaded">
+             xmlns:local="clr-namespace:AccountsReceivable.View" x:Class="AccountsReceivable.View.ContractView"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+             xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:ContractViewModel}"             
+             mc:Ignorable="d" d:DesignHeight="660" d:DesignWidth="1280" Background="#E5D9EA" MouseDown="OnBackgroundClick">
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="FontSize" Value="16"/>
@@ -15,26 +13,7 @@
             <Setter Property="TextAlignment" Value="Right" />
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
-        <Style x:Key="AddButtonStyle" BasedOn="{StaticResource SecondaryButtonStyle}" TargetType="{x:Type Button}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsValid}" Value="False">
-                    <Setter Property="IsEnabled" Value="False"/>
-                    <Setter Property="Foreground" Value="gray"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="DelButtonStyle" BasedOn="{StaticResource SecondaryButtonStyle}" TargetType="{x:Type Button}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding SelectedItem, ElementName=contractDataGrid}" Value="{x:Null}">
-                    <Setter Property="IsEnabled" Value="False"/>
-                    <Setter Property="Foreground" Value="gray"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
     </UserControl.Resources>
-    <UserControl.DataContext>
-        <Model:Contract/>
-    </UserControl.DataContext>
     <Grid Margin="2 10 0 2" x:Name="c">
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
@@ -44,68 +23,67 @@
             <ColumnDefinition Width="355"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Border Grid.Row="0" Grid.ColumnSpan="4" BorderBrush="Black" BorderThickness="0 0 0 3" VerticalAlignment="Bottom" Height="1"/>
         <StackPanel HorizontalAlignment="Right">
             <StackPanel Orientation="Horizontal" Margin="0 0 0 10" HorizontalAlignment ="Right">
                 <TextBlock Text="Номер договора"/>
-                <TextBox x:Name="numberTextBlock" Style="{StaticResource BaseTextBox}" Width="200" MaxLength="22">
-                    <Binding Path="Number" ValidatesOnExceptions="True" UpdateSourceTrigger="PropertyChanged">
-                        <Binding.ValidationRules>
-                            <DataErrorValidationRule ValidatesOnTargetUpdated="False"/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox>
+                <TextBox x:Name="numberTextBlock" Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseTextBox}" Width="200" MaxLength="22" TextWrapping="NoWrap"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment ="Right">
                 <TextBlock Text="Дата"/>
-                <DatePicker Style="{StaticResource CustomDatepiker}" CalendarStyle="{DynamicResource DatePickerCalendarStyle1}" Width="200" Text="{Binding Date, Mode=TwoWay, StringFormat=d}" SelectedDate="{x:Static sys:DateTime.Now}"
+                <DatePicker Style="{StaticResource CustomDatepiker}" CalendarStyle="{DynamicResource DatePickerCalendarStyle1}" Width="200" 
+                            Text="{Binding Date, StringFormat=d}" SelectedDate="{Binding Date}"
                             Height="{Binding ActualHeight, ElementName=numberTextBlock, Mode=OneWay}" FontSize="15"/>
             </StackPanel>
         </StackPanel>
         <StackPanel Grid.Column="1">
             <StackPanel Orientation="Horizontal" Margin="0 0 0 10" HorizontalAlignment ="Right">
-                <TextBlock Text="Номенклатура"/>
-                <ComboBox x:Name="nomenclatureComboBox" Style="{DynamicResource MainComboBox}" StaysOpenOnEdit="True"  Width="200" Height="24.68" VerticalContentAlignment="Center" FontSize="15" FontWeight="SemiBold">
-                    <ComboBox.SelectedItem>
-                        <Binding Path="Nomenclature" ValidatesOnExceptions="True" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <DataErrorValidationRule ValidatesOnTargetUpdated="False"/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </ComboBox.SelectedItem>
+                <TextBlock Text="Услуга"/>
+                <ComboBox ItemsSource="{Binding Nomenclatures}" SelectedItem="{Binding SelectedNomenclature}" Style="{DynamicResource MainComboBox}" 
+                          Width="200" Height="26" >
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock FontSize="16" Text="{Binding Name}" FontWeight="SemiBold"/>
+                                <TextBlock FontSize="12" Text="{Binding Unit}" Margin="0 0 0 2"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment ="Right">
                 <TextBlock Text="Контрагент"/>
-                <ComboBox SelectedValuePath="Name" x:Name="companyComboBox" Style="{DynamicResource MainComboBox}" StaysOpenOnEdit="True"  Width="200" Height="24.68" VerticalContentAlignment="Center" FontSize="15" FontWeight="SemiBold" DisplayMemberPath="ShortName">
-                    <ComboBox.SelectedValue>
-                        <Binding Path="Company" ValidatesOnExceptions="True" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <DataErrorValidationRule ValidatesOnTargetUpdated="False"/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </ComboBox.SelectedValue>
+                <ComboBox ItemsSource="{Binding Companies}" DisplayMemberPath="ShortName" SelectedItem="{Binding SelectedCompany}" Style="{DynamicResource MainComboBox}" 
+                          Width="200" Height="26" FontSize="16" FontWeight="SemiBold" >
                 </ComboBox>
             </StackPanel>
         </StackPanel>
-        <StackPanel Grid.Column="2"  Margin="30 0 30 0">
-            <StackPanel Height="35" Margin="0 0 0 0">
-                <Button Style="{StaticResource AddButtonStyle}" Content="Добавить" Click="Add_Button"/>
+        <StackPanel Grid.Column="2"  Margin="30 0 5 0">
+            <StackPanel Height="35">
+                <Button Style="{StaticResource SecondaryButtonStyle}" Content="Добавить" Command="{Binding AddContractCommand}"/>
             </StackPanel>
-            <Button Style="{StaticResource DelButtonStyle}" Content="Удалить" Click="DeleteButton_Click"/>
+            <Button Style="{StaticResource SecondaryButtonStyle}" Content="Удалить" Command="{Binding RemoveContractCommand}"/>
         </StackPanel>
-        <DataGrid Margin="10" x:Name="contractDataGrid" Grid.Row="1" Background="Transparent" Style="{StaticResource MainDataGrid}" Grid.ColumnSpan="3"  MaxWidth="{Binding ActualWidth, ElementName=userControl, Mode=OneWay}" HorizontalAlignment="Left" >
+        <StackPanel Grid.Column="3"  Margin="0 0 5 0">
+            <StackPanel Height="35">
+                <Button Style="{StaticResource SecondaryButtonStyle}" Content="Обновить" Command="{Binding RefreshDataCommand}"/>
+            </StackPanel>
+        </StackPanel>
+        <DataGrid Margin="10" ItemsSource="{Binding Contracts}" SelectionChanged="ContractDataGrid_SelectionChanged" x:Name="ContractDataGrid" 
+                  Grid.Row="1" Background="Transparent" Style="{StaticResource MainDataGrid}" Grid.ColumnSpan="4" HorizontalAlignment="Left" >
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Копировать" Command="Copy"/>
-                    <MenuItem Header="Удалить" Click="DeleteButton_Click"/>
+                    <MenuItem Header="Удалить" Command="{Binding RemoveContractCommand}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Number}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Номер"/>
-                <DataGridTextColumn Binding="{Binding Nomenclature}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Номенклатура"/>
-                <DataGridTextColumn Binding="{Binding Company}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Контрагент" Width="530"/>
-                <DataGridTextColumn Binding="{Binding Date, StringFormat=d}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Дата" Width="85"/>
+                <DataGridTextColumn Binding="{Binding Number}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Номер" Width="100"/>
+                <DataGridTextColumn Binding="{Binding Nomenclature.Name}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Номенклатура" Width="300"/>
+                <DataGridTextColumn Binding="{Binding Company.Name}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Контрагент" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Date}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Дата" Width="120"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

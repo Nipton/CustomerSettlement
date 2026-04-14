@@ -18,7 +18,7 @@ namespace AccountsReceivable.View
 {
     public partial class NomenclatureView : UserControl
     {
-        public NomenclatureView(){ }
+        public NomenclatureView(){ InitializeComponent(); }
         private void OnBackgroundClick(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton != MouseButton.Left) return;
