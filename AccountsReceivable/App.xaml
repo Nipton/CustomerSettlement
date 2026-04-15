@@ -14,8 +14,8 @@
             <DataTemplate DataType="{x:Type vm:ReportViewModel}">
                 <views:ReportView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:CompanyEditViewModel}">
-                <views:CompanyEditView/>
+            <DataTemplate DataType="{x:Type vm:CompanyEditorViewModel}">
+                <views:CompanyEditorView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:CounterpartiesViewModel}">
                 <views:CounterpartiesView/>
@@ -25,7 +25,10 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:ContractViewModel}">
                 <views:ContractView/>
-            </DataTemplate> 
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:AccountsJournalViewModel}">
+                <views:ArchiveAccountView/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

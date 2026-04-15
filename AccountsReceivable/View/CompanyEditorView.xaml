@@ -1,8 +1,8 @@
-﻿<Window x:Class="AccountsReceivable.View.CompanyEditView"
+﻿<Window x:Class="AccountsReceivable.View.CompanyEditorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:CompanyEditViewModel}"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:CompanyEditorViewModel}"
         mc:Ignorable="d" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              d:DesignWidth="720" Background="White" 
              Title="Редактирование компании" SizeToContent="Height" Width="720" WindowStartupLocation ="CenterScreen">
@@ -15,7 +15,9 @@
             <Setter Property="MinWidth" Value="250"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
-        <Style TargetType="TextBox" BasedOn="{StaticResource BaseTextBox}"/>
+        <Style TargetType="TextBox" BasedOn="{StaticResource BaseTextBox}">
+            <Setter Property="MinWidth" Value="350"/>
+        </Style>
         <Style TargetType="StackPanel">
             <Setter Property="Orientation" Value="Horizontal"/>
             <Setter Property="Margin" Value="10 10 0 5"/>

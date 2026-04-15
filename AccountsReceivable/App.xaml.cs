@@ -47,18 +47,22 @@ namespace AccountsReceivable
             services.AddTransient<ReportView>();
             services.AddSingleton<OrganizationViewModel>();
             services.AddTransient<OrganizationView>();
-            services.AddTransient<CompanyEditViewModel>();           
-            services.AddTransient<CompanyEditView>();
+            services.AddTransient<CompanyEditorViewModel>();           
+            services.AddTransient<CompanyEditorView>();
             services.AddSingleton<CounterpartiesViewModel>();
             services.AddTransient<CounterpartiesView>();
             services.AddSingleton<NomenclatureViewModel>();
             services.AddTransient<NomenclatureView>();
             services.AddSingleton<ContractViewModel>();
             services.AddTransient<ContractView>();
+            services.AddSingleton<AccountsJournalViewModel>();
+            services.AddTransient<ArchiveAccountView>();
+            services.AddTransient<AccountEditorView>();
 
             Services = services.BuildServiceProvider();
-            
-            var mainWindow = Services.GetRequiredService<MainWindow>();
+
+            //var mainWindow = Services.GetRequiredService<MainWindow>();
+            var mainWindow = Services.GetRequiredService<AccountEditorView>();
             mainWindow.Show();
         }
     }

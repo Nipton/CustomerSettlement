@@ -2,8 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AccountsReceivable.ViewModels"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="Дебиторская задолженность" Height="720" Width="1280" MinHeight="350" MinWidth="760" WindowStartupLocation ="CenterScreen" Background="#E5D9EA" Language="ru-RU">
     <Window.Resources>
@@ -102,26 +101,26 @@
                 </LinearGradientBrush>
             </Grid.Background>
             <StackPanel x:Name="Header" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowOrganizationViewCommand}">Организация</Button>
-            <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowAccointsViewCommand}">Счета</Button>
-            <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReportViewCommand}">Отчет</Button>
-            <Button Template="{StaticResource ResourceKey=HeaderButtons}" Name="ReferencesButton" Command="{Binding ToggleReferencesCommand}">Справочники</Button>
-            <Popup x:Name="popup"  MaxWidth="180" StaysOpen="False" IsOpen="{Binding IsDropdownOpen}"
-         AllowsTransparency="True" Placement="Bottom" PlacementTarget="{Binding ElementName=ReferencesButton}">
-                <StackPanel x:Name="st"   HorizontalAlignment="Center" Width="175">
-                    <StackPanel.Background>
-                        <LinearGradientBrush  StartPoint="0.5,0" EndPoint="0.5,1">
-                            <GradientStop Color= "#B564D4" Offset="0" />
-                            <GradientStop Color="#F5DCFF" Offset="1" />
-                        </LinearGradientBrush>
-                    </StackPanel.Background>
-                    <Button Style="{StaticResource PopupButton}" Command="{Binding ShowCounterpartyViewCommand}">Контрагенты</Button>
-                    <Button Style="{StaticResource PopupButton}" Command="{Binding ShowContractViewCommand}">Договоры</Button>
-                    <Button Style="{StaticResource PopupButton}" Command="{Binding ShowNomenclatureViewCommand}">Номенклатура</Button>
-                </StackPanel>
-            </Popup>
-            <Button Content="Архив" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowArchiveViewCommand}"/>
-            <Button Content="Акт сверки" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReconciliationViewCommand}"/>
+                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowOrganizationViewCommand}">Организация</Button>
+                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowAccointsViewCommand}">Счета</Button>
+                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReportViewCommand}">Отчет</Button>
+                <Button Content="Архив" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowArchiveViewCommand}"/>
+                <Button Content="Акт сверки" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReconciliationViewCommand}"/>
+                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Name="ReferencesButton" Command="{Binding ToggleReferencesCommand}">Справочники</Button>
+                <Popup x:Name="popup"  MaxWidth="180" StaysOpen="False" IsOpen="{Binding IsDropdownOpen}"
+AllowsTransparency="True" Placement="Bottom" PlacementTarget="{Binding ElementName=ReferencesButton}">
+                    <StackPanel x:Name="st"   HorizontalAlignment="Center" Width="175">
+                        <StackPanel.Background>
+                            <LinearGradientBrush  StartPoint="0.5,0" EndPoint="0.5,1">
+                                <GradientStop Color= "#B564D4" Offset="0" />
+                                <GradientStop Color="#F5DCFF" Offset="1" />
+                            </LinearGradientBrush>
+                        </StackPanel.Background>
+                        <Button Style="{StaticResource PopupButton}" Command="{Binding ShowCounterpartyViewCommand}">Контрагенты</Button>
+                        <Button Style="{StaticResource PopupButton}" Command="{Binding ShowContractViewCommand}">Договоры</Button>
+                        <Button Style="{StaticResource PopupButton}" Command="{Binding ShowNomenclatureViewCommand}">Номенклатура</Button>
+                    </StackPanel>
+                </Popup>
             </StackPanel>
         </Grid>
         <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}"/>

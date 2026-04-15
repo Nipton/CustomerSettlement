@@ -37,7 +37,7 @@ namespace AccountsReceivable.ViewModels
             if (Organization == null) return;
             try
             {
-                await dialogService.ShowWindowAsync<CompanyEditView, CompanyEditViewModel>(Organization);
+                await dialogService.ShowWindowAsync<CompanyEditorView, CompanyEditorViewModel>(Organization);
                 OnPropertyChanged(nameof(Organization));
             }
             catch (CloneException ex)

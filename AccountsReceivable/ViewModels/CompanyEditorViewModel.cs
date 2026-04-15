@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace AccountsReceivable.ViewModels
 {
-    public class CompanyEditViewModel : ViewModelBase, ILoadable, IDataErrorInfo
+    public class CompanyEditorViewModel : ViewModelBase, ILoadable, IDataErrorInfo
     {
         private const string FORMAT_ERROR = "Неверный формат";
         private Company editedСompany;
@@ -116,7 +116,7 @@ namespace AccountsReceivable.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand LoadEditViewCommand { get; }
         
-        public CompanyEditViewModel(Company originalСompany, ICompanyRepository companyRepository, IRepository<Category> categoryRepository, IDialogService dialogService) 
+        public CompanyEditorViewModel(Company originalСompany, ICompanyRepository companyRepository, IRepository<Category> categoryRepository, IDialogService dialogService) 
         {
             CancelCommand = new RelayCommand(_ => Cancel());
             SaveCommand = new AsyncRelayCommand(Save, _ => IsValid);

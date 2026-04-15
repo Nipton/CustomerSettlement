@@ -93,7 +93,7 @@ namespace AccountsReceivable.ViewModels
             var newCompany = new Company();
             try
             {
-                var result =  await dialogService.ShowWindowAsync<CompanyEditView, CompanyEditViewModel>(newCompany);
+                var result =  await dialogService.ShowWindowAsync<CompanyEditorView, CompanyEditorViewModel>(newCompany);
                 if (result)
                     Companies.Add(newCompany);
             }
@@ -112,7 +112,7 @@ namespace AccountsReceivable.ViewModels
             var company = SelectedItems[0];
             try
             {
-                await dialogService.ShowWindowAsync<CompanyEditView, CompanyEditViewModel>(company);
+                await dialogService.ShowWindowAsync<CompanyEditorView, CompanyEditorViewModel>(company);
             }
             catch (Exception)
             {

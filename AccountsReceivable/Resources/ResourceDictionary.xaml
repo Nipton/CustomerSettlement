@@ -9,6 +9,11 @@
         <Setter Property="Foreground" Value="#50026E"/>
         <Setter Property="Margin" Value="30 0 0 0"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform/>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate x:Name="btn" TargetType="Button">
@@ -30,7 +35,11 @@
                             <Setter Property="Cursor" Value="Hand"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="brd" Property="Margin" Value="0 2 0 0"/>
+                            <Setter Property="RenderTransform">
+                                <Setter.Value>
+                                    <TranslateTransform Y="2"/>
+                                </Setter.Value>
+                            </Setter>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="Gray"/>
@@ -71,7 +80,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="6">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="6" Padding="7 7">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -147,7 +156,7 @@
     <!--TextBox-->
     <Style x:Key="BaseTextBox" TargetType="TextBox">
         <Setter Property="FontSize" Value="16"/>
-        <Setter Property="Width" Value="350"/>
+        
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="SpellCheck.IsEnabled" Value="True"/>
@@ -172,6 +181,9 @@
                               Focusable="False" />
                     </Border>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.3"/>
+                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Border.BorderBrush" TargetName="border" Value="#E567F2"/>
                         </Trigger>
@@ -512,6 +524,7 @@
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="Padding" Value="6,3,5,3"/>
+        <Setter Property="MinWidth" Value="150"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
         <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
