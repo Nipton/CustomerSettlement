@@ -25,7 +25,7 @@ namespace AccountsReceivable.View
         {
             InitializeComponent();
             db = new ApplicationContext();
-            payment = new Payment();
+            payment = new Payment() { Number = "2"};
             id = index;
             if(editPayment != null )
             {
@@ -37,8 +37,8 @@ namespace AccountsReceivable.View
         {
             try
             {
-                payment.AccountID = id;
-                if (payment.ID != 0)
+                payment.AccountHeaderId = id;
+                if (payment.Id != 0)
                 {
                     db.Payment.Update(payment);
                     db.SaveChanges();

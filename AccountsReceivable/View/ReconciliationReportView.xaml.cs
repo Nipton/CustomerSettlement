@@ -88,7 +88,7 @@ namespace AccountsReceivable.View
             {
                 foreach (var item in filtredList)
                 {
-                    paymentsList?.AddRange(db.Payment.Where(x => x.AccountID == item.ID));
+                    paymentsList?.AddRange(db.Payment.Where(x => x.AccountHeaderId == item.ID));
                 }
             }
             creditDataGrid.ItemsSource = paymentsList;

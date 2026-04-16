@@ -27,7 +27,7 @@
                 <views:ContractView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:AccountsJournalViewModel}">
-                <views:ArchiveAccountView/>
+                <views:AccountsView/>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

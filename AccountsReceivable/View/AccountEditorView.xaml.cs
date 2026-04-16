@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace AccountsReceivable.View
 {
-    /// <summary>
-    /// Логика взаимодействия для AccountEditorView.xaml
-    /// </summary>
     public partial class AccountEditorView : Window
     {
         public AccountEditorView()

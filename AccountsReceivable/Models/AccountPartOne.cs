@@ -87,7 +87,7 @@ namespace AccountsReceivable.Models
         //    Contract = newAccOne.Contract;
         //    CompanyOld = newAccOne.CompanyOld;
         //    ID = newAccOne.ID;
-        //    Sum = newAccOne.Sum;
+        //    AmountWithVat = newAccOne.AmountWithVat;
         //    errorCollection = new Dictionary<string, string?>();
         //}
         public string Error => throw new NotImplementedException();

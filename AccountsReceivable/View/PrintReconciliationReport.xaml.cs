@@ -124,7 +124,7 @@ namespace AccountsReceivable.View
                     {
                         Date = payment.Date,
                         NameDocument = $"п/п № {payment.Number} от {payment.Date:d}",
-                        Credit = payment.Sum
+                        Credit = (double)payment.Sum
                     };
                     dataForTableList.Add(dataForTable);
                 }

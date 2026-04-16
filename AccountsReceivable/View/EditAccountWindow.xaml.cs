@@ -24,7 +24,7 @@ namespace AccountsReceivable.View
         public EditAccountWindow(AccountPartOne accOne, int option)
         {
             InitializeComponent();
-            accountsView = new AccountsView(accOne, option);
+            accountsView = new AccountsViewOLD(accOne, option);
             editAccount.Child= accountsView;
         }
     }

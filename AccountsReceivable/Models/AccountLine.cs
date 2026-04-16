@@ -21,9 +21,13 @@ namespace AccountsReceivable.Models
         [Precision(5, 2)]
         public decimal VatRate { get; set; } = 0m;
         [Precision(18, 2)]
-        public decimal Sum { get; set; }
-        public DateTime? Period { get; set; }
-        public int? AccountHeaderId { get; set; }
-        public virtual AccountHeader? AccountHeader { get; set; }
+        public decimal AmountWithVat { get; set; }
+        public DateOnly Period { get; set; }
+        public int AccountHeaderId { get; set; }
+        public virtual AccountHeader AccountHeader { get; set; } = null!;
+        public void RecalculateAmount()
+        {
+            AmountWithVat = Quantity * Price * (1 + VatRate / 100);
+        }
     }
 }

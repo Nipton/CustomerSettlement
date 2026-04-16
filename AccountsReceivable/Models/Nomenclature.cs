@@ -18,7 +18,5 @@ namespace AccountsReceivable.Models
         [Required]
         [MaxLength(50)]
         public string Unit { get; set; } = "";
-
-        public virtual ICollection<AccountLine> AccountList { get; set; } = new List<AccountLine>();
     }
 }

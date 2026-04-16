@@ -104,7 +104,7 @@
                 <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowOrganizationViewCommand}">Организация</Button>
                 <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowAccointsViewCommand}">Счета</Button>
                 <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReportViewCommand}">Отчет</Button>
-                <Button Content="Архив" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowArchiveViewCommand}"/>
+                <!--<Button Content="Архив" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowArchiveViewCommand}"/>-->
                 <Button Content="Акт сверки" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReconciliationViewCommand}"/>
                 <Button Template="{StaticResource ResourceKey=HeaderButtons}" Name="ReferencesButton" Command="{Binding ToggleReferencesCommand}">Справочники</Button>
                 <Popup x:Name="popup"  MaxWidth="180" StaysOpen="False" IsOpen="{Binding IsDropdownOpen}"

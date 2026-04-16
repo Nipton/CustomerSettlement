@@ -212,6 +212,53 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="SearchTextBox" TargetType="TextBox">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Background" Value="#ceaddc"/>
+        <Setter Property="BorderBrush" Value="#65247F"/>
+        <Setter Property="BorderThickness" Value="1.6"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Grid>
+                        <Border BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                Background="{TemplateBinding Background}"
+                                Name="border" 
+                                CornerRadius="7">
+                            <ScrollViewer Name="PART_ContentHost" 
+                                          VerticalAlignment="Center"
+                                          Margin="5,0,0,0"/>
+                        </Border>
+                        <TextBlock Text="Поиск..." 
+                                   IsHitTestVisible="False"
+                                   VerticalAlignment="Center"
+                                   Foreground="#71547D"
+                                   Margin="10 0 10 0">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" 
+                                                     Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="#65247F"/>
+                            <Setter TargetName="border" Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!--DataGrid-->
     <Style x:Key="WrapText" TargetType="TextBlock">

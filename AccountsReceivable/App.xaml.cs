@@ -9,11 +9,7 @@ using AccountsReceivable.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace AccountsReceivable
@@ -40,6 +36,7 @@ namespace AccountsReceivable
             services.AddSingleton<IRepository<Contract>, ContractRepository>(); 
             services.AddSingleton<IViewModelFactory, ViewModelFactory>();
             services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<IDataHub, DataHub>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>();                     
@@ -56,13 +53,12 @@ namespace AccountsReceivable
             services.AddSingleton<ContractViewModel>();
             services.AddTransient<ContractView>();
             services.AddSingleton<AccountsJournalViewModel>();
-            services.AddTransient<ArchiveAccountView>();
+            services.AddTransient<AccountsView>();
             services.AddTransient<AccountEditorView>();
 
             Services = services.BuildServiceProvider();
 
-            //var mainWindow = Services.GetRequiredService<MainWindow>();
-            var mainWindow = Services.GetRequiredService<AccountEditorView>();
+            var mainWindow = Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
         }
     }

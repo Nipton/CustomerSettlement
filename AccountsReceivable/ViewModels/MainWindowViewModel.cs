@@ -38,7 +38,7 @@ namespace AccountsReceivable.ViewModels
             ShowOrganizationViewCommand = new AsyncRelayCommand(ShowPageAsync<OrganizationViewModel>);
             //ShowReportViewCommand = new RelayCommand(async _ => await ShowPageAsync<ReportViewModel>());
             ShowAccointsViewCommand = new AsyncRelayCommand(ShowPageAsync<AccountsJournalViewModel>);
-            //ShowArchiveViewCommand = new RelayCommand(_ => ShowPage<ArchiveAccountView>());
+            //ShowArchiveViewCommand = new RelayCommand(_ => ShowPage<AccountsView>());
             //ShowReconciliationViewCommand = new RelayCommand(_ => ShowPage<ReconciliationReport>());
             ToggleReferencesCommand = new RelayCommand(_ => IsDropdownOpen = true, _ => !IsDropdownOpen);
             ShowCounterpartyViewCommand = new AsyncRelayCommand(async _ => { await ShowPageAsync<CounterpartiesViewModel>(); IsDropdownOpen = false; });

@@ -17,14 +17,13 @@ namespace AccountsReceivable.Models
         public DateTime Date { get; set; }
         [Precision(18, 2)]
         public decimal Sum { get; set; }
-        [Precision(18, 2)]
-        public decimal? Payment { get; set; }
-        public bool? PaymentStatus { get; set; }
-        public bool? ActStatus { get; set; }
+        public bool PaymentStatus { get; set; }
+        public bool ActStatus { get; set; }
 
-        public int? ContractId { get; set; }
-        public virtual Contract? Contract { get; set; }
-
+        public int ContractId { get; set; }
+        public virtual Contract Contract { get; set; } = null!;
+        
+        public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
         public virtual ICollection<AccountLine> AccountsList { get; set; } = new List<AccountLine>();
     }
 }
