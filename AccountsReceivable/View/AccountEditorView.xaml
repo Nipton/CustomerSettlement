@@ -165,7 +165,7 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="НДС"/>
                         <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" Margin="40 0 0 0">
-                            <TextBox  Style="{StaticResource LocalTextBox}" Text="{Binding VatRate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="40"
+                            <TextBox  Style="{StaticResource LocalTextBox}" Text="{Binding VatRate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="50"
                                      Height="{Binding ElementName=QuantityTextBox, Path=ActualHeight}" MaxLength="5"/>
                             <TextBlock Text="%" Margin="5 0 0 15"/>
                         </StackPanel>

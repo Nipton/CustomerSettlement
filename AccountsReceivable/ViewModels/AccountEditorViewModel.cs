@@ -242,9 +242,9 @@ namespace AccountsReceivable.ViewModels
             IsEditPanelVisible = true;
             HeaderAccountsLine = "Редактирование позиции счёта";
             SelectedNomenclature = SelectedAccountLine.Nomenclature;
-            Quantity = SelectedAccountLine.Quantity.ToString();
-            Price = SelectedAccountLine.Price.ToString();
-            VatRate = SelectedAccountLine.VatRate.ToString();
+            Quantity = SelectedAccountLine.Quantity.ToString("F2");
+            Price = SelectedAccountLine.Price.ToString("F2");
+            VatRate = SelectedAccountLine.VatRate.ToString("F2");
             Period = SelectedAccountLine.Period.ToDateTime(TimeOnly.MinValue);
         }        
         private void SaveAccountLine()
@@ -279,6 +279,7 @@ namespace AccountsReceivable.ViewModels
                 return;
             }
             AccountLines.Remove(SelectedAccountLine);
+            CalculateTotalSum();
         }
         private void MapLineFromForm(AccountLine line)
         {
@@ -353,6 +354,7 @@ namespace AccountsReceivable.ViewModels
         #nullable restore
         public string? ValidateDecimal(string value, string fieldName)
         {
+            value = value.Replace(',', '.');
             if (decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal digit))
             {
                 if (digit < 0)

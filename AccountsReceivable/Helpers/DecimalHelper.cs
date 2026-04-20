@@ -11,14 +11,10 @@ namespace AccountsReceivable.Helpers
     {
         public static decimal SafeParse(string value)
         {
-            try
-            {
-                return decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var result) ? result : 0;
-            }
-            catch (OverflowException)
-            {
+            if (string.IsNullOrEmpty(value))
                 return 0;
-            }
+            value = value.Replace(',', '.');
+            return decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var result) ? result : 0;
         }
         public static decimal SafeMultiply(decimal a, decimal b)
         {
