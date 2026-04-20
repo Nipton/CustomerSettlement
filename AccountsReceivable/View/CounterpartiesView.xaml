@@ -11,10 +11,10 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <DockPanel Background="#E5D9EA">
-            <Button Style="{StaticResource SecondaryButtonStyle}" Command="{Binding AddCompanyCommand}">Добавить</Button>
-            <Button Style="{StaticResource SecondaryButtonStyle}" Command="{Binding EditCompanyCommand}">Редактировать</Button>
-            <Button Style="{StaticResource SecondaryButtonStyle}" Command="{Binding RemoveCompaniesCommand}">Удалить</Button>
-            <Button Style="{StaticResource SecondaryButtonStyle}" Command="{Binding RefreshCompaniesCommand}">Обновить</Button>
+            <Button Style="{StaticResource SecondaryButtonStyle}" Command="{Binding AddCompanyCommand}">➕ Добавить</Button>
+            <Button Style="{StaticResource SecondaryButtonStyle}" Command="{Binding EditCompanyCommand}">✏️ Редактировать</Button>
+            <Button Style="{StaticResource SecondaryButtonStyle}" Command="{Binding RemoveCompaniesCommand}">🗑 Удалить</Button>
+            <Button Style="{StaticResource SecondaryButtonStyle}" Command="{Binding RefreshCompaniesCommand}">🔄 Обновить</Button>
             <Grid>
                 <TextBox Style="{StaticResource SearchTextBox}" Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                      HorizontalAlignment="Right" Margin="0 0 40 0"  Width="170" />
@@ -37,7 +37,7 @@
                 <DataGridTextColumn Binding="{Binding Path=Kpp}" ElementStyle="{StaticResource WrapText}" Header="КПП"/>
                 <DataGridTextColumn Binding="{Binding Path=LegalAddress}" ElementStyle="{StaticResource WrapText}" Header="Юр. адрес" Width="200"/>
                 <DataGridTextColumn Binding="{Binding Path=ActualAddress}" ElementStyle="{StaticResource WrapText}" Header="Физ. адрес" Width="200"/>
-                <DataGridTextColumn Binding="{Binding Path=Category.Name}" ElementStyle="{StaticResource WrapText}" Header="Категория" Width="150"/>
+                <DataGridTextColumn Binding="{Binding Path=Category, Converter={StaticResource EnumDisplayConverter}}" ElementStyle="{StaticResource WrapText}" Header="Категория" Width="150"/>
                 <DataGridTextColumn Binding="{Binding Path=Ogrn}" ElementStyle="{StaticResource WrapText}" Header="ОГРН"/>
                 <DataGridTextColumn Binding="{Binding Path=Bank}" ElementStyle="{StaticResource WrapText}" Header="Банк" Width="200"/>
                 <DataGridTextColumn Binding="{Binding Path=Rs}" ElementStyle="{StaticResource WrapText}" Header="р/с"/>

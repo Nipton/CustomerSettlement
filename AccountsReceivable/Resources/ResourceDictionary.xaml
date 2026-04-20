@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+                    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" xmlns:helpers="clr-namespace:AccountsReceivable.Helpers">
 
     <!--Button-->
     <Style x:Key="SecondaryButtonStyle" TargetType="Button">
@@ -1108,5 +1108,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+    <!--Converter-->
+    <helpers:EnumDisplayConverter x:Key="EnumDisplayConverter"/>
+    <helpers:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 </ResourceDictionary>

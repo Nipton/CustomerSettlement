@@ -1,8 +1,9 @@
 ﻿using AccountsReceivable.Data.Interfaces;
 using AccountsReceivable.Exceptions;
+using AccountsReceivable.Helpers;
 using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
-using AccountsReceivable.Services;
+using AccountsReceivable.Models.Enums;
 using AccountsReceivable.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
@@ -13,23 +14,17 @@ using System.Windows.Input;
 
 namespace AccountsReceivable.ViewModels
 {
-    public class CompanyEditorViewModel : ViewModelBase, ILoadable, IDataErrorInfo
+    public class CompanyEditorViewModel : ViewModelBase, IDataErrorInfo
     {
         private const string FORMAT_ERROR = "Неверный формат";
         private Company editedСompany;
         private Company originalСompany;
         private readonly ICompanyRepository companyRepository;
-        private readonly IRepository<Category> categoryRepository;
         private readonly IDialogService dialogService;
-        private IEnumerable<Category> categoryList = new List<Category>();
         private readonly bool isMainCompany;
         public bool IsShowCategory { get => !isMainCompany; }
         public string Header { get => isMainCompany ? "Организация" : "Контрагент"; }
-        public IEnumerable<Category> CategoryList
-        {
-            get => categoryList;
-            set => Set(ref categoryList, value);
-        }
+        public List<CompanyCategory> CategoryList { get; set; } = Enum.GetValues(typeof(CompanyCategory)).Cast<CompanyCategory>().OrderByDescending(x => x).ToList();
         #region Свойства Company
         public string Name
         {
@@ -101,33 +96,24 @@ namespace AccountsReceivable.ViewModels
             get => editedСompany.DirectorFullName;
             set => SetProperty(v => editedСompany.DirectorFullName = v, value);
         }
-        public Category? Category
+        public CompanyCategory? Category
         {
             get => editedСompany.Category;
             set => SetProperty(v => editedСompany.Category = v, value);
         }
-        public int? CategoryId
-        {
-            get => editedСompany.CategoryId;
-            set => SetProperty(v => editedСompany.CategoryId = v, value);
-        }
         #endregion
         public ICommand CancelCommand { get; }
         public ICommand SaveCommand { get; }
-        public ICommand LoadEditViewCommand { get; }
         
-        public CompanyEditorViewModel(Company originalСompany, ICompanyRepository companyRepository, IRepository<Category> categoryRepository, IDialogService dialogService) 
+        public CompanyEditorViewModel(Company originalСompany, ICompanyRepository companyRepository, IDialogService dialogService) 
         {
             CancelCommand = new RelayCommand(_ => Cancel());
             SaveCommand = new AsyncRelayCommand(Save, _ => IsValid);
-            LoadEditViewCommand = new AsyncRelayCommand(LoadAsync);
 
             this.companyRepository = companyRepository;
-            this.categoryRepository = categoryRepository;
             this.dialogService = dialogService;
             this.originalСompany = originalСompany;
             editedСompany = originalСompany.Clone() as Company ?? throw new CloneException("Не удалось клонировать компанию");
-            editedСompany.Category = null;
             if(originalСompany.Id == Constants.OWN_COMPANY_ID) 
                 isMainCompany = true;
         }
@@ -149,24 +135,11 @@ namespace AccountsReceivable.ViewModels
                 else
                     await companyRepository.UpdateCompanyAsync(editedСompany);
                 originalСompany.CopyFrom(editedСompany);
-                originalСompany.Category = categoryList.FirstOrDefault(c => c.Id == originalСompany.CategoryId);
                 dialogService.CloseWindow(this, true);
             }
             catch 
             {
                 dialogService.ShowError("Ошибка", "Произошла ошибка во время сохранения.");
-            }
-        }
-
-        public async Task LoadAsync()
-        {
-            try
-            {
-                CategoryList = await categoryRepository.GetAllAsync();
-            }
-            catch
-            {
-                dialogService.ShowError("Ошибка", "Не удалось загрузить список категорий.");
             }
         }
         #region Валидация

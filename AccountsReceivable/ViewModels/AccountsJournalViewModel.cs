@@ -1,4 +1,6 @@
 ﻿using AccountsReceivable.Interfaces;
+using AccountsReceivable.Models;
+using AccountsReceivable.Models.Enums;
 using AccountsReceivable.View;
 using AccountsReceivable.ViewModels.Commands;
 using System;
@@ -21,7 +23,7 @@ namespace AccountsReceivable.ViewModels
         }
         private async Task OpenAccountEditor()
         {
-            var reuslt = await dialogService.ShowWindowAsync<AccountEditorView, AccountEditorViewModel>();
+            var reuslt = await dialogService.ShowWindowAsync(DialogType.AccountEditor, new AccountHeader() { Id = 5});
         }
     }
 }

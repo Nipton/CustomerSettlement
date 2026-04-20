@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:CompanyEditorViewModel}"
         mc:Ignorable="d" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              d:DesignWidth="720" Background="White" 
-             Title="Редактирование компании" SizeToContent="Height" Width="720" WindowStartupLocation ="CenterScreen">
+             Title="Редактирование компании" SizeToContent="Height" Width="720" ResizeMode="NoResize" WindowStartupLocation ="CenterScreen">
         <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <Style TargetType="TextBlock">
@@ -16,7 +16,7 @@
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
         <Style TargetType="TextBox" BasedOn="{StaticResource BaseTextBox}">
-            <Setter Property="MinWidth" Value="350"/>
+            <Setter Property="Width" Value="350"/>
         </Style>
         <Style TargetType="StackPanel">
             <Setter Property="Orientation" Value="Horizontal"/>
@@ -24,6 +24,10 @@
         </Style>
     </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="20" Orientation="Vertical">
                 <StackPanel>
@@ -82,7 +86,15 @@
                 </StackPanel>
                 <StackPanel Visibility="{Binding IsShowCategory, Converter={StaticResource BoolToVisibilityConverter}}">
                     <TextBlock>Категория потребителей</TextBlock>
-                    <ComboBox  SelectedValue="{Binding CategoryId}" ItemsSource="{Binding CategoryList}" DisplayMemberPath="Name" SelectedValuePath="Id" Style="{StaticResource MainComboBox}" Width="350" BorderThickness="1.9" FontSize="14" Height="{Binding ActualHeight, ElementName=phone, Mode=OneWay}"/>
+                    <ComboBox  SelectedItem="{Binding Category}" ItemsSource="{Binding CategoryList}"
+                               Style="{StaticResource MainComboBox}" Width="350" BorderThickness="1.9" FontSize="14" 
+                               >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock FontWeight="Bold" FontSize="18" MinWidth="0" TextAlignment="Center">Руководитель</TextBlock>
@@ -95,11 +107,13 @@
                     <TextBlock>ФИО</TextBlock>
                     <TextBox x:Name="fullName" Text="{Binding Path=DirectorFullName}"></TextBox>
                 </StackPanel>
-                <StackPanel>
-                    <Button Style="{StaticResource PrimaryButtonStyle}" Margin="400 25 15 0" HorizontalAlignment="Right" Content="Сохранить" Command="{Binding SaveCommand}"/>
-                    <Button Style="{StaticResource PrimaryButtonStyle}" Content="Отмена" VerticalAlignment="Bottom" Command="{Binding CancelCommand}"/>
-                </StackPanel>
+                
             </StackPanel>
         </ScrollViewer>
+        <Border Grid.Row="1" Background="#E5D9EA"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="50 20">
+            <Button Style="{StaticResource PrimaryButtonStyle}" Content="Сохранить" Command="{Binding SaveCommand}" Margin="20 0"/>
+            <Button Style="{StaticResource PrimaryButtonStyle}" Content="Отмена" Command="{Binding CancelCommand}"/>
+        </StackPanel>
     </Grid>
 </Window>

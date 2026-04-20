@@ -1,6 +1,8 @@
 ﻿using AccountsReceivable.Data.Interfaces;
+using AccountsReceivable.Exceptions;
 using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
+using AccountsReceivable.Models.Enums;
 using AccountsReceivable.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
@@ -18,15 +20,15 @@ namespace AccountsReceivable.ViewModels
         private IRepository<Contract> contractRepository;
         private readonly IDialogService dialogService;
         private bool isFirstLoad = true;
-        private Nomenclature? selectedNomenclature;
+        private ContractSubject? selectedContractSubject;
         private Company? selectedCompany;
         private List<Contract> selectedContracts = new();
         private DateTime date = DateTime.Today;
         private string number = string.Empty;
-        public Nomenclature? SelectedNomenclature
+        public ContractSubject? SelectedContractSubject
         {
-            get => selectedNomenclature;
-            set => Set(ref selectedNomenclature, value);
+            get => selectedContractSubject;
+            set => Set(ref selectedContractSubject, value);
         }
         public Company? SelectedCompany
         {
@@ -49,7 +51,7 @@ namespace AccountsReceivable.ViewModels
             set => Set(ref number, value);
         }
         public ObservableCollection<Contract> Contracts { get; set; } = new();
-        public ObservableCollection<Nomenclature> Nomenclatures { get; set; } = new();
+        public List<ContractSubject> Subjects => Enum.GetValues(typeof(ContractSubject)).Cast<ContractSubject>().OrderByDescending(x => x).ToList();
         public ObservableCollection<Company> Companies { get; set; } = new();
         public ICommand AddContractCommand { get; }
         public ICommand RemoveContractCommand { get; }
@@ -60,36 +62,18 @@ namespace AccountsReceivable.ViewModels
             this.nomenclatureRepository = nomenclatureRepository;
             this.companyRepository = companyRepository;
             this.dialogService = dialogService;
-            nomenclatureRepository.DataChanged += LoadNomenclaturesAsync;
             companyRepository.DataChanged += LoadCompaniesAsync;
             AddContractCommand = new AsyncRelayCommand(AddContractAsync, _ => IsInputDataValid());
             RemoveContractCommand = new AsyncRelayCommand(RemoveContractAsync, _ => SelectedContracts.Count != 0);
-            RefreshDataCommand = new AsyncRelayCommand(async _ => {await LoadNomenclaturesAsync(); await LoadCompaniesAsync(); await LoadContractsAsync(); });
+            RefreshDataCommand = new AsyncRelayCommand(async _ => { await LoadCompaniesAsync(); await LoadContractsAsync(); });
         }
         public async Task LoadAsync()
         {
             if (isFirstLoad)
             {
-                await LoadNomenclaturesAsync();
                 await LoadCompaniesAsync();
                 await LoadContractsAsync();
                 isFirstLoad = false;
-            }
-        }
-        private async Task LoadNomenclaturesAsync()
-        {
-            try
-            {
-                Nomenclatures.Clear();
-                var list = await nomenclatureRepository.GetAllAsync();
-                foreach ( var nomenclature in list )
-                {
-                    Nomenclatures.Add(nomenclature);
-                }
-            }
-            catch (Exception)
-            {
-                dialogService.ShowInfo("Внимание!", "Не удалось загрузить список услуг.");
             }
         }
         private async Task LoadCompaniesAsync()
@@ -133,12 +117,11 @@ namespace AccountsReceivable.ViewModels
             }
             try
             {
-                Contract contract = new Contract() { Number = Number, CompanyId = SelectedCompany!.Id, NomenclatureId = SelectedNomenclature!.Id, Date = DateOnly.FromDateTime(Date) };
+                Contract contract = new Contract() { Number = Number, CompanyId = SelectedCompany!.Id, ContractSubject = SelectedContractSubject ?? ContractSubject.Other, Date = DateOnly.FromDateTime(Date) };
                 await contractRepository.AddAsync(contract);
                 contract.Company = SelectedCompany;
-                contract.Nomenclature = SelectedNomenclature;
                 Contracts.Add(contract);
-                SelectedNomenclature = null;
+                SelectedContractSubject = null;
                 SelectedCompany = null;
                 Number = string.Empty;
             }
@@ -165,6 +148,10 @@ namespace AccountsReceivable.ViewModels
                 }
                 SelectedContracts.Clear();
             }
+            catch (DeleteRestrictedException ex)
+            {
+                dialogService.ShowError("Ошибка!", ex.Message);
+            }
             catch
             {
                 dialogService.ShowError("Ошибка!", "Не удалось удалить объекты.");
@@ -172,7 +159,7 @@ namespace AccountsReceivable.ViewModels
         }
         private bool IsInputDataValid()
         {
-            return !string.IsNullOrWhiteSpace(Number) && SelectedCompany != null && SelectedNomenclature != null;
+            return !string.IsNullOrWhiteSpace(Number) && SelectedCompany != null && SelectedContractSubject != null;
         }
     }
 }

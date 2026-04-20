@@ -1,9 +1,9 @@
 ﻿using AccountsReceivable.Data.Interfaces;
 using AccountsReceivable.Exceptions;
+using AccountsReceivable.Helpers;
 using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
-using AccountsReceivable.Services;
-using AccountsReceivable.View;
+using AccountsReceivable.Models.Enums;
 using AccountsReceivable.ViewModels.Commands;
 using System;
 using System.Threading.Tasks;
@@ -37,7 +37,7 @@ namespace AccountsReceivable.ViewModels
             if (Organization == null) return;
             try
             {
-                await dialogService.ShowWindowAsync<CompanyEditorView, CompanyEditorViewModel>(Organization);
+                await dialogService.ShowWindowAsync(DialogType.CompanyEditor, Organization);
                 OnPropertyChanged(nameof(Organization));
             }
             catch (CloneException ex)

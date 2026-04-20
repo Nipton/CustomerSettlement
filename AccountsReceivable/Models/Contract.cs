@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AccountsReceivable.Models.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace AccountsReceivable.Models
@@ -10,9 +11,8 @@ namespace AccountsReceivable.Models
         [MaxLength(50)]
         public required string Number { get; set; }
         public DateOnly Date {  get; set; } 
-        public int NomenclatureId { get; set; }
         public int CompanyId { get; set; }
-        public virtual Nomenclature Nomenclature { get; set; } = null!;
+        public ContractSubject ContractSubject { get; set; }
         public virtual Company Company { get; set; } = null!;
-    }
+    }   
 }

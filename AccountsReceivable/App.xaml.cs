@@ -31,12 +31,12 @@ namespace AccountsReceivable
 
             services.AddDbContextFactory<ApplicationContext>(option => option.UseSqlite("Data Source=accounts.db"));
             services.AddSingleton<ICompanyRepository, CompanyRepository>();
-            services.AddSingleton<IRepository<Category>, CategoryRepository>();
             services.AddSingleton<INomenclatureRepository, NomenclatureRepository>();
             services.AddSingleton<IRepository<Contract>, ContractRepository>(); 
             services.AddSingleton<IViewModelFactory, ViewModelFactory>();
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<IDataHub, DataHub>();
+            services.AddTransient<IAccountEditingService, AccountEditingService>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>();                     
@@ -55,6 +55,7 @@ namespace AccountsReceivable
             services.AddSingleton<AccountsJournalViewModel>();
             services.AddTransient<AccountsView>();
             services.AddTransient<AccountEditorView>();
+            services.AddTransient<AccountEditorViewModel>();
 
             Services = services.BuildServiceProvider();
 

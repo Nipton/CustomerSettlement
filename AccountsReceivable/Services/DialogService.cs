@@ -1,4 +1,6 @@
 ﻿using AccountsReceivable.Interfaces;
+using AccountsReceivable.Models.Enums;
+using AccountsReceivable.View;
 using AccountsReceivable.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -18,13 +20,27 @@ namespace AccountsReceivable.Services
         {
             this.factory = factory;
         }
-
-        public async Task<bool> ShowWindowAsync<TView, TViewModel>(params object[] args) where TView : Window where TViewModel : ViewModelBase
+        public async Task<bool> ShowWindowAsync(DialogType dialogType, params object[] args) 
         {
-            var window = factory.CreateWindow<TView, TViewModel>(args);
+            Window window = dialogType switch
+            {
+                DialogType.CompanyEditor => factory.CreateWindow<CompanyEditorView, CompanyEditorViewModel>(args),
+                DialogType.AccountEditor => factory.CreateWindow<AccountEditorView, AccountEditorViewModel>(args),
+                _ => throw new NotSupportedException($"Диалог {dialogType} не поддерживается. ")
+            };
             if (window.DataContext is ILoadable loadable)
             {
                 await loadable.LoadAsync();
+            }
+            if (window.DataContext is IDisposable disposable)
+            {
+                EventHandler handler = null!;
+                handler = (_, _) =>
+                {
+                    disposable.Dispose();
+                    window.Closed -= handler;
+                };
+                window.Closed += handler;
             }
             return window.ShowDialog() == true;
         }

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace AccountsReceivable.View
 {
@@ -19,6 +20,11 @@ namespace AccountsReceivable.View
         public AccountEditorView()
         {
             InitializeComponent();
+        }
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => textBox?.SelectAll()), DispatcherPriority.Input);
         }
     }
 }

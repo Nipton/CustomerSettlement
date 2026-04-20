@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AccountsReceivable.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -43,9 +44,8 @@ namespace AccountsReceivable.Models
         public string Position { get; set; } = string.Empty;
         [MaxLength(200)]
         public string DirectorFullName { get; set; } = string.Empty;
-
-        public int? CategoryId { get; set; }
-        public virtual Category? Category { get; set; }
+        public CompanyCategory? Category { get; set; }
+        public virtual ICollection<Contract> Contracts { get; set; } = new List<Contract>();
 
         public object Clone()
         {
@@ -68,7 +68,6 @@ namespace AccountsReceivable.Models
             Phone = edited.Phone;
             Position = edited.Position;
             DirectorFullName = edited.DirectorFullName;
-            CategoryId = edited.CategoryId;
             Category = edited.Category;
         }
     }

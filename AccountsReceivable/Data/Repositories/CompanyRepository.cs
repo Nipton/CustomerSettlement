@@ -1,7 +1,7 @@
 ﻿using AccountsReceivable.Data.Interfaces;
 using AccountsReceivable.Exceptions;
+using AccountsReceivable.Helpers;
 using AccountsReceivable.Models;
-using AccountsReceivable.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ namespace AccountsReceivable.Data.Repositories
         public async Task<IEnumerable<Company>> GetAllCompaniesAsync()
         {
             using var context = await factory.CreateDbContextAsync();
-            return await context.Companies.Where(x => x.Id != Constants.OWN_COMPANY_ID).Include(c => c.Category).ToListAsync();           
+            return await context.Companies.Where(x => x.Id != Constants.OWN_COMPANY_ID).ToListAsync();           
         }
         public async Task DeleteCompaniesAsync(List<Company> companies)
         {

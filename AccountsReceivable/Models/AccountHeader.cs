@@ -14,7 +14,7 @@ namespace AccountsReceivable.Models
         public int Id { get; set; }    
         public int CompanyId { get; set; }
         public virtual Company Company { get; set; } = null!;
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         [Precision(18, 2)]
         public decimal Sum { get; set; }
         public bool PaymentStatus { get; set; }

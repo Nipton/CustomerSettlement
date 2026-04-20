@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AccountsReceivable.View" xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:AccountEditorViewModel}"
         mc:Ignorable="d"
-        Title="Добавление счёта" SizeToContent="Height"  Width="750" MinWidth="450" WindowStartupLocation="CenterScreen" >
+        Title="{Binding WindowTitle}" SizeToContent="Height" MinWidth="450" Width="750" WindowStartupLocation="CenterScreen" Language="ru-RU" >
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="15"/>
@@ -18,18 +18,21 @@
             <Setter Property="Margin" Value="0 0 0 15"/>
             <Setter Property="MinHeight" Value="26"/>
             <Setter Property="MinWidth" Value="40"/>
+            <Setter Property="FontWeight" Value="Normal"/>
         </Style>
         <Style x:Key="LocalTextBox" TargetType="TextBox" BasedOn="{StaticResource BaseTextBox}">
             <Setter Property="Margin" Value="0 0 0 15"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="TextWrapping" Value="NoWrap"/>
             <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="MaxLength" Value="20"/>
+            <EventSetter Event="GotFocus" Handler="TextBox_GotFocus"/>
         </Style>
         <Style TargetType="DatePicker" BasedOn="{StaticResource CustomDatepiker}">
             <Setter Property="CalendarStyle" Value="{StaticResource DatePickerCalendarStyle1}"/>
             <Setter Property="Margin" Value="0 0 0 15"/>
             <Setter Property="FontSize" Value="15"/>
-            <Setter Property="MinWidth" Value="130"/>
+            <Setter Property="MinWidth" Value="110"/>
             <Setter Property="FontWeight" Value="Normal"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
@@ -44,9 +47,9 @@
     <Grid Margin="0 20 0 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" MinHeight="300"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="Основные данные счёта">
             <Grid Margin="5 20 5 0">
@@ -58,45 +61,62 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*" MaxWidth="300"/>
+                    <ColumnDefinition Width="*" MaxWidth="260"/>
+                    <ColumnDefinition Width="0.5*" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Контрагент"/>
                 <TextBlock Text="Договор" Grid.Row="1"/>
                 <TextBlock Text="Дата счёта" Grid.Row="2"/>
-                <ComboBox   Grid.Column="2"/>
-                <ComboBox Grid.Row="1" Grid.Column="2"/>
-                <DatePicker Grid.Row="2" Grid.Column="2"/>
+                <ComboBox  ItemsSource="{Binding Companies}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedCompany}" Grid.Column="2"/>
+                <ComboBox x:Name="CompanyComboBox" ItemsSource="{Binding Contracts}" DisplayMemberPath="Number" SelectedItem="{Binding SelectedContract}" Grid.Row="1" Grid.Column="2"/>
+                <DatePicker SelectedDate="{Binding DateAccount}" Grid.Row="2" Grid.Column="2"/>
+                <Button Grid.Column="3" Grid.Row="1" Margin="50 0 0 15" Command="{Binding ClearSelectionCommand}" Content="🔄 Сбросить фильтры" Style="{StaticResource SecondaryButtonStyle}" FontSize="16"/>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Row="1" Header="Позиции счёта">
+        <GroupBox Grid.Row="1" Header="{Binding HeaderAccountsLine}">
             <Grid Margin="0 20 0 0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <DataGrid Style="{StaticResource MainDataGrid}" MinHeight="100">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn ElementStyle="{StaticResource WrapText}" Binding="{Binding Nomenclature}" Header="Номенклатура" Width="*" MinWidth="220"/>
-                        <DataGridTextColumn Binding="{Binding Quantity}" Header="Количество" MinWidth="120"/>
-                        <DataGridTextColumn Binding="{Binding Unit}" Header="Ед. измер" MinWidth="90"/>
-                        <DataGridTextColumn Binding="{Binding Price, StringFormat=N2}" Header="Цена" MinWidth="120"/>
-                        <DataGridTextColumn Binding="{Binding VAT}" Header="НДС" MinWidth="60"/>
-                        <DataGridTextColumn Binding="{Binding Sum, StringFormat=N2}" Header="Сумма" MinWidth="120"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <Grid Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Collapsed">
-                    <Button Content="+ Добавить позицию" Style="{StaticResource SecondaryButtonStyle}" Margin="10 10" FontSize="16"/>
+                <Grid 
+                    Visibility="{Binding IsEditPanelVisible, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Inverse}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid Style="{StaticResource MainDataGrid}" MinHeight="143" SelectionMode="Single" x:Name="AccountLineDataGrid"
+                              SelectedItem="{Binding SelectedAccountLine}" ItemsSource="{Binding AccountLines}" FontWeight="Normal">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn ElementStyle="{StaticResource WrapText}" Binding="{Binding Nomenclature.Name}" Header="Номенклатура" Width="1.8*" MinWidth="190"/>
+                            <DataGridTextColumn Binding="{Binding Price, StringFormat=N2}" Header="Цена" MinWidth="110"  Width="*"/>
+                            <DataGridTextColumn Binding="{Binding Quantity}" Header="Количество" MinWidth="100"/>
+                            <DataGridTextColumn Binding="{Binding Nomenclature.Unit}" Header="Ед. изм." MinWidth="70"/>
+                            <DataGridTextColumn Binding="{Binding VatRate}" Header="НДС" MinWidth="60"/>
+                            <DataGridTextColumn Binding="{Binding AmountWithVat, StringFormat=N2}" Header="Сумма"  Width="*" MinWidth="110"/>
+                        </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu Name="DataGridContextMenu">
+                                <MenuItem Header="Копировать" Command="Copy"></MenuItem>
+                                <MenuItem Header="Редактировать" Command="{Binding EditAccountLineCommand}" ></MenuItem>
+                                <MenuItem Header="Удалить" Command="{Binding RemoveAccountLineCommand}" ></MenuItem>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </DataGrid>
+                    <DockPanel Grid.Row="1" Margin="10 10"  LastChildFill="False">
+                        <Button Command="{Binding AddNewLineCommand}" Content="+ Добавить позицию" DockPanel.Dock="Left" Style="{StaticResource SecondaryButtonStyle}" FontSize="16"/>
+                        <Button Command="{Binding RemoveAccountLineCommand}" Content="Удалить" DockPanel.Dock="Right" Style="{StaticResource SecondaryButtonStyle}" FontSize="16"/>
+                        <Button Command="{Binding EditAccountLineCommand}" Content="Изменить" DockPanel.Dock="Right"  Style="{StaticResource SecondaryButtonStyle}" FontSize="16"/>
+                        
+                    </DockPanel>
                 </Grid>
-                <Grid Grid.Row="1" Margin="10 15 10 0" Grid.IsSharedSizeScope="True" Visibility="Visible">
+                <Grid Margin="10 15 10 0" Grid.IsSharedSizeScope="True"
+                      Visibility="{Binding IsEditPanelVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="20"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Column="0">
                         <Grid.ColumnDefinitions>
@@ -107,17 +127,29 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" SharedSizeGroup="Row0"/>
                             <RowDefinition Height="Auto" SharedSizeGroup="Row1"/>
-                            <RowDefinition Height="Auto" SharedSizeGroup="Row2"/>
+                            <RowDefinition Height="Auto"  SharedSizeGroup="Row2"/>
                             <RowDefinition Height="Auto" SharedSizeGroup="Row3"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Номенклатура"/>
-                        <ComboBox Grid.Row="0" Grid.Column="2"/>
+                        <ComboBox ItemsSource="{Binding Nomenclatures}" SelectedItem="{Binding SelectedNomenclature}" Grid.Row="0" Grid.Column="2" 
+                                  Height="{Binding ElementName=CompanyComboBox, Path=ActualHeight}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock FontSize="16" Text="{Binding Name}"/>
+                                        <TextBlock FontSize="12" Text="{Binding Unit}" FontWeight="Light"  Margin="0 0 0 2"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Количество"/>
-                        <TextBox Style="{StaticResource LocalTextBox}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch"/>
+                        <TextBox Style="{StaticResource LocalTextBox}" x:Name="QuantityTextBox" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch"
+                                 Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Цена"/>
-                        <TextBox Style="{StaticResource LocalTextBox}" Grid.Row="2" Grid.Column="2"/>
+                        <TextBox Style="{StaticResource LocalTextBox}" Grid.Row="2" Grid.Column="2"
+                                 Text="{Binding Price, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, StringFormat=c}"/>
                         <TextBlock Grid.Row="3" Grid.Column="0" Text="Период"/>
-                        <DatePicker Grid.Row="3" Grid.Column="2" />
+                        <DatePicker Grid.Row="3" Grid.Column="2" SelectedDate="{Binding Period}"/>
                     </Grid>
                     <Grid Grid.Column="2">
                         <Grid.ColumnDefinitions>
@@ -132,43 +164,48 @@
                             <RowDefinition Height="Auto" SharedSizeGroup="Row3"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="НДС"/>
-                        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
-                            <TextBox Style="{StaticResource LocalTextBox}" Width="40" IsEnabled="{Binding IsChecked, ElementName=VatCheckBox}"/>
+                        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" Margin="40 0 0 0">
+                            <TextBox  Style="{StaticResource LocalTextBox}" Text="{Binding VatRate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="40"
+                                     Height="{Binding ElementName=QuantityTextBox, Path=ActualHeight}" MaxLength="5"/>
                             <TextBlock Text="%" Margin="5 0 0 15"/>
-                            <CheckBox VerticalAlignment="Center" Margin="20 0 0 15" Style="{StaticResource CheckBoxStyle1}" x:Name="VatCheckBox"/>
                         </StackPanel>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Сумма без НДС"/>
-                        <TextBlock Grid.Row="1" Grid.Column="2"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding AmountWithoutVat, StringFormat=c}" HorizontalAlignment="Left"  Margin="40 0 0 15"/>
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Сумма НДС"/>
-                        <TextBlock Grid.Row="2" Grid.Column="2"/>
+                        <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding VatSum, StringFormat=c}" HorizontalAlignment="Left" Margin="40 0 0 15"/>
                         <TextBlock Grid.Row="3" Grid.Column="0" Text="Итого"/>
-                        <TextBlock Grid.Row="3" Grid.Column="2"/>
+                        <TextBlock  Grid.Row="3" Grid.Column="2" Text="{Binding AmountWithVat, StringFormat=c}" HorizontalAlignment="Left"  Margin="40 0 0 15"/>
                     </Grid>
-                    <Button HorizontalAlignment="Right" Grid.ColumnSpan="3" Grid.Row="1" 
-                            Content="Сохранить позицию" Style="{StaticResource SecondaryButtonStyle}" Margin="0 5 30 10" FontSize="16"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.ColumnSpan="3" Grid.Row="1" Margin="0 20 40 10">
+                        <Button Command="{Binding FinishEditLineCommand}" Content="Отмена" Style="{StaticResource SecondaryButtonStyle}" FontSize="16"/>
+                        <Button Command="{Binding SaveNewLineCommand}" Content="Сохранить позицию" Style="{StaticResource SecondaryButtonStyle}"
+                                FontSize="16"/>
+                    </StackPanel>
+                   
                 </Grid>
             </Grid>
         </GroupBox>
         <GroupBox Grid.Row="2" Header="Итоги">
-            <Grid Margin="50 20 170 0">
+            <Grid Margin="50 20 0 0">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Сумма счёта:" HorizontalAlignment="Left"/>
                 <TextBlock Grid.Row="1" Text="В т.ч. НДС:" HorizontalAlignment="Left"/>
-                <TextBlock Grid.Column="1"/>
-                <TextBlock Grid.Row="1" Grid.Column="1"/>
+                <TextBlock Grid.Column="2" Text="{Binding TotalAccountSum, StringFormat=c}" HorizontalAlignment="Left" />
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding TotalVatSum, StringFormat=c}" HorizontalAlignment="Left" />
             </Grid>
         </GroupBox>
         <Border Grid.Row="3" Background="#E5D9EA"/>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20 10">
-            <Button Style="{StaticResource PrimaryButtonStyle}" Content="Сохранить" MinWidth="110" Margin="20 0"/>
-            <Button Style="{StaticResource PrimaryButtonStyle}" Content="Отмена"  MinWidth="110"/>
+            <Button Style="{StaticResource PrimaryButtonStyle}" Command="{Binding CancelCommand}" Content="Отмена" MinWidth="110" Margin="20 0"/>
+            <Button Style="{StaticResource PrimaryButtonStyle}" Command="{Binding SaveAllCommand}" Content="Сохранить"  MinWidth="110"/>
         </StackPanel>
     </Grid>
 </Window>

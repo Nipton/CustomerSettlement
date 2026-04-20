@@ -2,16 +2,14 @@
 using AccountsReceivable.Exceptions;
 using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
-using AccountsReceivable.View;
+using AccountsReceivable.Models.Enums;
 using AccountsReceivable.ViewModels.Commands;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -93,7 +91,7 @@ namespace AccountsReceivable.ViewModels
             var newCompany = new Company();
             try
             {
-                var result =  await dialogService.ShowWindowAsync<CompanyEditorView, CompanyEditorViewModel>(newCompany);
+                var result =  await dialogService.ShowWindowAsync(DialogType.CompanyEditor, newCompany);
                 if (result)
                     Companies.Add(newCompany);
             }
@@ -112,7 +110,7 @@ namespace AccountsReceivable.ViewModels
             var company = SelectedItems[0];
             try
             {
-                await dialogService.ShowWindowAsync<CompanyEditorView, CompanyEditorViewModel>(company);
+                await dialogService.ShowWindowAsync(DialogType.CompanyEditor, company);
             }
             catch (Exception)
             {

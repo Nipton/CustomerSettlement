@@ -7,7 +7,7 @@ using System.Xml;
 using System.Configuration;
 using System.Collections.Specialized;
 
-namespace RSDN
+namespace AccountsReceivable.Helpers
 {
     public class RusNumber
     {
@@ -62,7 +62,7 @@ namespace RSDN
 
         public static string Case(int val, string one, string two, string five)
         {
-            int t=(val % 100 > 20) ? val % 10 : val % 20;
+            int t=val % 100 > 20 ? val % 10 : val % 20;
 
             switch (t)
             {
@@ -92,7 +92,7 @@ namespace RSDN
                     XmlNode junior=curr["junior"];
                     RusCurrency.Register(   
                         curr.Attributes["code"].InnerText,
-                        (curr.Attributes["male"].InnerText == "1"),
+                        curr.Attributes["male"].InnerText == "1",
                         senior.Attributes["one"].InnerText,
                         senior.Attributes["two"].InnerText,
                         senior.Attributes["five"].InnerText,

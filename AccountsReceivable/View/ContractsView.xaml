@@ -2,11 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:AccountsReceivable.View" x:Class="AccountsReceivable.View.ContractView"
+             x:Class="AccountsReceivable.View.ContractView"
              xmlns:sys="clr-namespace:System;assembly=mscorlib" 
-             xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:ContractViewModel}"             
+             xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" xmlns:helpers="clr-namespace:AccountsReceivable.Helpers" d:DataContext="{d:DesignInstance Type=viewmodels:ContractViewModel}"             
              mc:Ignorable="d" d:DesignHeight="660" d:DesignWidth="1280" Background="#E5D9EA" MouseDown="OnBackgroundClick">
-    <UserControl.Resources>
+    <UserControl.Resources>   
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="Margin" Value="15 0 10 0"/>
@@ -34,21 +34,18 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment ="Right">
                 <TextBlock Text="Дата"/>
                 <DatePicker Style="{StaticResource CustomDatepiker}" CalendarStyle="{DynamicResource DatePickerCalendarStyle1}" Width="200" 
-                            Text="{Binding Date, StringFormat=d}" SelectedDate="{Binding Date}"
+                            SelectedDate="{Binding Date}"
                             Height="{Binding ActualHeight, ElementName=numberTextBlock, Mode=OneWay}" FontSize="15"/>
             </StackPanel>
         </StackPanel>
         <StackPanel Grid.Column="1">
             <StackPanel Orientation="Horizontal" Margin="0 0 0 10" HorizontalAlignment ="Right">
-                <TextBlock Text="Услуга"/>
-                <ComboBox ItemsSource="{Binding Nomenclatures}" SelectedItem="{Binding SelectedNomenclature}" Style="{DynamicResource MainComboBox}" 
-                          Width="200" Height="26" >
+                <TextBlock Text="Предмет договора"/>
+                <ComboBox ItemsSource="{Binding Subjects}" SelectedItem="{Binding SelectedContractSubject}"
+                          Style="{DynamicResource MainComboBox}" Width="200" Height="26" FontSize="16" FontWeight="SemiBold">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel>
-                                <TextBlock FontSize="16" Text="{Binding Name}" FontWeight="SemiBold"/>
-                                <TextBlock FontSize="12" Text="{Binding Unit}" Margin="0 0 0 2"/>
-                            </StackPanel>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -62,13 +59,13 @@
         </StackPanel>
         <StackPanel Grid.Column="2"  Margin="30 0 5 0">
             <StackPanel Height="35">
-                <Button Style="{StaticResource SecondaryButtonStyle}" Content="Добавить" Command="{Binding AddContractCommand}"/>
+                <Button Style="{StaticResource SecondaryButtonStyle}" Content="➕ Добавить" Command="{Binding AddContractCommand}"/>
             </StackPanel>
-            <Button Style="{StaticResource SecondaryButtonStyle}" Content="Удалить" Command="{Binding RemoveContractCommand}"/>
+            <Button Style="{StaticResource SecondaryButtonStyle}" Content="🗑 Удалить" Command="{Binding RemoveContractCommand}"/>
         </StackPanel>
         <StackPanel Grid.Column="3"  Margin="0 0 5 0">
             <StackPanel Height="35">
-                <Button Style="{StaticResource SecondaryButtonStyle}" Content="Обновить" Command="{Binding RefreshDataCommand}"/>
+                <Button Style="{StaticResource SecondaryButtonStyle}" Content="🔄 Обновить" Command="{Binding RefreshDataCommand}"/>
             </StackPanel>
         </StackPanel>
         <DataGrid Margin="10" ItemsSource="{Binding Contracts}" SelectionChanged="ContractDataGrid_SelectionChanged" x:Name="ContractDataGrid" 
@@ -81,7 +78,7 @@
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Number}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Номер" Width="100"/>
-                <DataGridTextColumn Binding="{Binding Nomenclature.Name}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Номенклатура" Width="300"/>
+                <DataGridTextColumn Binding="{Binding ContractSubject, Converter={StaticResource EnumDisplayConverter}}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Предмет договора" Width="300"/>
                 <DataGridTextColumn Binding="{Binding Company.Name}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Контрагент" Width="*"/>
                 <DataGridTextColumn Binding="{Binding Date}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Дата" Width="120"/>
             </DataGrid.Columns>

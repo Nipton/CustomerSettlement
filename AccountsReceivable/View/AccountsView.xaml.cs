@@ -48,7 +48,7 @@ namespace AccountsReceivable.View
                 await Task.Run(() =>
                 {
                     companiesList = fileIOService.LoadData();
-                    accountsPartOneList = new ObservableCollection<AccountPartOne>(db.AccountsPartOne.Where(x => x.ID != -1).Include(x => x.Contract).ToList());
+                    //accountsPartOneList = new ObservableCollection<AccountPartOne>(db.AccountsPartOne.Where(x => x.ID != -1).Include(x => x.Contract).ToList());
 
                 });
             }

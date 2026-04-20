@@ -12,8 +12,8 @@ namespace AccountsReceivable.Models
     public class AccountLine
     {
         public int Id { get; set; }
-        public int NomenclatureId { get; set; }
-        public virtual Nomenclature Nomenclature { get; set; } = null!;
+        public int? NomenclatureId { get; set; }
+        public virtual Nomenclature? Nomenclature { get; set; }
         [Precision(18, 3)]
         public decimal Quantity { get; set; } = 1m;
         [Precision(18, 2)]
@@ -25,9 +25,5 @@ namespace AccountsReceivable.Models
         public DateOnly Period { get; set; }
         public int AccountHeaderId { get; set; }
         public virtual AccountHeader AccountHeader { get; set; } = null!;
-        public void RecalculateAmount()
-        {
-            AmountWithVat = Quantity * Price * (1 + VatRate / 100);
-        }
     }
 }

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountsReceivable.Services
+namespace AccountsReceivable.Models.Enums
 {
-    public static class Constants
+    public enum DialogType
     {
-        public const int OWN_COMPANY_ID = -1;
+        CompanyEditor,
+        AccountEditor
     }
 }
