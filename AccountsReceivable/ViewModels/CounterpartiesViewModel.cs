@@ -5,6 +5,7 @@ using AccountsReceivable.Models;
 using AccountsReceivable.Models.Enums;
 using AccountsReceivable.ViewModels.Commands;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -21,14 +22,9 @@ namespace AccountsReceivable.ViewModels
         private readonly IDialogService dialogService;
         private bool isLoaded;
         private string searchTerm = string.Empty;
-        private List<Company> selectedItems = new();
         public ObservableCollection<Company> Companies { get; } = new();
         public ICollectionView CompaniesView { get; }
-        public List<Company> SelectedItems
-        {
-            get => selectedItems;
-            set => Set(ref selectedItems, value);
-        }
+        public IList SelectedItems { get; set; } = new List<Company>();
         public string SearchTerm
         {
             get => searchTerm; 
@@ -107,7 +103,7 @@ namespace AccountsReceivable.ViewModels
                 dialogService.ShowInfo("Внимание!", "Для редактирования необходимо выделить только один элемент.");
                 return;
             }
-            var company = SelectedItems[0];
+            var company = SelectedItems.Cast<Company>().First();
             try
             {
                 await dialogService.ShowWindowAsync(DialogType.CompanyEditor, company);
@@ -129,12 +125,12 @@ namespace AccountsReceivable.ViewModels
                 return;
             try
             {
-                await companyRepository.DeleteCompaniesAsync(SelectedItems);
-                foreach (var item in SelectedItems.ToList())
+                var selected = SelectedItems.Cast<Company>().ToList();
+                await companyRepository.DeleteCompaniesAsync(selected);
+                foreach (var item in selected)
                 {
                     Companies.Remove(item);
                 }
-                SelectedItems.Clear();
             }
             catch (DeleteRestrictedException ex)
             {

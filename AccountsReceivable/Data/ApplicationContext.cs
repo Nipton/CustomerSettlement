@@ -18,7 +18,7 @@ namespace AccountsReceivable.Data
         public DbSet<AccountPartTwo> AccountsPartTwo { get; set; } = null!;
         public DbSet<AccountHeader> AccountHeaders { get; set; } = null!;
         public DbSet<AccountLine> AccountLines { get; set; } = null!;
-        public DbSet<Payment> Payment { get; set; } = null!;
+        public DbSet<Payment> Payments { get; set; } = null!;
         public DbSet<Nomenclature> Nomenclatures { get; set; } = null!;
 
         public ApplicationContext() { }  

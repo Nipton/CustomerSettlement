@@ -5,6 +5,7 @@ using AccountsReceivable.Models;
 using AccountsReceivable.Models.Enums;
 using AccountsReceivable.ViewModels.Commands;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace AccountsReceivable.ViewModels
         private bool isFirstLoad = true;
         private ContractSubject? selectedContractSubject;
         private Company? selectedCompany;
-        private List<Contract> selectedContracts = new();
+        public IList SelectedContracts { get; set; } = new List<Contract>();
         private DateTime date = DateTime.Today;
         private string number = string.Empty;
         public ContractSubject? SelectedContractSubject
@@ -34,11 +35,6 @@ namespace AccountsReceivable.ViewModels
         {
             get => selectedCompany;
             set => Set(ref selectedCompany, value);
-        }
-        public List<Contract> SelectedContracts
-        {
-            get => selectedContracts;
-            set => Set(ref selectedContracts, value);
         }
         public DateTime Date 
         {
@@ -117,7 +113,7 @@ namespace AccountsReceivable.ViewModels
             }
             try
             {
-                Contract contract = new Contract() { Number = Number, CompanyId = SelectedCompany!.Id, ContractSubject = SelectedContractSubject ?? ContractSubject.Other, Date = DateOnly.FromDateTime(Date) };
+                Contract contract = new Contract() { Number = Number, CompanyId = SelectedCompany!.Id, ContractSubject = SelectedContractSubject ?? ContractSubject.Other, Date = Date };
                 await contractRepository.AddAsync(contract);
                 contract.Company = SelectedCompany;
                 Contracts.Add(contract);
@@ -141,12 +137,12 @@ namespace AccountsReceivable.ViewModels
                 return;
             try
             {
-                await contractRepository.DeleteAsync(SelectedContracts);
-                foreach (var contract in SelectedContracts)
+                var selectet = SelectedContracts.Cast<Contract>().ToList();
+                await contractRepository.DeleteAsync(selectet);
+                foreach (var contract in selectet)
                 {
                     Contracts.Remove(contract);                   
                 }
-                SelectedContracts.Clear();
             }
             catch (DeleteRestrictedException ex)
             {

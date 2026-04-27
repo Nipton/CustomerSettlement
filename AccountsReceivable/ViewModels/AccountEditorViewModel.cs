@@ -17,7 +17,8 @@ namespace AccountsReceivable.ViewModels
     public class AccountEditorViewModel : ViewModelBase, ILoadable, IDataErrorInfo, IDisposable
     {
         #region Поля и свойства
-        private readonly IDataHub dataHub;
+        private readonly ICompanyRepository companyRepository;
+        private readonly IRepository<Contract> contractRepoitory;
         private readonly IDialogService dialogService;
         private readonly IAccountEditingService editingService;
         private AccountHeader workingAccHeader = new();
@@ -28,18 +29,15 @@ namespace AccountsReceivable.ViewModels
         private Contract? selectedContract;
         private Nomenclature? selectedNomenclature;
         private AccountLine? selectedAccountLine;
-        private string quantity = "1";
-        private string price = "0";
-        private string vatRate = "0";  
+        private decimal? quantity = 1;
+        private decimal? price = 0;
+        private decimal? vatRate = 0;  
         private decimal totalAccountSum;
         private decimal totalVatSum;
         private bool isEditPanelVisible;
         private bool isEditing;
         private bool isUpdating;
         private string headerAccountsLine = "Позиции счёта";
-        private decimal QuantityDecimal => DecimalHelper.SafeParse(Quantity);
-        private decimal PriceDecimal => DecimalHelper.SafeParse(Price);
-        private decimal VatRateDecimal => DecimalHelper.SafeParse(VatRate);
         public DateTime DateAccount { get => dateAccount; set => Set(ref dateAccount, value); }
         private List<Company> allCompanies = new();
         private List<Contract> allContracts = new();
@@ -54,7 +52,7 @@ namespace AccountsReceivable.ViewModels
         public AccountLine? SelectedAccountLine { get => selectedAccountLine; set => Set(ref selectedAccountLine, value); }
         public string WindowTitle { get; set; } = string.Empty;
         public string HeaderAccountsLine { get => headerAccountsLine; set => Set(ref headerAccountsLine, value); }
-        public string Quantity
+        public decimal? Quantity
         {
             get => quantity; set
             {
@@ -62,7 +60,7 @@ namespace AccountsReceivable.ViewModels
                 { OnPropertyChanged(nameof(AmountWithVat)); OnPropertyChanged(nameof(VatSum)); OnPropertyChanged(nameof(AmountWithoutVat)); }
             }
         }
-        public string Price
+        public decimal? Price
         {
             get => price; set
             {
@@ -70,7 +68,7 @@ namespace AccountsReceivable.ViewModels
                 { OnPropertyChanged(nameof(AmountWithVat)); OnPropertyChanged(nameof(VatSum)); OnPropertyChanged(nameof(AmountWithoutVat)); }
             }
         }
-        public string VatRate
+        public decimal? VatRate
         {
             get => vatRate; set
             {
@@ -79,8 +77,8 @@ namespace AccountsReceivable.ViewModels
             }
         }
         public decimal AmountWithVat => DecimalHelper.SafeAdd(AmountWithoutVat, VatSum);
-        public decimal AmountWithoutVat => DecimalHelper.SafeMultiply(QuantityDecimal, PriceDecimal);
-        public decimal VatSum => DecimalHelper.SafeMultiply(AmountWithoutVat, (VatRateDecimal / 100));
+        public decimal AmountWithoutVat => DecimalHelper.SafeMultiply(Quantity, Price);
+        public decimal VatSum => DecimalHelper.SafeMultiply(AmountWithoutVat, (VatRate / 100));
         public DateTime Period { get => period; set => Set(ref period, value); }
         public decimal TotalAccountSum { get => totalAccountSum; set => Set(ref totalAccountSum, value); }
         public decimal TotalVatSum { get => totalVatSum; set => Set(ref totalVatSum, value); }
@@ -95,9 +93,10 @@ namespace AccountsReceivable.ViewModels
         public ICommand SaveAllCommand { get; }
         public ICommand ClearSelectionCommand { get; }
         
-        public AccountEditorViewModel(AccountHeader accountHeader, IDataHub dataHub, IAccountEditingService editingService, IDialogService dialogService)
+        public AccountEditorViewModel(AccountHeader accountHeader, ICompanyRepository companyRepository, IRepository<Contract> contractRepoitory, IAccountEditingService editingService, IDialogService dialogService)
         {
-            this.dataHub = dataHub;
+            this.companyRepository = companyRepository;
+            this.contractRepoitory = contractRepoitory;
             this.dialogService = dialogService;
             this.editingService = editingService;
             incomingAccHeader = accountHeader;
@@ -108,15 +107,15 @@ namespace AccountsReceivable.ViewModels
             FinishEditLineCommand = new RelayCommand(_ => FinishEditLine());
             EditAccountLineCommand = new RelayCommand(_ => EditAccountLine(), _ => SelectedAccountLine != null);
             RemoveAccountLineCommand = new RelayCommand(_ => RemoveAccountLine(), _ => SelectedAccountLine != null);
-            SaveAllCommand = new AsyncRelayCommand(SaveAccountHeader, _ => !IsEditPanelVisible && SelectedContract != null && SelectedCompany != null);
+            SaveAllCommand = new AsyncRelayCommand(SaveAccountHeaderAsync, _ => !IsEditPanelVisible && SelectedContract != null && SelectedCompany != null);
             ClearSelectionCommand = new RelayCommand(_ => ClearHeaderSelection());
         }
         public async Task LoadAsync()
         {
             try
             {
-                allCompanies = (await dataHub.CompanyRepository.GetAllCompaniesAsync()).ToList();
-                allContracts = (await dataHub.ContractRepository.GetAllAsync()).ToList();
+                allCompanies = (await companyRepository.GetAllCompaniesAsync()).ToList();
+                allContracts = (await contractRepoitory.GetAllAsync()).ToList();
                 foreach (var company in allCompanies)
                     Companies.Add(company);
                 foreach (var contract in allContracts)
@@ -147,7 +146,7 @@ namespace AccountsReceivable.ViewModels
                 workingAccHeader = loadedAccHeader;
             SelectedCompany = allCompanies.FirstOrDefault(x => x.Id == workingAccHeader.CompanyId);
             SelectedContract = allContracts.FirstOrDefault(x => x.Id == workingAccHeader.ContractId);
-            DateAccount = workingAccHeader.Date.ToDateTime(TimeOnly.MinValue);
+            DateAccount = workingAccHeader.Date;
             foreach (var line in workingAccHeader.AccountsList)
                 AccountLines.Add(line);
             CalculateTotalSum();
@@ -200,7 +199,7 @@ namespace AccountsReceivable.ViewModels
             }
             finally { isUpdating = false; }
         }
-        public async Task SaveAccountHeader()
+        public async Task SaveAccountHeaderAsync()
         {
             if (SelectedContract == null || SelectedCompany == null)
             {
@@ -210,19 +209,23 @@ namespace AccountsReceivable.ViewModels
             workingAccHeader.AccountsList = AccountLines;
             workingAccHeader.CompanyId = SelectedCompany.Id;
             workingAccHeader.ContractId = SelectedContract.Id;
-            workingAccHeader.Date = DateOnly.FromDateTime(DateAccount);
+            workingAccHeader.Date = DateAccount;
             workingAccHeader.Sum = TotalAccountSum;
             if (incomingAccHeader.Id != 0)
-            {
-                var payment = await editingService.GetPaymentSumAsync(incomingAccHeader.Id);
-                workingAccHeader.PaymentStatus = TotalAccountSum <= payment;
-            }
+               workingAccHeader.PaymentStatus = workingAccHeader.Sum > 0 && workingAccHeader.Sum <= workingAccHeader.PaymentSum;
+            
             await editingService.SaveAccountsAsync(workingAccHeader);
+
+            incomingAccHeader.Id = workingAccHeader.Id;
+            incomingAccHeader.Date = workingAccHeader.Date;
             incomingAccHeader.Company = SelectedCompany;
             incomingAccHeader.Contract = SelectedContract;
+            incomingAccHeader.Sum = workingAccHeader.Sum;
             incomingAccHeader.CompanyId = SelectedCompany.Id;
             incomingAccHeader.ContractId = SelectedContract.Id;
             incomingAccHeader.AccountsList = workingAccHeader.AccountsList;
+            incomingAccHeader.PaymentStatus = workingAccHeader.PaymentStatus;
+
             dialogService.CloseWindow(this, true);
         }       
         private void AddNewAccountLine()
@@ -242,10 +245,10 @@ namespace AccountsReceivable.ViewModels
             IsEditPanelVisible = true;
             HeaderAccountsLine = "Редактирование позиции счёта";
             SelectedNomenclature = SelectedAccountLine.Nomenclature;
-            Quantity = SelectedAccountLine.Quantity.ToString("F2");
-            Price = SelectedAccountLine.Price.ToString("F2");
-            VatRate = SelectedAccountLine.VatRate.ToString("F2");
-            Period = SelectedAccountLine.Period.ToDateTime(TimeOnly.MinValue);
+            Quantity = SelectedAccountLine.Quantity;
+            Price = SelectedAccountLine.Price;
+            VatRate = SelectedAccountLine.VatRate;
+            Period = SelectedAccountLine.Period;
         }        
         private void SaveAccountLine()
         {
@@ -285,11 +288,13 @@ namespace AccountsReceivable.ViewModels
         {
             line.NomenclatureId = SelectedNomenclature!.Id;
             line.Nomenclature = SelectedNomenclature;
-            line.Period = DateOnly.FromDateTime(Period);
+            line.Period = Period;
             line.AmountWithVat = AmountWithVat;
-            line.Quantity = QuantityDecimal;
-            line.Price = PriceDecimal;
-            line.VatRate = VatRateDecimal;
+            if (!Quantity.HasValue || !Price.HasValue || !VatRate.HasValue)
+                throw new ArgumentException("Ошибка значений");
+            line.Quantity = Quantity.Value;
+            line.Price = Price.Value;
+            line.VatRate = VatRate.Value;
         }
         private void FinishEditLine()
         {
@@ -318,13 +323,14 @@ namespace AccountsReceivable.ViewModels
         {
             SelectedNomenclature = null;
             Period = DateTime.Today;
-            Price = "0";
-            VatRate = "0";
-            Quantity = "1";
+            Price = 0;
+            VatRate = 0;
+            Quantity = 1;
         }
         private void CancelWindow()
         {
-            dialogService.CloseWindow(this, false);
+            if(dialogService.ShowConfirmation("Подтверждние", "Вы уверены, что хотите отменить все изменения?"))
+                dialogService.CloseWindow(this, false);
         }
         public void Dispose()
         {
@@ -352,18 +358,17 @@ namespace AccountsReceivable.ViewModels
             }
         }
         #nullable restore
-        public string? ValidateDecimal(string value, string fieldName)
+        public string? ValidateDecimal(decimal? value, string fieldName)
         {
-            value = value.Replace(',', '.');
-            if (decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal digit))
+            if (value != null)
             {
-                if (digit < 0)
+                if (value < 0)
                     return "Значение не может быть отрицательным";
-                if (fieldName == nameof(Quantity) && PriceDecimal > 0 && digit > decimal.MaxValue / PriceDecimal)
+                if (fieldName == nameof(Quantity) && Price > 0 && value > decimal.MaxValue / Price)
                     return "Слишком большое значение";
-                if (fieldName == nameof(Price) && QuantityDecimal > 0 && digit > decimal.MaxValue / QuantityDecimal)
+                if (fieldName == nameof(Price) && Quantity > 0 && value > decimal.MaxValue / Quantity)
                     return "Слишком большое значение";
-                if(fieldName == nameof(VatRate) && digit>120)
+                if(fieldName == nameof(VatRate) && value> 120)
                     return "Ставка НДС не может превышать 120%";
                 return null;
             }

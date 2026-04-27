@@ -1,13 +1,10 @@
-﻿<Window x:Class="AccountsReceivable.View.PaymentWindow"
+﻿<Window x:Class="AccountsReceivable.View.PaymentView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:AccountsReceivable.View"
-        xmlns:m="clr-namespace:AccountsReceivable.Models" d:DataContext="{d:DesignInstance Type=m:Payment}"
-        mc:Ignorable="d"
-        Title="Оплата" Width="330" SizeToContent="Height" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Language="ru-RU">
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:PaymentViewModel}" mc:Ignorable="d"
+        Title="Оплата" Width="330" SizeToContent="Height" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" >
     <Window.Resources>
         <Style TargetType="TextBlock" x:Key="tb">
             <Setter Property="FontSize" Value="16"/>
@@ -34,22 +31,23 @@
         <StackPanel Margin="0 10 0 15" Orientation="Vertical">
             <StackPanel>
                 <TextBlock Text="Номер п/п" Style="{StaticResource tb}"/>
-                <TextBox Text="{Binding Number}"/>
+                <TextBox Text="{Binding PaymentNumber, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel>
                 <TextBlock Text="Дата" Style="{StaticResource tb}"/>
-                <DatePicker Style="{StaticResource CustomDatepiker}" CalendarStyle="{DynamicResource DatePickerCalendarStyle1}" Width="160" Text="{Binding Date, Mode=TwoWay, StringFormat=d}" SelectedDate="{x:Static sys:DateTime.Now}"/>
-                
+                <DatePicker Style="{StaticResource CustomDatepiker}" CalendarStyle="{DynamicResource DatePickerCalendarStyle1}" Width="160" 
+                            SelectedDate="{Binding Date}"/>
             </StackPanel>
             <StackPanel>
                 <TextBlock Text="Сумма" Name="sumTextBox" Style="{StaticResource tb}"/>
-                <TextBox Text="{Binding Sum, StringFormat=N2}" LostFocus="DoubleTextBox_LostFocus" MouseDoubleClick="SelectAddress" GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton"/>
+                <TextBox Text="{Binding PaymentSum, Converter={StaticResource ValidatingDecimalConverter}, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" 
+                         GotFocus="TextBox_GotFocus"/>
             </StackPanel>
         </StackPanel>
         <Border Grid.Row="1" Grid.ColumnSpan="2" Background="#E5D9EA"/>
         <StackPanel Grid.Row="1" HorizontalAlignment="Right" Margin="0 0 10 0">
-            <Button Style="{StaticResource PrimaryButtonStyle}" Click="AddButton_Click" Content="Добавить" Width="100" Height="30" Margin="0 0 10 0"/>
-            <Button Style="{StaticResource PrimaryButtonStyle}" Click="CancelButton_Click" Content="Отмена" Width="100" Height="30"/>
+            <Button Style="{StaticResource PrimaryButtonStyle}" Command="{Binding CancelCommand}" Content="Отмена" Width="100" Height="30" Margin="0 0 10 0"/>
+            <Button Style="{StaticResource PrimaryButtonStyle}" Command="{Binding ApplyCommand}" Content="Сохранить" Width="100" Height="30" />
         </StackPanel>
     </Grid>
 </Window>

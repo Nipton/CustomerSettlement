@@ -26,6 +26,7 @@ namespace AccountsReceivable.Services
             {
                 DialogType.CompanyEditor => factory.CreateWindow<CompanyEditorView, CompanyEditorViewModel>(args),
                 DialogType.AccountEditor => factory.CreateWindow<AccountEditorView, AccountEditorViewModel>(args),
+                DialogType.PaymentEditor => factory.CreateWindow<PaymentView, PaymentViewModel>(args),
                 _ => throw new NotSupportedException($"Диалог {dialogType} не поддерживается. ")
             };
             if (window.DataContext is ILoadable loadable)

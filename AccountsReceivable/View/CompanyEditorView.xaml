@@ -112,8 +112,8 @@
         </ScrollViewer>
         <Border Grid.Row="1" Background="#E5D9EA"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="50 20">
-            <Button Style="{StaticResource PrimaryButtonStyle}" Content="Сохранить" Command="{Binding SaveCommand}" Margin="20 0"/>
-            <Button Style="{StaticResource PrimaryButtonStyle}" Content="Отмена" Command="{Binding CancelCommand}"/>
+            <Button Style="{StaticResource PrimaryButtonStyle}" Content="Отмена" Command="{Binding CancelCommand}" Margin="20 0"/>
+            <Button Style="{StaticResource PrimaryButtonStyle}" Content="Сохранить" Command="{Binding SaveCommand}"/>
         </StackPanel>
     </Grid>
 </Window>

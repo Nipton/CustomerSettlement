@@ -59,7 +59,8 @@ namespace AccountsReceivable.ViewModels
             }
         }
         private async Task LoadNomenclaturesAsync()
-        {           
+        {
+            NomenclatureList.Clear();
             try
             {
                 var list = await nomenclatureRepository.GetAllAsync();

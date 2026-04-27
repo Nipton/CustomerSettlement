@@ -3,9 +3,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              x:Class="AccountsReceivable.View.ContractView"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib" 
-             xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" xmlns:helpers="clr-namespace:AccountsReceivable.Helpers" d:DataContext="{d:DesignInstance Type=viewmodels:ContractViewModel}"             
-             mc:Ignorable="d" d:DesignHeight="660" d:DesignWidth="1280" Background="#E5D9EA" MouseDown="OnBackgroundClick">
+             xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:helpers="clr-namespace:AccountsReceivable.Helpers"
+             xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:ContractViewModel}"             
+             mc:Ignorable="d" d:DesignHeight="660" d:DesignWidth="1280" Background="#E5D9EA" MouseDown="OnBackgroundClick"> 
     <UserControl.Resources>   
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="FontSize" Value="16"/>
@@ -68,7 +68,7 @@
                 <Button Style="{StaticResource SecondaryButtonStyle}" Content="🔄 Обновить" Command="{Binding RefreshDataCommand}"/>
             </StackPanel>
         </StackPanel>
-        <DataGrid Margin="10" ItemsSource="{Binding Contracts}" SelectionChanged="ContractDataGrid_SelectionChanged" x:Name="ContractDataGrid" 
+        <DataGrid Margin="10" ItemsSource="{Binding Contracts}" x:Name="ContractDataGrid" 
                   Grid.Row="1" Background="Transparent" Style="{StaticResource MainDataGrid}" Grid.ColumnSpan="4" HorizontalAlignment="Left" >
             <DataGrid.ContextMenu>
                 <ContextMenu>
@@ -80,8 +80,11 @@
                 <DataGridTextColumn Binding="{Binding Number}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Номер" Width="100"/>
                 <DataGridTextColumn Binding="{Binding ContractSubject, Converter={StaticResource EnumDisplayConverter}}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Предмет договора" Width="300"/>
                 <DataGridTextColumn Binding="{Binding Company.Name}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Контрагент" Width="*"/>
-                <DataGridTextColumn Binding="{Binding Date}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Дата" Width="120"/>
+                <DataGridTextColumn Binding="{Binding Date, StringFormat='dd.MM.yyyy'}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Дата" Width="120"/>
             </DataGrid.Columns>
+            <i:Interaction.Behaviors>
+                <helpers:DataGridSelectedItemsBehavior SelectedItems="{Binding SelectedContracts, Mode=OneWayToSource}"/>
+            </i:Interaction.Behaviors>
         </DataGrid>
     </Grid>
 </UserControl>

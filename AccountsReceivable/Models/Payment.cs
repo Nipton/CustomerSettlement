@@ -9,16 +9,21 @@ using System.Threading.Tasks;
 
 namespace AccountsReceivable.Models
 {
-    public class Payment
+    public class Payment : ICloneable
     {
 		public int Id { get; set; }
         [Required]
         [MaxLength(100)]
-        public required string Number { get; set; }
+        public string Number { get; set; } = string.Empty;
         [Precision(18, 2)]
         public decimal Sum { get; set; }
 		public DateTime Date { get; set; }
 		public int AccountHeaderId {  get; set; }
 		public AccountHeader AccountHeader { get; set; } = null!;
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace AccountsReceivable.Models.Enums
     public enum DialogType
     {
         CompanyEditor,
-        AccountEditor
+        AccountEditor,
+        PaymentEditor
     }
 }

@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace AccountsReceivable
 {
@@ -35,8 +37,8 @@ namespace AccountsReceivable
             services.AddSingleton<IRepository<Contract>, ContractRepository>(); 
             services.AddSingleton<IViewModelFactory, ViewModelFactory>();
             services.AddSingleton<IDialogService, DialogService>();
-            services.AddSingleton<IDataHub, DataHub>();
             services.AddTransient<IAccountEditingService, AccountEditingService>();
+            services.AddSingleton<IAccountRepository, AccountRepository>(); 
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>();                     
@@ -56,11 +58,13 @@ namespace AccountsReceivable
             services.AddTransient<AccountsView>();
             services.AddTransient<AccountEditorView>();
             services.AddTransient<AccountEditorViewModel>();
+            services.AddTransient<PaymentView>();
+            services.AddTransient<PaymentViewModel>();
 
             Services = services.BuildServiceProvider();
 
             var mainWindow = Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
-        }
+        }        
     }
 }

@@ -26,14 +26,6 @@ namespace AccountsReceivable.View
         {
             InitializeComponent();
         }
-        private void Grid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (DataContext is not CounterpartiesViewModel vm)
-                return;
-            if (sender is not DataGrid grid)
-                return;
-            vm.SelectedItems = grid.SelectedItems.Cast<Company>().ToList();
-        }
         private void OnBackgroundClick(object sender, MouseButtonEventArgs e)
         {
             if(e.ChangedButton != MouseButton.Left) return;

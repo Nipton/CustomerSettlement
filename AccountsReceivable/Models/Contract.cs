@@ -10,7 +10,7 @@ namespace AccountsReceivable.Models
         [Required]
         [MaxLength(50)]
         public required string Number { get; set; }
-        public DateOnly Date {  get; set; } 
+        public DateTime Date {  get; set; } 
         public int CompanyId { get; set; }
         public ContractSubject ContractSubject { get; set; }
         public virtual Company Company { get; set; } = null!;

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:AccountsReceivable" xmlns:vm="clr-namespace:AccountsReceivable.ViewModels" xmlns:views="clr-namespace:AccountsReceivable.View">
     <Application.Resources>
+
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Resources/ResourceDictionaryColors.xaml"/>
@@ -32,6 +33,10 @@
             <DataTemplate DataType="{x:Type vm:AccountEditorViewModel}">
                 <views:AccountEditorView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:PaymentViewModel}">
+                <views:PaymentView/>
+            </DataTemplate>
         </ResourceDictionary>
+        
     </Application.Resources>
 </Application>

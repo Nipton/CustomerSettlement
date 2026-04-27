@@ -144,10 +144,10 @@
                         </ComboBox>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Количество"/>
                         <TextBox Style="{StaticResource LocalTextBox}" x:Name="QuantityTextBox" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch"
-                                 Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                                 Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValidatingDecimalConverter}, ValidatesOnDataErrors=True}"/>
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Цена"/>
                         <TextBox Style="{StaticResource LocalTextBox}" Grid.Row="2" Grid.Column="2"
-                                 Text="{Binding Price, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, StringFormat=c}"/>
+                                 Text="{Binding Price, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValidatingDecimalConverter}, ValidatesOnDataErrors=True, StringFormat=c}"/>
                         <TextBlock Grid.Row="3" Grid.Column="0" Text="Период"/>
                         <DatePicker Grid.Row="3" Grid.Column="2" SelectedDate="{Binding Period}"/>
                     </Grid>
@@ -165,7 +165,7 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="НДС"/>
                         <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" Margin="40 0 0 0">
-                            <TextBox  Style="{StaticResource LocalTextBox}" Text="{Binding VatRate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="50"
+                            <TextBox  Style="{StaticResource LocalTextBox}" Text="{Binding VatRate, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValidatingDecimalConverter}, ValidatesOnDataErrors=True}" Width="50"
                                      Height="{Binding ElementName=QuantityTextBox, Path=ActualHeight}" MaxLength="5"/>
                             <TextBlock Text="%" Margin="5 0 0 15"/>
                         </StackPanel>

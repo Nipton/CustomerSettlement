@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AccountsReceivable.Helpers
 {
@@ -16,11 +12,12 @@ namespace AccountsReceivable.Helpers
             value = value.Replace(',', '.');
             return decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var result) ? result : 0;
         }
-        public static decimal SafeMultiply(decimal a, decimal b)
+        public static decimal SafeMultiply(decimal? a, decimal? b)
         {
+            if(!a.HasValue || !b.HasValue) return 0;
             try
             {
-                return a * b;
+                return a.Value * b.Value;
             }
             catch (OverflowException)
             {

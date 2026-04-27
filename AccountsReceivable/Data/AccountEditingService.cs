@@ -24,10 +24,6 @@ namespace AccountsReceivable.Data
                 await context.AccountHeaders.AddAsync(accountHeader);
             await context.SaveChangesAsync();
         }
-        public async Task<decimal> GetPaymentSumAsync(int id)
-        {
-            return await context.Payment.Where(x => x.AccountHeaderId == id).SumAsync(x => x.Sum);
-        }
         public async Task<IEnumerable<Nomenclature>> GetNomenclaturesAsync()
         {
             return await context.Nomenclatures.ToListAsync();

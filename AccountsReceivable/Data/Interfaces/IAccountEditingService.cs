@@ -11,7 +11,6 @@ namespace AccountsReceivable.Data.Interfaces
     {
         Task<AccountHeader?> GetAccountAsync(int id);
         Task SaveAccountsAsync(AccountHeader accountHeader);
-        Task<decimal> GetPaymentSumAsync(int id);
         Task<IEnumerable<Nomenclature>> GetNomenclaturesAsync();
     }
 }
