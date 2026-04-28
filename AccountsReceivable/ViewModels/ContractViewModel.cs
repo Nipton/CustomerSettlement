@@ -18,7 +18,7 @@ namespace AccountsReceivable.ViewModels
     {
         private readonly INomenclatureRepository nomenclatureRepository;
         private readonly ICompanyRepository companyRepository;
-        private IRepository<Contract> contractRepository;
+        private IContractRepository contractRepository;
         private readonly IDialogService dialogService;
         private bool isFirstLoad = true;
         private ContractSubject? selectedContractSubject;
@@ -52,7 +52,7 @@ namespace AccountsReceivable.ViewModels
         public ICommand AddContractCommand { get; }
         public ICommand RemoveContractCommand { get; }
         public ICommand RefreshDataCommand { get; }
-        public ContractViewModel(IRepository<Contract> contractRepository, INomenclatureRepository nomenclatureRepository, ICompanyRepository companyRepository, IDialogService dialogService) 
+        public ContractViewModel(IContractRepository contractRepository, INomenclatureRepository nomenclatureRepository, ICompanyRepository companyRepository, IDialogService dialogService) 
         {
             this.contractRepository = contractRepository;
             this.nomenclatureRepository = nomenclatureRepository;

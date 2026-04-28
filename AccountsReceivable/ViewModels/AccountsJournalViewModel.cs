@@ -159,7 +159,7 @@ namespace AccountsReceivable.ViewModels
                 ReloadAccountLines(cachedLines);
             }
         }
-        public async Task AddPaymentAsync()
+        private async Task AddPaymentAsync()
         {
             if (SelectedAccHeader == null)
             {
@@ -197,7 +197,7 @@ namespace AccountsReceivable.ViewModels
                 AccountHeadersView.Refresh();
             }
         }
-        public async Task EditPaymentAsync()
+        private async Task EditPaymentAsync()
         {
             if (SelectedAccHeader == null || SelectedPayments.Count != 1)
             {
@@ -233,7 +233,7 @@ namespace AccountsReceivable.ViewModels
                 AccountHeadersView.Refresh();
             }
         }
-        public async Task DeletePaymentAsync()
+        private async Task DeletePaymentAsync()
         {
             if (SelectedAccHeader == null || SelectedPayments.Count == 0)
             {
@@ -290,7 +290,7 @@ namespace AccountsReceivable.ViewModels
             foreach (var payment in payments)
                 Payments.Add(payment);
         }
-        public async Task LoadAccountsByDateAsync()
+        private async Task LoadAccountsByDateAsync()
         {
             int version = ++loadVersion;
             try
@@ -307,7 +307,7 @@ namespace AccountsReceivable.ViewModels
                 dialogService.ShowError("Ошибка загрузки", "Не удалось загрузить список счетов.");
             }
         }
-        public async Task LoadAccountDataAfterSelectAsync()
+        private async Task LoadAccountDataAfterSelectAsync()
         {
             if (SelectedAccHeader == null)
             {

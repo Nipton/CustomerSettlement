@@ -50,6 +50,7 @@ namespace AccountsReceivable.ViewModels
         {
             if (isLoaded) return;
             await LoadCompaniesAsync();
+            isLoaded = true;
         }
         private async Task LoadCompaniesAsync()
         {
@@ -60,8 +61,7 @@ namespace AccountsReceivable.ViewModels
                 foreach (var company in companyList)
                 {
                     Companies.Add(company);
-                }
-                isLoaded = true;
+                }   
             }
             catch (Exception)
             {

@@ -4,12 +4,13 @@ using AccountsReceivable.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 
 namespace AccountsReceivable.Data.Repositories
 {
-    public class ContractRepository : IRepository<Contract>
+    public class ContractRepository : IContractRepository
     {
         private readonly IDbContextFactory<ApplicationContext> factory;
         public ContractRepository(IDbContextFactory<ApplicationContext> dbContextFactory) 
@@ -48,6 +49,11 @@ namespace AccountsReceivable.Data.Repositories
         {
             using var context = await factory.CreateDbContextAsync();
             return await context.Contracts.Include(c => c.Company).ToListAsync();
+        }
+        public async Task<IEnumerable<Contract>> GetContractsByCompanyIdAsync(int id)
+        {
+            using var context = await factory.CreateDbContextAsync();
+            return await context.Contracts.Where(x => x.CompanyId == id).ToListAsync();
         }
     }
 }

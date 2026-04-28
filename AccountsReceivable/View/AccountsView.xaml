@@ -31,7 +31,7 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Border Grid.Row="1" Grid.ColumnSpan="4" BorderThickness="0 0 0 3" BorderBrush="#50026E" VerticalAlignment="Bottom" Height="1"/>
+        <Border Grid.Row="1" Grid.ColumnSpan="4" BorderThickness="0 0 0 3" BorderBrush="#50026E" VerticalAlignment="Bottom" Height="2"/>
         <Grid Grid.ColumnSpan="3" Margin="10 15 40 10" MinWidth="810">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>

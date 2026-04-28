@@ -18,7 +18,7 @@ namespace AccountsReceivable.ViewModels
     {
         #region Поля и свойства
         private readonly ICompanyRepository companyRepository;
-        private readonly IRepository<Contract> contractRepoitory;
+        private readonly IContractRepository contractRepoitory;
         private readonly IDialogService dialogService;
         private readonly IAccountEditingService editingService;
         private AccountHeader workingAccHeader = new();
@@ -93,7 +93,7 @@ namespace AccountsReceivable.ViewModels
         public ICommand SaveAllCommand { get; }
         public ICommand ClearSelectionCommand { get; }
         
-        public AccountEditorViewModel(AccountHeader accountHeader, ICompanyRepository companyRepository, IRepository<Contract> contractRepoitory, IAccountEditingService editingService, IDialogService dialogService)
+        public AccountEditorViewModel(AccountHeader accountHeader, ICompanyRepository companyRepository, IContractRepository contractRepoitory, IAccountEditingService editingService, IDialogService dialogService)
         {
             this.companyRepository = companyRepository;
             this.contractRepoitory = contractRepoitory;

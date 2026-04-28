@@ -36,6 +36,9 @@
             <DataTemplate DataType="{x:Type vm:PaymentViewModel}">
                 <views:PaymentView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ReconciliationReportViewModel}">
+                <views:ReconciliationReportView/>
+            </DataTemplate>
         </ResourceDictionary>
         
     </Application.Resources>

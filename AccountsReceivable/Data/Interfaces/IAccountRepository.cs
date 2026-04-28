@@ -9,6 +9,7 @@ namespace AccountsReceivable.Data.Interfaces
     public interface IAccountRepository
     {
         Task<IEnumerable<AccountHeader>> GetAccountsByDateAsync(DateTime fromDate, DateTime toDate);
+        Task<IEnumerable<AccountHeader>> GetAccountsByCompanyAsync(int companyId, int? contractId = null);
         Task<List<AccountLine>> GetAccountLinesByHeaderIdAsync(int headerId);
         Task<List<Payment>> GetPaymentsByHeaderIdAsync(int headerId);
         Task DeleteAccountHeaderById(int headerId);
