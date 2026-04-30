@@ -18,61 +18,69 @@
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
     </UserControl.Resources>
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="60 15 70 15">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="275"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock ><Run Text="Наименование:"/></TextBlock>
-            <TextBlock Grid.Row="1"><Run Text="Краткое наименование:"/></TextBlock>
-            <TextBlock Grid.Row="2"><Run Text="Юридический адрес:"/></TextBlock>
-            <TextBlock Grid.Row="3"><Run Text="Фактический адрес:"/></TextBlock>
-            <TextBlock Grid.Row="4"><Run Text="ИНН:"/></TextBlock>
-            <TextBlock Grid.Row="5"><Run Text="КПП:"/></TextBlock>
-            <TextBlock Grid.Row="6"><Run Text="ОГРН:"/></TextBlock>
-            <TextBlock Grid.Row="7"><Run Text="Банк:"/></TextBlock>
-            <TextBlock Grid.Row="8"><Run Text="р/с:"/></TextBlock>
-            <TextBlock Grid.Row="9"><Run Text="БИК:"/></TextBlock>
-            <TextBlock Grid.Row="10"><Run Text="к/с:"/></TextBlock>
-            <TextBlock Grid.Row="11"><Run Text="Телефон:"/></TextBlock>
-            <TextBlock Grid.Row="12" FontWeight="Bold" FontSize="17"><Run Text="Руководитель"/></TextBlock>
-            <TextBlock Grid.Row="13"><Run Text="Должность:"/></TextBlock>
-            <TextBlock Grid.Row="14"><Run Text="ФИО:"/></TextBlock>
-            <Button  Grid.Row="15" Grid.ColumnSpan="2" Style="{StaticResource PrimaryButtonStyle}" Margin="0 0 -20 0" HorizontalAlignment="Right" 
-                     VerticalAlignment="Top" Height="20" Command="{Binding EditOrganizationCommand}">Редактировать</Button>
-            
-            <TextBlock Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Name}"/>
-            <TextBlock Grid.Row="1" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.ShortName}"/>
-            <TextBlock Grid.Row="2" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.LegalAddress}"/>
-            <TextBlock Grid.Row="3" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.ActualAddress}"/>
-            <TextBlock Grid.Row="4" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Inn}"/>
-            <TextBlock Grid.Row="5" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Kpp}"/>
-            <TextBlock Grid.Row="6" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Ogrn}"/>
-            <TextBlock Grid.Row="7" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Bank}"/>
-            <TextBlock Grid.Row="8" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Rs}"/>
-            <TextBlock Grid.Row="9" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Bik}"/>
-            <TextBlock Grid.Row="10" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Ks}"/>
-            <TextBlock Grid.Row="11" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Phone}"/>
-            <TextBlock Grid.Row="13" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Position}"/>
-            <TextBlock Grid.Row="14" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.DirectorFullName}" Margin="20 4 150 10"/>
-        </Grid>
-    </ScrollViewer>
+    <Grid Margin="60 15 70 15">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border  BorderBrush="#50026E" BorderThickness="2" CornerRadius="8"  HorizontalAlignment="Center" >
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="300"/>
+                        <ColumnDefinition MinWidth="300"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock ><Run Text="Наименование:"/></TextBlock>
+                    <TextBlock Grid.Row="1"><Run Text="Краткое наименование:"/></TextBlock>
+                    <TextBlock Grid.Row="2"><Run Text="Юридический адрес:"/></TextBlock>
+                    <TextBlock Grid.Row="3"><Run Text="Фактический адрес:"/></TextBlock>
+                    <TextBlock Grid.Row="4"><Run Text="ИНН:"/></TextBlock>
+                    <TextBlock Grid.Row="5"><Run Text="КПП:"/></TextBlock>
+                    <TextBlock Grid.Row="6"><Run Text="ОГРН:"/></TextBlock>
+                    <TextBlock Grid.Row="7"><Run Text="Банк:"/></TextBlock>
+                    <TextBlock Grid.Row="8"><Run Text="р/с:"/></TextBlock>
+                    <TextBlock Grid.Row="9"><Run Text="БИК:"/></TextBlock>
+                    <TextBlock Grid.Row="10"><Run Text="к/с:"/></TextBlock>
+                    <TextBlock Grid.Row="11"><Run Text="Телефон:"/></TextBlock>
+                    <TextBlock Grid.Row="12" FontWeight="Bold" FontSize="17"><Run Text="Руководитель"/></TextBlock>
+                    <TextBlock Grid.Row="13"><Run Text="Должность:"/></TextBlock>
+                    <TextBlock Grid.Row="14"><Run Text="ФИО:"/></TextBlock>
+
+                    <TextBlock Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Name}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.ShortName}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.LegalAddress}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.ActualAddress}"/>
+                    <TextBlock Grid.Row="4" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Inn}"/>
+                    <TextBlock Grid.Row="5" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Kpp}"/>
+                    <TextBlock Grid.Row="6" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Ogrn}"/>
+                    <TextBlock Grid.Row="7" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Bank}"/>
+                    <TextBlock Grid.Row="8" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Rs}"/>
+                    <TextBlock Grid.Row="9" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Bik}"/>
+                    <TextBlock Grid.Row="10" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Ks}"/>
+                    <TextBlock Grid.Row="11" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Phone}"/>
+                    <TextBlock Grid.Row="13" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.Position}"/>
+                    <TextBlock Grid.Row="14" Grid.Column="1" Style="{StaticResource textBlock}" Text="{Binding Organization.DirectorFullName}" Margin="20 4 150 10"/>
+                </Grid>
+            </ScrollViewer>
+        </Border>
+        <Button  Grid.Row="1" Style="{StaticResource PrimaryButtonStyle}"  HorizontalAlignment="Right" 
+         VerticalAlignment="Top" Command="{Binding EditOrganizationCommand}">Редактировать</Button>
+    </Grid>
 </UserControl>

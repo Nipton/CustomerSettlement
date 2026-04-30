@@ -138,7 +138,7 @@
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Nomenclature.Name}" ElementStyle="{StaticResource WrapText}" Header="Номенклатура" MinWidth="118" Width="*"/>
-                <DataGridTextColumn Binding="{Binding Quantity}" ElementStyle="{StaticResource WrapText}" Header="Количество" MinWidth="60"/>
+                <DataGridTextColumn Binding="{Binding Quantity,  StringFormat=N1}" ElementStyle="{StaticResource WrapText}" Header="Количество" MinWidth="60"/>
                 <DataGridTextColumn Binding="{Binding Nomenclature.Unit}" ElementStyle="{StaticResource WrapText}" Header="Ед. измер" MinWidth="60"/>
                 <DataGridTextColumn Binding="{Binding Price, StringFormat=N2}" ElementStyle="{StaticResource WrapText}" Header="Цена" MinWidth="60" Width="*"/>
                 <DataGridTextColumn Binding="{Binding VatRate}" ElementStyle="{StaticResource WrapText}" Header="НДС" MinWidth="60"/>

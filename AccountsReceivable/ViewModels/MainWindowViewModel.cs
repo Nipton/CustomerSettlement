@@ -7,9 +7,9 @@ namespace AccountsReceivable.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private ViewModelBase currentViewModel;
+        private ViewModelBase? currentViewModel;
         private bool isDropdownOpen;       
-        public ViewModelBase CurrentViewModel
+        public ViewModelBase? CurrentViewModel
         {
             get => currentViewModel;
             set => Set(ref currentViewModel, value);
@@ -35,7 +35,7 @@ namespace AccountsReceivable.ViewModels
             this.factory = factory;
 
             ShowOrganizationViewCommand = new AsyncRelayCommand(ShowPageAsync<OrganizationViewModel>);
-            //ShowReportViewCommand = new RelayCommand(async _ => await ShowPageAsync<ReportViewModel>());
+            ShowReportViewCommand = new AsyncRelayCommand(ShowPageAsync<ReportViewModel>);
             ShowAccointsViewCommand = new AsyncRelayCommand(ShowPageAsync<AccountsJournalViewModel>);
             ShowReconciliationViewCommand = new AsyncRelayCommand(ShowPageAsync<ReconciliationReportViewModel>);
             ToggleReferencesCommand = new RelayCommand(_ => IsDropdownOpen = true, _ => !IsDropdownOpen);

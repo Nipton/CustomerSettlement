@@ -87,7 +87,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn ElementStyle="{StaticResource WrapText}" Binding="{Binding Nomenclature.Name}" Header="Номенклатура" Width="1.8*" MinWidth="190"/>
                             <DataGridTextColumn Binding="{Binding Price, StringFormat=N2}" Header="Цена" MinWidth="110"  Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Quantity}" Header="Количество" MinWidth="100"/>
+                            <DataGridTextColumn Binding="{Binding Quantity, StringFormat=N1}" Header="Количество" MinWidth="100"/>
                             <DataGridTextColumn Binding="{Binding Nomenclature.Unit}" Header="Ед. изм." MinWidth="70"/>
                             <DataGridTextColumn Binding="{Binding VatRate}" Header="НДС" MinWidth="60"/>
                             <DataGridTextColumn Binding="{Binding AmountWithVat, StringFormat=N2}" Header="Сумма"  Width="*" MinWidth="110"/>

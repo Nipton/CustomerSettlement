@@ -1,7 +1,7 @@
 ﻿using AccountsReceivable.Models;
+using AccountsReceivable.Models.Enums;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AccountsReceivable.Data.Interfaces
@@ -17,5 +17,6 @@ namespace AccountsReceivable.Data.Interfaces
         Task AddPaymentAsync(Payment payment, AccountHeader accountHeader);
         Task DeletePaymentsAsync(List<int> paymentsIdToDelete, AccountHeader accountHeader);
         Task EditPaymentAsync(Payment payment, AccountHeader accountHeader);
+        Task<ReportData> GetServiceStatisticsAsync(DateTime fromDate, DateTime toDate, int? nomenclatureId = null, CompanyCategory? companyCategory = null);
     }
 }

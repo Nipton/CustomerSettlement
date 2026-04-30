@@ -1,5 +1,6 @@
 ﻿using AccountsReceivable.Data.Interfaces;
 using AccountsReceivable.Models;
+using AccountsReceivable.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -84,6 +85,18 @@ namespace AccountsReceivable.Data.Repositories
             var trackedHeader = await context.AccountHeaders.FirstAsync(h => h.Id == header.Id);
             trackedHeader.PaymentSum = header.PaymentSum;
             trackedHeader.PaymentStatus = header.PaymentStatus;
+        }
+        public async Task<ReportData> GetServiceStatisticsAsync(DateTime fromDate, DateTime toDate, int? nomenclatureId = null, CompanyCategory? companyCategory = null)
+        {
+            using var context = await factory.CreateDbContextAsync();
+            var query = context.AccountLines.Where(l => l.Period >= fromDate && l.Period < toDate.Date.AddDays(1));
+            if (nomenclatureId != null)
+                query = query.Where(l => l.NomenclatureId == nomenclatureId);
+            if (companyCategory != null)
+                query = query.Where(l => l.AccountHeader.Company.Category == companyCategory);
+
+            var result = await query.GroupBy(l => 1).Select(g => new ReportData { Sum = g.Sum(l => l.AmountWithVat), Volume = g.Sum(l => l.Quantity), HasData = true }).FirstOrDefaultAsync();
+            return result ?? new ReportData { HasData = false };
         }
     }
 }
