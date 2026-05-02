@@ -1,4 +1,5 @@
 ﻿using AccountsReceivable.Data.Interfaces;
+using AccountsReceivable.Data.Repositories;
 using AccountsReceivable.Helpers;
 using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
@@ -18,7 +19,7 @@ namespace AccountsReceivable.ViewModels
     {
         #region Поля и свойства
         private readonly ICompanyRepository companyRepository;
-        private readonly IContractRepository contractRepoitory;
+        private readonly IContractRepository contractRepository;
         private readonly IDialogService dialogService;
         private readonly IAccountEditingService editingService;
         private AccountHeader workingAccHeader = new();
@@ -36,7 +37,6 @@ namespace AccountsReceivable.ViewModels
         private decimal totalVatSum;
         private bool isEditPanelVisible;
         private bool isEditing;
-        private bool isUpdating;
         private string headerAccountsLine = "Позиции счёта";
         public DateTime DateAccount { get => dateAccount; set => Set(ref dateAccount, value); }
         private List<Company> allCompanies = new();
@@ -45,9 +45,9 @@ namespace AccountsReceivable.ViewModels
         public ObservableCollection<Company> Companies { get; set; } = new();
         public ObservableCollection<Contract> Contracts { get; set; } = new();      
         public ObservableCollection<AccountLine> AccountLines { get; set; } = new();
-        public Company? SelectedCompany { get => selectedCompany; set { if (Set(ref selectedCompany, value)) SetContractsAfterSelectCompany(); } }
+        public Company? SelectedCompany { get => selectedCompany; set { if (Set(ref selectedCompany, value)) _ = SetContractsAfterSelectCompanyAsync(); } }
         
-        public Contract? SelectedContract { get => selectedContract; set { if (Set(ref selectedContract, value)) SetCompaniesAfterSelectContract();  } }
+        public Contract? SelectedContract { get => selectedContract; set => Set(ref selectedContract, value); }
         public Nomenclature? SelectedNomenclature { get => selectedNomenclature; set => Set(ref selectedNomenclature, value); }
         public AccountLine? SelectedAccountLine { get => selectedAccountLine; set => Set(ref selectedAccountLine, value); }
         public string WindowTitle { get; set; } = string.Empty;
@@ -93,10 +93,10 @@ namespace AccountsReceivable.ViewModels
         public ICommand SaveAllCommand { get; }
         public ICommand ClearSelectionCommand { get; }
         
-        public AccountEditorViewModel(AccountHeader accountHeader, ICompanyRepository companyRepository, IContractRepository contractRepoitory, IAccountEditingService editingService, IDialogService dialogService)
+        public AccountEditorViewModel(AccountHeader accountHeader, ICompanyRepository companyRepository, IContractRepository contractRepository, IAccountEditingService editingService, IDialogService dialogService)
         {
             this.companyRepository = companyRepository;
-            this.contractRepoitory = contractRepoitory;
+            this.contractRepository = contractRepository;
             this.dialogService = dialogService;
             this.editingService = editingService;
             incomingAccHeader = accountHeader;
@@ -115,11 +115,8 @@ namespace AccountsReceivable.ViewModels
             try
             {
                 allCompanies = (await companyRepository.GetAllCompaniesAsync()).ToList();
-                allContracts = (await contractRepoitory.GetAllAsync()).ToList();
                 foreach (var company in allCompanies)
                     Companies.Add(company);
-                foreach (var contract in allContracts)
-                    Contracts.Add(contract);
                 Nomenclatures = (await editingService.GetNomenclaturesAsync()).ToList();
                 await InitializeAsync();
             }
@@ -151,53 +148,32 @@ namespace AccountsReceivable.ViewModels
                 AccountLines.Add(line);
             CalculateTotalSum();
         }
-        private void SetCompaniesAfterSelectContract()
+        private async Task SetContractsAfterSelectCompanyAsync()
         {
-            if (isUpdating) return;
-            isUpdating = true;
+            Contracts.Clear();
+            if (SelectedCompany == null) return;
             try
             {
-                var filtred = allCompanies.Where(x => SelectedContract?.CompanyId == x.Id).ToList();
-                Company? oldSelectedCompany = SelectedCompany?.Id == SelectedContract?.CompanyId ? SelectedCompany : null;
-                Companies.Clear();
-                foreach (var company in filtred)
-                    Companies.Add(company);
-                SelectedCompany = oldSelectedCompany;
-            }
-            finally { isUpdating = false; }
-        }
-        private void SetContractsAfterSelectCompany()
-        {
-            if (isUpdating) return;
-            isUpdating = true;
-            try
-            {
-                var filtred = allContracts.Where(x => SelectedCompany?.Id == x.CompanyId).ToList();
-                Contract? oldSelectedContract = SelectedCompany?.Id == SelectedContract?.CompanyId ? SelectedContract : null;
-                Contracts.Clear();
-                foreach (var contract in filtred)
+                var contracts = await contractRepository.GetContractsByCompanyIdAsync(SelectedCompany.Id);
+                foreach (var contract in contracts)
                     Contracts.Add(contract);
-                SelectedContract = oldSelectedContract;
             }
-            finally { isUpdating = false; }
+            catch (Exception)
+            {
+                dialogService.ShowError("Ошибка!", "Не удалось загрузить список договоров.");
+            }
         }
         private void ClearHeaderSelection()
         {
-            if (isUpdating) return;
-            isUpdating = true;
-            try
-            {
-                SelectedCompany = null;
-                SelectedContract = null;
-                Companies.Clear();
-                Contracts.Clear();
-                foreach (var company in allCompanies)
-                    Companies.Add(company);
-                foreach (var contract in allContracts)
-                    Contracts.Add(contract);
-                DateAccount = DateTime.Today;
-            }
-            finally { isUpdating = false; }
+            SelectedCompany = null;
+            SelectedContract = null;
+            Companies.Clear();
+            Contracts.Clear();
+            foreach (var company in allCompanies)
+                Companies.Add(company);
+            foreach (var contract in allContracts)
+                Contracts.Add(contract);
+            DateAccount = DateTime.Today;
         }
         public async Task SaveAccountHeaderAsync()
         {

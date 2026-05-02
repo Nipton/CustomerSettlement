@@ -35,7 +35,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Style="{StaticResource HeaderTextBox}" Text="Контрагент"/>
-            <ComboBox Grid.Column="1" x:Name="CompanyComboBox" Style="{StaticResource MainComboBox}" StaysOpenOnEdit="True" MinWidth="200" 
+            <ComboBox Grid.Column="1" x:Name="CompanyComboBox" Style="{StaticResource MainComboBox}" StaysOpenOnEdit="True" MinWidth="200" IsEditable="True"
                       VerticalContentAlignment="Center" FontSize="15" FontWeight="SemiBold" 
                       ItemsSource="{Binding Companies}" SelectedItem="{Binding SelectedCompany}" DisplayMemberPath="ShortName"/>
             <TextBlock Style="{StaticResource HeaderTextBox}"  Grid.Row="2" Text="Договор"/>

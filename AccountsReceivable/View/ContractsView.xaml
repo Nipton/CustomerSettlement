@@ -58,7 +58,7 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment ="Right">
                 <TextBlock Text="Контрагент"/>
                 <ComboBox ItemsSource="{Binding Companies}" DisplayMemberPath="ShortName" SelectedItem="{Binding SelectedCompany}" Style="{DynamicResource MainComboBox}" 
-                          Width="200" Height="26" FontSize="16" FontWeight="SemiBold" >
+                          Width="200" Height="26" FontSize="16" FontWeight="SemiBold" IsEditable="True">
                 </ComboBox>
             </StackPanel>
         </StackPanel>
