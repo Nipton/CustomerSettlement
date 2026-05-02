@@ -128,12 +128,12 @@ namespace AccountsReceivable.Helpers
             currencies.Add(currency, info);
         }
 
-        public static string Str(double val)
+        public static string Str(decimal val)
         {
             return Str(val, "RUR");
         }
 
-        public static string Str(double val, string currency)
+        public static string Str(decimal val, string currency)
         {
             if(!currencies.Contains(currency)) 
                 throw new ArgumentOutOfRangeException("currency", "Валюта \""+currency+"\" не зарегистрирована");
@@ -144,7 +144,7 @@ namespace AccountsReceivable.Helpers
                 info.juniorOne, info.juniorTwo, info.juniorFive);
         }
 
-        public static string Str(double val, bool male, 
+        public static string Str(decimal val, bool male, 
             string seniorOne, string seniorTwo, string seniorFive,
             string juniorOne, string juniorTwo, string juniorFive)
         {
@@ -152,7 +152,7 @@ namespace AccountsReceivable.Helpers
             if(val < 0) { val = - val; minus = true; }
 
             int n = (int) val;
-            int remainder = (int) (( val - n + 0.005 ) * 100);
+            int remainder = (int) (( val - n + 0.005m ) * 100);
 
             StringBuilder r = new StringBuilder();
 

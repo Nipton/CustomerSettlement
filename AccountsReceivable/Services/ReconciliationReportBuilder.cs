@@ -1,23 +1,44 @@
-﻿using AccountsReceivable.Interfaces;
+﻿using AccountsReceivable.Data.Interfaces;
+using AccountsReceivable.Helpers;
+using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AccountsReceivable.Services
 {
     public class ReconciliationReportBuilder : IReconciliationReportBuilder
     {
-        public ReconciliationReport Build(List<AccountHeader> accounts, DateTime fromDate, DateTime toDate)
+        private readonly ICompanyRepository companyRepository;
+        public ReconciliationReportBuilder(ICompanyRepository companyRepository)
+        {
+            this.companyRepository = companyRepository;
+        }
+        public async Task<ReconciliationReport> Build(List<AccountHeader> accounts, Contract? contract, DateTime fromDate, DateTime toDate)
         {
             if (accounts.Count == 0) throw new ArgumentException(nameof(accounts));
-            ReconciliationReport report = new ReconciliationReport();
+
+            var ourCompany = await companyRepository.GetCompanyAsync(Constants.OWN_COMPANY_ID);
+            var counterparty = await companyRepository.GetCompanyAsync(accounts.First().CompanyId);
+
+            ReconciliationReport report = new ReconciliationReport() {OurCompany = ourCompany!, Counterparty = counterparty! };
+            if (contract != null)
+                report.Contract = contract;
+
             var paymentBeforeDateSum = accounts.SelectMany(h => h.Payments).Where(p => p.Date < fromDate).Sum(p => p.Sum);
             var accountBeforeDateSum = accounts.SelectMany(h => h.AccountsList).Where(l => l.Period < fromDate).Sum(l => l.AmountWithVat);
 
-            var paymentsSum = accounts.SelectMany(h => h.Payments).Where(p => p.Date >= fromDate && p.Date < toDate.Date.AddDays(1)).Sum(p => p.Sum);
-            var accountsSum = accounts.SelectMany(h => h.AccountsList).Where(l => l.Period >= fromDate && l.Period < toDate.Date.AddDays(1)).Sum(l => l.AmountWithVat);
 
+            var payments = accounts.SelectMany(h => h.Payments).Where(p => p.Date >= fromDate && p.Date < toDate.Date.AddDays(1)).ToList();
+            var accountLines = accounts.SelectMany(h => h.AccountsList).Where(l => l.Period >= fromDate && l.Period < toDate.Date.AddDays(1)).ToList();
+            var paymentsSum = payments.Sum(p => p.Sum);
+            var accountsSum = accountLines.Sum(l => l.AmountWithVat);
+
+            report.ReconciliationEntries = ReconciliationEntryBuild(accountLines, payments);
+            report.Payments = payments;
+            report.AccountLines = accountLines;
             report.OpeningBalance = accountBeforeDateSum - paymentBeforeDateSum;
             report.Change = accountsSum - paymentsSum;
             report.ClosingBalance = report.OpeningBalance + report.Change;
@@ -26,6 +47,31 @@ namespace AccountsReceivable.Services
             report.FromDate = fromDate;
             report.ToDate = toDate;
             return report;
+        }
+        private List<ReconciliationEntry> ReconciliationEntryBuild(List<AccountLine> accountLines, List<Payment> payments)
+        {
+            List<ReconciliationEntry> reconciliationEntries = new List<ReconciliationEntry>(accountLines.Count + payments.Count);
+            foreach (var accountLine in accountLines)
+            {
+                reconciliationEntries.Add(new ReconciliationEntry
+                {
+                    Date = accountLine.Period,
+                    Credit = null,
+                    Debit = accountLine.AmountWithVat,
+                    DocumentName = $"Акт №{accountLine.AccountHeader.Id} от {accountLine.AccountHeader.Date:d}"
+                });
+            }
+            foreach (var payment in payments)
+            {
+                reconciliationEntries.Add(new ReconciliationEntry
+                {
+                    Date = payment.Date,
+                    Credit = payment.Sum,
+                    Debit = null,
+                    DocumentName = $"П/п №{payment.Number} от {payment.Date:d}"
+                });
+            }
+            return reconciliationEntries.OrderBy(x => x.Date).ThenByDescending(x => x.Debit.HasValue).ToList();
         }
     }
 }

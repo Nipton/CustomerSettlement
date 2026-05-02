@@ -1,6 +1,7 @@
 ﻿using AccountsReceivable.Data.Interfaces;
 using AccountsReceivable.Interfaces;
 using AccountsReceivable.Models;
+using AccountsReceivable.Models.Enums;
 using AccountsReceivable.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,9 @@ namespace AccountsReceivable.ViewModels
         private readonly IContractRepository contractRepository;
         private readonly IAccountRepository accountRepository;
         private readonly IReconciliationReportBuilder reportBuilder;
+        private readonly IDocumentService<ReconciliationReport> documentService;
         private bool isLoaded;
+        private ReconciliationReport? reportData;
         private decimal? openingBalance;
         private decimal? closingBalance;
         private decimal? chargedTotal;
@@ -52,17 +55,20 @@ namespace AccountsReceivable.ViewModels
         public decimal? Change { get => change; set => Set(ref change, value); }
         public string? Period { get => period; set => Set(ref period, value); }
         public ICommand GenerateReportCommand { get; }
+        public ICommand PrintReportCommand {  get; }
         public ICommand ClearFormCommand { get; }
-        public ReconciliationReportViewModel(IDialogService dialogService, ICompanyRepository companyRepository, IContractRepository contractRepository, IAccountRepository accountRepository, IReconciliationReportBuilder reportBuilder)
+        public ReconciliationReportViewModel(IDialogService dialogService, ICompanyRepository companyRepository, IContractRepository contractRepository, IAccountRepository accountRepository, IReconciliationReportBuilder reportBuilder, IDocumentService<ReconciliationReport> documentService)
         {
             this.accountRepository = accountRepository;
             this.dialogService = dialogService;
             this.companyRepository = companyRepository;
             this.contractRepository = contractRepository;
             this.reportBuilder = reportBuilder;
+            this.documentService = documentService;
             companyRepository.DataChanged += LoadCompaniesAsync;
             GenerateReportCommand = new AsyncRelayCommand(GenerateReport, _ => CanGenerateReport());
             ClearFormCommand = new RelayCommand(_ => ClearAll());
+            PrintReportCommand = new AsyncRelayCommand(PrintReconciliationReport);
         }
 
         public async Task LoadAsync()
@@ -117,9 +123,11 @@ namespace AccountsReceivable.ViewModels
                 return;
             }
             List<AccountHeader> accounts;
+            var selectedCompany = SelectedCompany;
+            var selectedContract = SelectedContract;
             try
             {
-                accounts = (await accountRepository.GetAccountsByCompanyAsync(SelectedCompany!.Id, SelectedContract?.Id)).ToList();
+                accounts = (await accountRepository.GetAccountsByCompanyAsync(selectedCompany!.Id, selectedContract?.Id)).ToList();
             }
             catch (Exception)
             {
@@ -127,28 +135,37 @@ namespace AccountsReceivable.ViewModels
                 return;
             }
             ClearForm();
-            var payments = accounts.SelectMany(h => h.Payments).Where(p => p.Date >= FromDate && p.Date < ToDate!.Value.Date.AddDays(1));
-            var accountLines = accounts.SelectMany(h => h.AccountsList).Where(l => l.Period >= FromDate && l.Period < ToDate!.Value.Date.AddDays(1));
-            foreach (var accountLine in accountLines)
-                AccountLines.Add(accountLine);
-            foreach (var payment in payments)
-                Payments.Add(payment);
             ReconciliationReport reconciliationReport;
             try
             {
-                reconciliationReport = reportBuilder.Build(accounts, FromDate!.Value, ToDate!.Value);
+                reconciliationReport = await reportBuilder.Build(accounts, selectedContract, FromDate!.Value, ToDate!.Value);
+                foreach (var accountLine in reconciliationReport.AccountLines)
+                    AccountLines.Add(accountLine);
+                foreach (var payment in reconciliationReport.Payments)
+                    Payments.Add(payment);
                 OpeningBalance = reconciliationReport.OpeningBalance;
                 ClosingBalance = reconciliationReport.ClosingBalance;
                 Change = reconciliationReport.Change;
                 ChargedTotal = reconciliationReport.ChargedTotal;
                 PaymentsTotal = reconciliationReport.PaymentsTotal;
                 Period = reconciliationReport.FormattedPeriod;
+                reportData = reconciliationReport;
             }
             catch (Exception)
             {
                 dialogService.ShowError("Ошибка!", "Не удалось выполнить расчёты.");
                 return;
             }
+        }
+        private async Task PrintReconciliationReport()
+        {
+            if (reportData == null)
+            {
+                dialogService.ShowInfo("Печать", "Для печати необходимо сперва сформировать акт");
+                return;
+            }
+            var html = await documentService.BuildHtml(reportData);
+            await dialogService.ShowWindowAsync(DialogType.PrintPreview, html);
         }
         private void ClearForm()
         {
@@ -160,6 +177,7 @@ namespace AccountsReceivable.ViewModels
             Period = null;
             AccountLines.Clear();
             Payments.Clear();
+            reportData = null;
         }
         private void ClearAll()
         {

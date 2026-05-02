@@ -10,6 +10,7 @@ namespace AccountsReceivable.Models.Enums
     {
         CompanyEditor,
         AccountEditor,
-        PaymentEditor
+        PaymentEditor,
+        PrintPreview
     }
 }

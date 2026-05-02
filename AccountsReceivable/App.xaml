@@ -39,6 +39,9 @@
             <DataTemplate DataType="{x:Type vm:ReconciliationReportViewModel}">
                 <views:ReconciliationReportView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:PrintPreviewViewModel}">
+                <views:PrintPreviewView/>
+            </DataTemplate>
         </ResourceDictionary>
         
     </Application.Resources>

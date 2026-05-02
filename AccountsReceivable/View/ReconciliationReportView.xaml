@@ -60,7 +60,7 @@
             </StackPanel>
             <Button Grid.Column="2" Grid.Row="2" Content="🔄 Очистить фильтры" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Center" Command="{Binding ClearFormCommand}"/>
             <Button Grid.Column="3" Grid.Row="0" Content="📝 Сформировать акт" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding GenerateReportCommand}"/>
-            <Button Grid.Column="3" Grid.Row="2" Content="🖨️ Печать" Style="{StaticResource SecondaryButtonStyle}"/>
+            <Button Grid.Column="3" Grid.Row="2" Content="🖨️ Печать" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding PrintReportCommand}"/>
         </Grid>
         <Border BorderThickness="0 0 0 3" BorderBrush="#50026E" VerticalAlignment="Bottom" Height="2"/>
         <Grid Grid.Row="1">

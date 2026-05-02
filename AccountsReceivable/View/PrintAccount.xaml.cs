@@ -114,14 +114,14 @@ namespace AccountsReceivable.View
             {
 
                 customerTextBlock.Text = FormationStrings.GenerateCompanyData(company);
-                sumStrTextBlock.Text = RusCurrency.Str(accOne.Sum);
+                sumStrTextBlock.Text = RusCurrency.Str((decimal)accOne.Sum);
                 if(sumVat == 0)
                 {
                     vatTB.Text = "НДС не облагается";
                 }
                 else
                 {
-                    vatTB.Text = $"В том числе НДС - {RusCurrency.Str(sumVat)}";
+                    vatTB.Text = $"В том числе НДС - {RusCurrency.Str((decimal)sumVat)}";
                 }
             }
         }

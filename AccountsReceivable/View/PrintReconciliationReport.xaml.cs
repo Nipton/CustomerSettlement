@@ -32,6 +32,10 @@ namespace AccountsReceivable.View
         private double? finalDebitBalance;
         private double? finaleCreditBalance;
 
+        public PrintReconciliationReport()
+        {
+            InitializeComponent();
+        }
         public PrintReconciliationReport(List<AccountPartOne> selectedAccOne, List<Payment>? selectedPayments, DateTime dateTime, DateTime maxDate)
         {
             InitializeComponent();
@@ -64,7 +68,7 @@ namespace AccountsReceivable.View
             textTextBlock.Text = $"Мы, нижеподписавшиеся, {organization.Position} {organization.ShortName} {organization.DirectorFullName}, с одной стороны, и {company?.Position} {company?.ShortName} {company?.DirectorFullName}, с другой стороны, составили настоящий акт сверки в том, что состояние взаимных расчетов по данным учета следующее: ";
             if(finalDebitBalance > finaleCreditBalance && finalDebitBalance!=null)
             {
-                dataCompany1.Text = $"По данным {organization.ShortName}\nна {maxDate:d} задолженность в пользу {organization.ShortName} составляет {finalDebitBalance} руб. ({RusCurrency.Str((double)finalDebitBalance)})";
+                dataCompany1.Text = $"По данным {organization.ShortName}\nна {maxDate:d} задолженность в пользу {organization.ShortName} составляет {finalDebitBalance} руб. ({RusCurrency.Str((decimal)finalDebitBalance)})";
             }
             else if(finalDebitBalance == finaleCreditBalance)
             {
@@ -72,7 +76,7 @@ namespace AccountsReceivable.View
             }
             else if(finalDebitBalance < finaleCreditBalance && finaleCreditBalance != null) 
             {
-                dataCompany1.Text = $"По данным {organization.ShortName}\nна {maxDate:d} задолженность в пользу {company?.ShortName} составляет {finaleCreditBalance} руб. ({RusCurrency.Str((double)finaleCreditBalance)})";
+                dataCompany1.Text = $"По данным {organization.ShortName}\nна {maxDate:d} задолженность в пользу {company?.ShortName} составляет {finaleCreditBalance} руб. ({RusCurrency.Str((decimal)finaleCreditBalance)})";
             }
             dataCompany2.Text = $"По данным {company?.ShortName}";
             dataCompany3.Text = $"По данным {organization.ShortName}";

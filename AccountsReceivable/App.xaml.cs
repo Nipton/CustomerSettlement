@@ -32,14 +32,18 @@ namespace AccountsReceivable
             var services = new ServiceCollection();
 
             services.AddDbContextFactory<ApplicationContext>(option => option.UseSqlite("Data Source=accounts.db"));
+            services.AddSingleton<IViewModelFactory, ViewModelFactory>();
+
             services.AddSingleton<ICompanyRepository, CompanyRepository>();
             services.AddSingleton<INomenclatureRepository, NomenclatureRepository>();
             services.AddSingleton<IContractRepository, ContractRepository>(); 
-            services.AddSingleton<IViewModelFactory, ViewModelFactory>();
-            services.AddSingleton<IDialogService, DialogService>();
-            services.AddTransient<IAccountEditingService, AccountEditingService>();
             services.AddSingleton<IAccountRepository, AccountRepository>(); 
+            services.AddSingleton<ITemplateRepository, TemplateRepository>();
+            services.AddTransient<IAccountEditingService, AccountEditingService>();
+            
+            services.AddSingleton<IDialogService, DialogService>();
             services.AddTransient<IReconciliationReportBuilder, ReconciliationReportBuilder>();
+            services.AddTransient<IDocumentService<ReconciliationReport>, ReconciliationDocumentService>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>();                     
@@ -63,6 +67,8 @@ namespace AccountsReceivable
             services.AddTransient<PaymentViewModel>();
             services.AddSingleton<ReconciliationReportViewModel>();
             services.AddTransient<ReconciliationReportView>();
+            services.AddTransient<PrintPreviewViewModel>();
+            services.AddTransient<PrintPreviewView>();
 
             Services = services.BuildServiceProvider();
 
