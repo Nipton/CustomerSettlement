@@ -19,7 +19,7 @@ namespace AccountsReceivable.Data.Repositories
         public async Task<IEnumerable<AccountHeader>> GetAccountsByDateAsync(DateTime fromDate, DateTime toDate)
         {
             using var context = await factory.CreateDbContextAsync();
-            return await context.AccountHeaders.Where(x => x.Date < toDate.Date.AddDays(1) && x.Date >= fromDate.Date).Include(x => x.Company).Include(x => x.Contract).OrderByDescending(x=> x.Id).ToListAsync();
+            return await context.AccountHeaders.Where(x => x.Date < toDate.Date.AddDays(1) && x.Date >= fromDate.Date).Include(x => x.Company).Include(h => h.OwnerCompany).Include(x => x.Contract).OrderByDescending(x=> x.Id).ToListAsync();
         }
         public async Task<IEnumerable<AccountHeader>> GetAccountsByCompanyAsync(int companyId, int? contractId = null)
         {
@@ -27,7 +27,7 @@ namespace AccountsReceivable.Data.Repositories
             var query = context.AccountHeaders.Where(h => h.CompanyId == companyId);
             if (contractId != null)
                 query = query.Where(h => h.ContractId == contractId);
-            return await query.Include(h => h.AccountsList).ThenInclude(l => l.Nomenclature).Include(h => h.Payments).Include(h => h.Contract).ToArrayAsync();
+            return await query.Include(h => h.AccountsList).ThenInclude(l => l.Nomenclature).Include(h => h.Payments).Include(h => h.Company).Include(h => h.OwnerCompany).Include(h => h.Contract).ToArrayAsync();
         }
         public async Task<List<AccountLine>> GetAccountLinesByHeaderIdAsync(int headerId)
         {

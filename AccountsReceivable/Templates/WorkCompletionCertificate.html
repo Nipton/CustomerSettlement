@@ -1,0 +1,89 @@
+﻿<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Акт выполненных работ</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h2 class="header">
+      Акт выполненных работ (оказанных услуг)<br />
+      №{Title}
+    </h2>
+    <hr class="separator" />
+    <table class="grid">
+      <tr>
+        <td>Исполнитель:</td>
+        <td class="bold-text">{{Contractor}}</td>
+      </tr>
+      <tr>
+        <td>Заказчик:</td>
+        <td class="bold-text">{{Customer}}</td>
+      </tr>
+      <tr>
+        <td>Основание:</td>
+        <td class="bold-text">Договор №{{Contract}}</td>
+      </tr>
+    </table>
+    <table id="workTable">
+      <colgroup>
+        <col style="width: 6%" />
+        <col style="width: 25%" />
+        <col style="width: 15%" />
+        <col style="width: 10%" />
+        <col style="width: 15%" />
+        <col style="width: 20%" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>№</th>
+          <th>Наименование товара или услуги</th>
+          <th>Кол-во</th>
+          <th>Ед. изм</th>
+          <th>Цена, руб.</th>
+          <th>Сумма, руб</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{TableRows}}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5">Итого:</td>
+          <td class="sum-value">{TotalSum}</td>
+        </tr>
+        <tr>
+          <td colspan="5">В том числе НДС:</td>
+          <td class="sum-value">{SumVat}</td>
+        </tr>
+        <tr>
+          <td colspan="5">Всего с НДС:</td>
+          <td class="sum-value">{{TotalSumWithVat}}</td>
+        </tr>
+      </tfoot>
+    </table>
+    <p style="margin-top: 30px">{{FinalStatement}}</p>
+    <p>
+      Вышеперечисленные услуги выполнены в полном объеме, в установленные сроки,
+      с надлежащим качеством. Стороны претензий друг к другу не имеют.
+    </p>
+    <div class="footer">
+      <div style="flex: 1">
+        <p>Представитель заказчика</p>
+        <p class="signature-line">
+          <span class="line"></span>
+          <span class="name">({{DirectorOurCompany}})</span>
+        </p>
+        <p style="margin-top: 30px">М.П.</p>
+      </div>
+      <div style="flex: 1">
+        <p>Представитель исполнителя</p>
+        <p class="signature-line">
+          <span class="line"></span>
+          <span class="name">({{DirectorOurCompany}})</span>
+        </p>
+        <p style="margin-top: 30px">М.П.</p>
+      </div>
+    </div>
+  </body>
+</html>

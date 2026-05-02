@@ -49,16 +49,16 @@
                     </Separator>
                     <Grid Margin="0 0 0 15">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock VerticalAlignment="Top" Margin="5 0 5 0" HorizontalAlignment="Left">Исполнитель:</TextBlock>
+                        <TextBlock VerticalAlignment="Center" Margin="5 0 5 0" HorizontalAlignment="Left">Исполнитель:</TextBlock>
                         <TextBlock HorizontalAlignment="Left" Grid.Column="1" Name="recipient2TextBlock" TextWrapping="Wrap"/>
-                        <TextBlock VerticalAlignment="Top" Margin="5 5 5 0" HorizontalAlignment="Left" Grid.Row="1">Заказчик:</TextBlock>
+                        <TextBlock VerticalAlignment="Center" Margin="5 5 5 0" HorizontalAlignment="Left" Grid.Row="1">Заказчик:</TextBlock>
                         <TextBlock HorizontalAlignment="Left" Margin="0 5 5 0" x:Name="customerTextBlock" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap"/>
                     </Grid>
                     <Border BorderBrush="Black" BorderThickness="2 1 0 0">

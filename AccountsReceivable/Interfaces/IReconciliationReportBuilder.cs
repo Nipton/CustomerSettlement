@@ -7,6 +7,6 @@ namespace AccountsReceivable.Interfaces
 {
     public interface IReconciliationReportBuilder
     {
-        Task<ReconciliationReport> Build(List<AccountHeader> accounts, Contract? contract, DateTime fromDate, DateTime toDate);
+        ReconciliationReport Build(List<AccountHeader> accounts, Contract? contract, DateTime fromDate, DateTime toDate);
     }
 }

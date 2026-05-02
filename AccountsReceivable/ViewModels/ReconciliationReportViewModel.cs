@@ -138,7 +138,7 @@ namespace AccountsReceivable.ViewModels
             ReconciliationReport reconciliationReport;
             try
             {
-                reconciliationReport = await reportBuilder.Build(accounts, selectedContract, FromDate!.Value, ToDate!.Value);
+                reconciliationReport = reportBuilder.Build(accounts, selectedContract, FromDate!.Value, ToDate!.Value);
                 foreach (var accountLine in reconciliationReport.AccountLines)
                     AccountLines.Add(accountLine);
                 foreach (var payment in reconciliationReport.Payments)

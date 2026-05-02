@@ -11,19 +11,11 @@ namespace AccountsReceivable.Services
 {
     public class ReconciliationReportBuilder : IReconciliationReportBuilder
     {
-        private readonly ICompanyRepository companyRepository;
-        public ReconciliationReportBuilder(ICompanyRepository companyRepository)
-        {
-            this.companyRepository = companyRepository;
-        }
-        public async Task<ReconciliationReport> Build(List<AccountHeader> accounts, Contract? contract, DateTime fromDate, DateTime toDate)
+        public ReconciliationReport Build(List<AccountHeader> accounts, Contract? contract, DateTime fromDate, DateTime toDate)
         {
             if (accounts.Count == 0) throw new ArgumentException(nameof(accounts));
 
-            var ourCompany = await companyRepository.GetCompanyAsync(Constants.OWN_COMPANY_ID);
-            var counterparty = await companyRepository.GetCompanyAsync(accounts.First().CompanyId);
-
-            ReconciliationReport report = new ReconciliationReport() {OurCompany = ourCompany!, Counterparty = counterparty! };
+            ReconciliationReport report = new ReconciliationReport() { OurCompany = accounts.First().OwnerCompany, Counterparty = accounts.First().Company };
             if (contract != null)
                 report.Contract = contract;
 

@@ -46,6 +46,7 @@ namespace AccountsReceivable.Data
             modelBuilder.Entity<Contract>().Property(c => c.Date).HasDefaultValueSql("CURRENT_DATE");
             modelBuilder.Entity<Contract>().HasOne(c => c.Company).WithMany(c => c.Contracts).HasForeignKey(c => c.CompanyId).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<AccountHeader>().HasOne(a => a.Company).WithMany().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<AccountHeader>().HasOne(a => a.OwnerCompany).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<AccountHeader>().HasOne(a => a.Contract).WithMany().OnDelete(DeleteBehavior.Restrict);
         }
     }

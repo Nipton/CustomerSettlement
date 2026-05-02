@@ -1,19 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AccountsReceivable.Helpers;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AccountsReceivable.Models
 {
     [Table("AccountHeaders")]
     public class AccountHeader
     {
-        public int Id { get; set; }    
+        public int Id { get; set; } 
+        
+        public int OwnerCompanyId { get; set; } = Constants.OWN_COMPANY_ID;
         public int CompanyId { get; set; }
+        /// <summary>
+        /// Контрагент (покупатель/заказчик)
+        /// </summary>
         public virtual Company Company { get; set; } = null!;
+        /// <summary>
+        /// Наша компания (от лица которой работаем)
+        /// </summary>
+        public virtual Company OwnerCompany { get; set; } = null!;
         public DateTime Date { get; set; }
         [Precision(18, 2)]
         public decimal Sum { get; set; }
