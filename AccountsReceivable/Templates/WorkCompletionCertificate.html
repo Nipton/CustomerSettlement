@@ -4,13 +4,17 @@
     <meta charset="UTF-8" />
     <title>Акт выполненных работ</title>
     {{Styles}}
+    <style>
+      #workTable tfoot td.sum-value {
+        border: 1px solid black;
+      }
+    </style>
   </head>
   <body>
-    <h2 class="header">
+    <h2 class="header-with-border">
       Акт выполненных работ (оказанных услуг)<br />
       №{{Title}}
     </h2>
-    <hr class="separator" />
     <table class="grid">
       <tr>
         <td>Исполнитель:</td>

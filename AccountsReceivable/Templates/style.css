@@ -1,7 +1,3 @@
-.header {
-  text-align: center;
-  margin-bottom: 30px;
-}
 body {
   font-family: Arial, sans-serif;
   width: 210mm;
@@ -16,12 +12,25 @@ table {
   table-layout: fixed;
   border-collapse: collapse;
 }
-
 th,
 td {
   border: 1px solid;
   padding: 5px;
   word-wrap: break-word;
+}
+tr {
+  page-break-inside: avoid;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.header-with-border {
+  text-align: center;
+  border-bottom: 3px solid black;
+  padding-bottom: 5px;
+  margin-bottom: 30px;
 }
 .grid {
   font-size: 16px;
@@ -31,29 +40,6 @@ td {
 .grid td {
   border: none;
   padding: 20px 10px;
-}
-#reconTable td:nth-child(3),
-#reconTable td:nth-child(4),
-#reconTable td:nth-child(7),
-#reconTable td:nth-child(8) {
-  text-align: right;
-}
-#workTable td:nth-child(3),
-#workTable td:nth-child(5),
-#workTable td:nth-child(6) {
-  text-align: right;
-}
-#workTable tfoot td {
-  border: none;
-  text-align: right;
-  padding: 5px 5px;
-  font-weight: bold;
-}
-#workTable tfoot td.sum-value {
-  border: 1px solid black; /* рамка со всех сторон */
-}
-tr {
-  page-break-inside: avoid;
 }
 .balance-row td {
   font-weight: bold;
@@ -69,7 +55,6 @@ tr {
   margin: 5px 0;
   word-wrap: break-word;
 }
-
 .spaced-group p {
   margin: 30px 0;
   word-wrap: break-word;
@@ -86,15 +71,25 @@ tr {
   border-bottom: 1px solid black;
   height: 1px;
 }
-
 .name {
   white-space: nowrap;
 }
-
 .separator {
   border: none;
   border-top: 3px solid black;
   margin: -20px 0 20px 0;
+}
+
+#workTable td:nth-child(3),
+#workTable td:nth-child(5),
+#workTable td:nth-child(6) {
+  text-align: right;
+}
+#workTable tfoot td {
+  border: none;
+  text-align: right;
+  padding: 5px 5px;
+  font-weight: bold;
 }
 
 @page {

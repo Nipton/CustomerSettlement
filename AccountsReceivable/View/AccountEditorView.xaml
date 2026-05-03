@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AccountsReceivable.View" xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:AccountEditorViewModel}"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" SizeToContent="Height" MinWidth="450" Width="750" WindowStartupLocation="CenterScreen" Language="ru-RU" >
+        Title="{Binding WindowTitle}" SizeToContent="Height" MaxHeight="900" MinWidth="450" Width="750" WindowStartupLocation="CenterScreen" Language="ru-RU" >
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="15"/>

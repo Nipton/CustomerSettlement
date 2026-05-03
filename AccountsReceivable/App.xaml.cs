@@ -43,8 +43,10 @@ namespace AccountsReceivable
             
             services.AddSingleton<IDialogService, DialogService>();
             services.AddTransient<IReconciliationReportBuilder, ReconciliationReportBuilder>();
-            services.AddTransient<IDocumentService<ReconciliationReport>, ReconciliationDocumentService>();
-            services.AddTransient<IDocumentService<AccountHeader>, ActDocumentService>();
+            services.AddTransient<ReconciliationDocumentService>();
+            services.AddTransient<ActDocumentService>();
+            services.AddTransient<InvoiceDocumentService>();
+            services.AddTransient<IDocumentServiceFactory, DocumentServiceFactory>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>();                     

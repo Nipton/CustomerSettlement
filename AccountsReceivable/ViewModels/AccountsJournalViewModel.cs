@@ -19,7 +19,7 @@ namespace AccountsReceivable.ViewModels
     {
         private readonly IAccountRepository accountRepository;
         private readonly IDialogService dialogService;
-        private readonly IDocumentService<AccountHeader> documentService;
+        private readonly IDocumentServiceFactory documentService;
         private DateTime fromDate;
         private DateTime toDate;
         private AccountHeader? selectedAccHeader;
@@ -54,7 +54,8 @@ namespace AccountsReceivable.ViewModels
         public ICommand DeletePaymentsCommand { get; }
         public ICommand EditPaymentCommand { get; }
         public ICommand PrintAct {  get; }
-        public AccountsJournalViewModel(IDialogService dialogService, IAccountRepository accountRepository, IDocumentService<AccountHeader> documentService)
+        public ICommand PrintInvoice {  get; }
+        public AccountsJournalViewModel(IDialogService dialogService, IAccountRepository accountRepository, IDocumentServiceFactory documentService)
         {
             this.dialogService = dialogService;
             this.accountRepository = accountRepository;
@@ -71,6 +72,7 @@ namespace AccountsReceivable.ViewModels
             DeletePaymentsCommand = new AsyncRelayCommand(DeletePaymentAsync, _ => SelectedPayments.Count > 0);
             EditPaymentCommand = new AsyncRelayCommand(EditPaymentAsync, _ => SelectedPayments.Count == 1);
             PrintAct = new AsyncRelayCommand(PrintActAsync, _ => SelectedAccHeader != null);
+            PrintInvoice = new AsyncRelayCommand(PrintInvoiceAsync, _ => SelectedAccHeader != null);
         }
         public async Task LoadAsync()
         {
@@ -369,7 +371,21 @@ namespace AccountsReceivable.ViewModels
             }
             var header = SelectedAccHeader;
             header.AccountsList = linesCache[header.Id];
-            var html = await documentService.BuildHtml(header);
+            var actService = documentService.GetActService();
+            var html = await actService.BuildHtml(header);
+            await dialogService.ShowWindowAsync(DialogType.PrintPreview, html);
+        }
+        private async Task PrintInvoiceAsync()
+        {
+            if (SelectedAccHeader == null)
+            {
+                dialogService.ShowInfo("Печать счёта на оплату", "Для печати счёта на оплату необходимо выбрать один счёт.");
+                return;
+            }
+            var header = SelectedAccHeader;
+            header.AccountsList = linesCache[header.Id];
+            var invoiceService = documentService.GetInvoiceService();
+            var html = await invoiceService.BuildHtml(header);
             await dialogService.ShowWindowAsync(DialogType.PrintPreview, html);
         }
     }

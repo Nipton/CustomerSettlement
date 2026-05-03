@@ -57,7 +57,7 @@
                 <Button Content="🗑 Удалить" Command="{Binding DeleteAccHeaderCommand}" Style="{StaticResource SecondaryButtonStyle}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="🖨️ Печать счета" Style="{StaticResource SecondaryButtonStyle}"/>
+                <Button Content="🖨️ Печать счета" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding PrintInvoice}"/>
                 <Button Content="📝 Печать акта" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding PrintAct}"/>
             </StackPanel>
         </Grid>
@@ -70,7 +70,7 @@
                 <ContextMenu Name="DataGridContextMenu">
                     <MenuItem Header="Оплатить" Command="{Binding AddPaymentCommand}"/>
                     <Separator/>
-                    <MenuItem FontWeight="Bold" Header="Печать счета"/>
+                    <MenuItem FontWeight="Bold" Header="Печать счета" Command="{Binding PrintInvoice}"/>
                     <MenuItem FontWeight="Bold" Header="Печать акта" Command="{Binding PrintAct}"/>
                     <Separator/>
                     <MenuItem Header="Редактировать запись" Command="{Binding EditAccountHeaderCommand}"/>

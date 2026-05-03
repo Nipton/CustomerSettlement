@@ -1,13 +1,7 @@
 ﻿using AccountsReceivable.Data;
 using AccountsReceivable.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -50,24 +44,6 @@ namespace AccountsReceivable.View
                 {
                     PrintAccount printAccount = new PrintAccount(selectedAccOne);
                     printAccount.ShowDialog();
-                }
-            }
-        }
-
-        private void PrintAct(object sender, RoutedEventArgs e)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (AccHeadersDataGrid.SelectedItem is AccountPartOne selectedAccOne)
-                {
-                    PrintAct printAccount = new PrintAct(selectedAccOne);
-                    printAccount.ShowDialog();
-                    if(printAccount.PrintStatus)
-                    {
-                        selectedAccOne.ActStatus = true;
-                        db.AccountsPartOne.Update(selectedAccOne);
-                        db.SaveChanges();
-                    }
                 }
             }
         }

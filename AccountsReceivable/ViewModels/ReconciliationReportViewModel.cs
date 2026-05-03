@@ -19,7 +19,7 @@ namespace AccountsReceivable.ViewModels
         private readonly IContractRepository contractRepository;
         private readonly IAccountRepository accountRepository;
         private readonly IReconciliationReportBuilder reportBuilder;
-        private readonly IDocumentService<ReconciliationReport> documentService;
+        private readonly IDocumentServiceFactory documentService;
         private bool isLoaded;
         private ReconciliationReport? reportData;
         private decimal? openingBalance;
@@ -57,7 +57,7 @@ namespace AccountsReceivable.ViewModels
         public ICommand GenerateReportCommand { get; }
         public ICommand PrintReportCommand {  get; }
         public ICommand ClearFormCommand { get; }
-        public ReconciliationReportViewModel(IDialogService dialogService, ICompanyRepository companyRepository, IContractRepository contractRepository, IAccountRepository accountRepository, IReconciliationReportBuilder reportBuilder, IDocumentService<ReconciliationReport> documentService)
+        public ReconciliationReportViewModel(IDialogService dialogService, ICompanyRepository companyRepository, IContractRepository contractRepository, IAccountRepository accountRepository, IReconciliationReportBuilder reportBuilder, IDocumentServiceFactory documentService)
         {
             this.accountRepository = accountRepository;
             this.dialogService = dialogService;
@@ -164,7 +164,8 @@ namespace AccountsReceivable.ViewModels
                 dialogService.ShowInfo("Печать", "Для печати необходимо сперва сформировать акт");
                 return;
             }
-            var html = await documentService.BuildHtml(reportData);
+            var reconciliationService = documentService.GetReconciliationService();
+            var html = await reconciliationService.BuildHtml(reportData);
             await dialogService.ShowWindowAsync(DialogType.PrintPreview, html);
         }
         private void ClearForm()
