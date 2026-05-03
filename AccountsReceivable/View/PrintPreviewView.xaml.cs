@@ -17,14 +17,22 @@ namespace AccountsReceivable.View
         }
         private async Task LoadHtml()
         {
-            if(DataContext is PrintPreviewViewModel vm)
+            try
             {
-                await Browser.EnsureCoreWebView2Async();
-                Browser.NavigateToString(vm.HtmlContent);
-                reportTitle = vm.HtmlTitle;
-                Browser.ZoomFactor = 0.8;
-                UpdateZoomDisplay();
-                Browser.ZoomFactorChanged += Browser_ZoomFactorChanged;
+                if (DataContext is PrintPreviewViewModel vm)
+                {
+                    await Browser.EnsureCoreWebView2Async();
+                    Browser.NavigateToString(vm.HtmlContent);
+                    reportTitle = vm.HtmlTitle;
+                    Browser.ZoomFactor = 0.8;
+                    UpdateZoomDisplay();
+                    Browser.ZoomFactorChanged += Browser_ZoomFactorChanged;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки документа", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Close();
             }
         }
         private async void Print_Click(object sender, RoutedEventArgs e)

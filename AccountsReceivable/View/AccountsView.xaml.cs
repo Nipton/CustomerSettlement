@@ -1,6 +1,4 @@
-﻿using AccountsReceivable.Data;
-using AccountsReceivable.Models;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -33,18 +31,6 @@ namespace AccountsReceivable.View
                 var picker = (DatePicker)sender;
                 var binding = picker.GetBindingExpression(DatePicker.SelectedDateProperty);
                 binding?.UpdateSource();
-            }
-        }
-
-        private void PrintAccount(object sender, RoutedEventArgs e)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (AccHeadersDataGrid.SelectedItem is AccountPartOne selectedAccOne)
-                {
-                    PrintAccount printAccount = new PrintAccount(selectedAccOne);
-                    printAccount.ShowDialog();
-                }
             }
         }
     }

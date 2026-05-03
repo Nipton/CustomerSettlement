@@ -1,9 +1,4 @@
-﻿using AccountsReceivable.Data;
-using AccountsReceivable.Models;
-using AccountsReceivable.ViewModels;
-using System;
-using System.Linq;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace AccountsReceivable.View
