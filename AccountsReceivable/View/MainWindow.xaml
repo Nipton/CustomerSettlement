@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodels="clr-namespace:AccountsReceivable.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
-        mc:Ignorable="d"
+        mc:Ignorable="d" xmlns:enums="clr-namespace:AccountsReceivable.Models.Enums"
         Title="Дебиторская задолженность" Height="720" Width="1280" MinHeight="350" MinWidth="760" WindowStartupLocation ="CenterScreen" Background="#E5D9EA" Language="ru-RU">
     <Window.Resources>
         <Style x:Key="PopupButton" TargetType="Button">
@@ -17,6 +17,18 @@
                             <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource PageTypeToBooleanConverter}">
+                                        <Binding Path="DataContext.CurrentPageType" 
+                                         RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                        <Binding Path="Tag" 
+                                         RelativeSource="{RelativeSource Self}"/>
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                <Setter TargetName="PopupBorder" Property="Background" Value="#65247F"/>
+                                <Setter Property="Foreground" Value="#E567F2"/>
+                            </DataTrigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="PopupBorder" Property="Background" Value="#65247F"/>
                                 <Setter Property="Foreground" Value="#D87EFC"/>
@@ -36,32 +48,31 @@
                                 <Style TargetType="Label">
                                     <Setter Property="Foreground" Value="#16061C"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource 
-                                            Mode=FindAncestor,
-                                            AncestorType={x:Type Button}},
-                                            Path = IsFocused}" Value="true">
+
+                                        <DataTrigger Value="True">
+                                            <DataTrigger.Binding>
+                                                <MultiBinding Converter="{StaticResource PageTypeToBooleanConverter}">
+                                                    <Binding Path="DataContext.CurrentPageType" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                                    <Binding Path="Tag" RelativeSource="{RelativeSource AncestorType=Button}"/>
+                                                </MultiBinding>
+                                            </DataTrigger.Binding>
                                             <Setter Property="Effect">
                                                 <Setter.Value>
                                                     <DropShadowEffect ShadowDepth="0" Color="BlueViolet" BlurRadius="20" />
                                                 </Setter.Value>
                                             </Setter>
+                                            <Setter Property="Foreground" Value="#E567F2"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding ElementName= Btn, Path=IsMouseOver}" Value="true">
+                                        
+                                        <DataTrigger Binding="{Binding ElementName=Btn, Path=IsMouseOver}" Value="true">
                                             <Setter Property="Foreground" Value="#C197D2"/>
                                             <Setter Property="Cursor" Value="Hand"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource 
-                                            Mode=FindAncestor,
-                                            AncestorType={x:Type Button}},
-                                            Path = IsFocused}" Value="true">
-                                            <Setter Property="Foreground" Value="#E567F2"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource 
-                                            Mode=FindAncestor,
-                                            AncestorType={x:Type Button}},
-                                            Path = IsPressed}" Value="true">
+
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=IsPressed}" Value="true">
                                             <Setter Property="Foreground" Value="#8C6D98"/>
                                         </DataTrigger>
+                                        
                                     </Style.Triggers>
                                 </Style>
                             </Label.Style>
@@ -101,13 +112,21 @@
                 </LinearGradientBrush>
             </Grid.Background>
             <StackPanel x:Name="Header" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowOrganizationViewCommand}">Организация</Button>
-                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowAccointsViewCommand}">Счета</Button>
-                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReportViewCommand}">Отчет</Button>
-                <Button Content="Акт сверки" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReconciliationViewCommand}"/>
-                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Name="ReferencesButton" Command="{Binding ToggleReferencesCommand}">Справочники</Button>
+                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowOrganizationViewCommand}" Tag="{x:Static enums:PageType.Organization}">Организация</Button>
+                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowAccointsViewCommand}" Tag="{x:Static enums:PageType.Accounts}">Счета</Button>
+                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReportViewCommand}" Tag="{x:Static enums:PageType.Report}">Отчет</Button>
+                <Button Content="Акт сверки" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReconciliationViewCommand}" Tag="{x:Static enums:PageType.Reconciliation}"/>
+                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Name="ReferencesButton" Command="{Binding ToggleReferencesCommand}" Content="Справочники">
+                    <Button.Tag>
+                        <x:Array Type="{x:Type enums:PageType}">
+                            <x:Static Member="enums:PageType.Counterparties"/>
+                            <x:Static Member="enums:PageType.Contract"/>
+                            <x:Static Member="enums:PageType.Nomenclature"/>
+                        </x:Array>
+                    </Button.Tag>
+                </Button>
                 <Popup x:Name="popup"  MaxWidth="180" StaysOpen="False" IsOpen="{Binding IsDropdownOpen}"
-AllowsTransparency="True" Placement="Bottom" PlacementTarget="{Binding ElementName=ReferencesButton}">
+                    AllowsTransparency="True" Placement="Bottom" PlacementTarget="{Binding ElementName=ReferencesButton}">
                     <StackPanel x:Name="st"   HorizontalAlignment="Center" Width="175">
                         <StackPanel.Background>
                             <LinearGradientBrush  StartPoint="0.5,0" EndPoint="0.5,1">
@@ -115,9 +134,9 @@ AllowsTransparency="True" Placement="Bottom" PlacementTarget="{Binding ElementNa
                                 <GradientStop Color="#F5DCFF" Offset="1" />
                             </LinearGradientBrush>
                         </StackPanel.Background>
-                        <Button Style="{StaticResource PopupButton}" Command="{Binding ShowCounterpartyViewCommand}">Контрагенты</Button>
-                        <Button Style="{StaticResource PopupButton}" Command="{Binding ShowContractViewCommand}">Договоры</Button>
-                        <Button Style="{StaticResource PopupButton}" Command="{Binding ShowNomenclatureViewCommand}">Номенклатура</Button>
+                        <Button Style="{StaticResource PopupButton}" Command="{Binding ShowCounterpartyViewCommand}" Tag="{x:Static enums:PageType.Counterparties}">Контрагенты</Button>
+                        <Button Style="{StaticResource PopupButton}" Command="{Binding ShowContractViewCommand}" Tag="{x:Static enums:PageType.Contract}">Договоры</Button>
+                        <Button Style="{StaticResource PopupButton}" Command="{Binding ShowNomenclatureViewCommand}" Tag="{x:Static enums:PageType.Nomenclature}">Номенклатура</Button>
                     </StackPanel>
                 </Popup>
             </StackPanel>

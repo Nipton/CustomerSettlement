@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace AccountsReceivable.Helpers
+namespace AccountsReceivable.Converters
 {
     public class ValidatingDecimalConverter : IValueConverter
     {

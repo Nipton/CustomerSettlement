@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AccountsReceivable.Helpers;
+using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace AccountsReceivable.Helpers
+namespace AccountsReceivable.Converters
 {
     public class EnumDisplayConverter : IValueConverter
     {
