@@ -1,10 +1,11 @@
 ﻿using AccountsReceivable.Models;
 using System;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace AccountsReceivable.Helpers
 {
-    public static class FormationStrings
+    public static class StringFormattingHelper
     {
         public static string GenerateFIO(Company company)
         {
@@ -30,6 +31,27 @@ namespace AccountsReceivable.Helpers
                 return match.Groups[1].Value;
 
             return "Отчёт";
+        }
+        public static string GenerateCompanyInfo(Company company)
+        {
+            if (company == null) return string.Empty;
+
+            var sb = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(company.Name))
+                sb.Append(company.Name);
+            if (!string.IsNullOrEmpty(company.Inn))
+                sb.Append($", ИНН {company.Inn}");
+
+            if (!string.IsNullOrEmpty(company.Kpp))
+                sb.Append($", КПП {company.Kpp}");
+
+            if (!string.IsNullOrEmpty(company.LegalAddress))
+                sb.Append($", {company.LegalAddress}");
+            if (!string.IsNullOrEmpty(company.Phone))
+                sb.Append($", тел: {company.Phone}");
+
+            return sb.ToString();
         }
     }
 }

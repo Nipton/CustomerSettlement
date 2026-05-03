@@ -44,6 +44,7 @@ namespace AccountsReceivable
             services.AddSingleton<IDialogService, DialogService>();
             services.AddTransient<IReconciliationReportBuilder, ReconciliationReportBuilder>();
             services.AddTransient<IDocumentService<ReconciliationReport>, ReconciliationDocumentService>();
+            services.AddTransient<IDocumentService<AccountHeader>, ActDocumentService>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>();                     

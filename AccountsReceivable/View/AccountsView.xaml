@@ -58,7 +58,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="🖨️ Печать счета" Style="{StaticResource SecondaryButtonStyle}"/>
-                <Button Content="📝 Печать акта" Style="{StaticResource SecondaryButtonStyle}"/>
+                <Button Content="📝 Печать акта" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding PrintAct}"/>
             </StackPanel>
         </Grid>
         <TextBlock Grid.Row="2" Text="Счета" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="5"/>
@@ -71,7 +71,7 @@
                     <MenuItem Header="Оплатить" Command="{Binding AddPaymentCommand}"/>
                     <Separator/>
                     <MenuItem FontWeight="Bold" Header="Печать счета"/>
-                    <MenuItem FontWeight="Bold" Header="Печать акта"/>
+                    <MenuItem FontWeight="Bold" Header="Печать акта" Command="{Binding PrintAct}"/>
                     <Separator/>
                     <MenuItem Header="Редактировать запись" Command="{Binding EditAccountHeaderCommand}"/>
                     <MenuItem Header="Копировать" Command="Copy"/>

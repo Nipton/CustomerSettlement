@@ -22,6 +22,8 @@ namespace AccountsReceivable.Models
         public decimal VatRate { get; set; } = 0m;
         [Precision(18, 2)]
         public decimal AmountWithVat { get; set; }
+        [NotMapped]
+        public decimal AmountWithoutVat => Price * Quantity;
         public DateTime Period { get; set; }
         public int AccountHeaderId { get; set; }
         public virtual AccountHeader AccountHeader { get; set; } = null!;

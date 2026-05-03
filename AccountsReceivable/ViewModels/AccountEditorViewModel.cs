@@ -40,7 +40,6 @@ namespace AccountsReceivable.ViewModels
         private string headerAccountsLine = "Позиции счёта";
         public DateTime DateAccount { get => dateAccount; set => Set(ref dateAccount, value); }
         private List<Company> allCompanies = new();
-        private List<Contract> allContracts = new();
         public List<Nomenclature> Nomenclatures { get; set; } = new();
         public ObservableCollection<Company> Companies { get; set; } = new();
         public ObservableCollection<Contract> Contracts { get; set; } = new();      
@@ -142,7 +141,7 @@ namespace AccountsReceivable.ViewModels
             else
                 workingAccHeader = loadedAccHeader;
             SelectedCompany = allCompanies.FirstOrDefault(x => x.Id == workingAccHeader.CompanyId);
-            SelectedContract = allContracts.FirstOrDefault(x => x.Id == workingAccHeader.ContractId);
+            SelectedContract = Contracts.FirstOrDefault(x => x.Id == workingAccHeader.ContractId);
             DateAccount = workingAccHeader.Date;
             foreach (var line in workingAccHeader.AccountsList)
                 AccountLines.Add(line);
@@ -171,8 +170,6 @@ namespace AccountsReceivable.ViewModels
             Contracts.Clear();
             foreach (var company in allCompanies)
                 Companies.Add(company);
-            foreach (var contract in allContracts)
-                Contracts.Add(contract);
             DateAccount = DateTime.Today;
         }
         public async Task SaveAccountHeaderAsync()

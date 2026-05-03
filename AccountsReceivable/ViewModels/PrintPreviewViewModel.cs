@@ -18,7 +18,7 @@ namespace AccountsReceivable.ViewModels
             this.htmlContent = htmlContent;
             this.dialogService = dialogService;
             CloseCommand = new RelayCommand(_ => CloseWindow());
-            HtmlTitle = FormationStrings.GetTitleFromHtml(htmlContent);
+            HtmlTitle = StringFormattingHelper.GetTitleFromHtml(htmlContent);
         }
         private void CloseWindow()
         {

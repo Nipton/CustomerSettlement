@@ -38,9 +38,9 @@ namespace AccountsReceivable.Services
             html = html.Replace("{{OrganizationHeader}}", $"{report.OurCompany.Position} {report.OurCompany.Name} {report.OurCompany.DirectorFullName}".Trim());
             html = html.Replace("{{CounterpartyHeader}}", $"{report.Counterparty.Position} {report.Counterparty.Name} {report.Counterparty.DirectorFullName}".Trim());
             html = html.Replace("{{PositionOurCompany}}", report.OurCompany.Position);
-            html = html.Replace("{{DirectorOurCompany}}", FormationStrings.GenerateFIO(report.OurCompany));
+            html = html.Replace("{{DirectorOurCompany}}", StringFormattingHelper.GenerateFIO(report.OurCompany));
             html = html.Replace("{{PositionCounterparty}}", report.Counterparty.Position);
-            html = html.Replace("{{DirectorCounterparty}}", FormationStrings.GenerateFIO(report.Counterparty));
+            html = html.Replace("{{DirectorCounterparty}}", StringFormattingHelper.GenerateFIO(report.Counterparty));
             html = html.Replace("{{FinalDebtStatement}}", GetFinalDebtStatement(report));
             html = html.Replace("{{TableRows}}", GetTableRows(report));
             return html;
@@ -48,9 +48,9 @@ namespace AccountsReceivable.Services
         private string GetFinalDebtStatement(ReconciliationReport report)
         {
             if (report.ClosingBalance > 0)
-                return $"на {report.ToDate:d} задолженность в пользу {report.OurCompany.Name} {report.ClosingBalance:N2} руб ({RusCurrency.Str(report.ClosingBalance)})";
+                return $"на {report.ToDate:d} задолженность в пользу {report.OurCompany.Name} {report.ClosingBalance:N2} руб. ({RusCurrency.Str(report.ClosingBalance)})";
             else if (report.ClosingBalance < 0)
-                return $"на {report.ToDate:d} задолженность в пользу {report.Counterparty.Name} {Math.Abs(report.ClosingBalance):N2} руб ({RusCurrency.Str(Math.Abs(report.ClosingBalance))})";
+                return $"на {report.ToDate:d} задолженность в пользу {report.Counterparty.Name} {Math.Abs(report.ClosingBalance):N2} руб. ({RusCurrency.Str(Math.Abs(report.ClosingBalance))})";
             else
                 return $"на {report.ToDate:d} задолженность отсутствует";
         }
