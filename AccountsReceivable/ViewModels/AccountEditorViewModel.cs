@@ -198,6 +198,7 @@ namespace AccountsReceivable.ViewModels
             incomingAccHeader.ContractId = SelectedContract.Id;
             incomingAccHeader.AccountsList = workingAccHeader.AccountsList;
             incomingAccHeader.PaymentStatus = workingAccHeader.PaymentStatus;
+            incomingAccHeader.OwnerCompany = (await companyRepository.GetCompanyAsync(Constants.OWN_COMPANY_ID))!;
 
             dialogService.CloseWindow(this, true);
         }       

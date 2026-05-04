@@ -372,8 +372,15 @@ namespace AccountsReceivable.ViewModels
             var header = SelectedAccHeader;
             header.AccountsList = linesCache[header.Id];
             var actService = documentService.GetActService();
-            var html = await actService.BuildHtml(header);
-            await dialogService.ShowWindowAsync(DialogType.PrintPreview, html);
+            try
+            {
+                var html = await actService.BuildHtml(header);
+                await dialogService.ShowWindowAsync(DialogType.PrintPreview, html);
+            }
+            catch (Exception)
+            {
+                dialogService.ShowError("Ошибка", "Ошибка во время печати.");
+            }
         }
         private async Task PrintInvoiceAsync()
         {
@@ -385,8 +392,15 @@ namespace AccountsReceivable.ViewModels
             var header = SelectedAccHeader;
             header.AccountsList = linesCache[header.Id];
             var invoiceService = documentService.GetInvoiceService();
-            var html = await invoiceService.BuildHtml(header);
-            await dialogService.ShowWindowAsync(DialogType.PrintPreview, html);
+            try
+            {
+                var html = await invoiceService.BuildHtml(header);
+                await dialogService.ShowWindowAsync(DialogType.PrintPreview, html);
+            }
+            catch (Exception)
+            {
+                dialogService.ShowError("Ошибка", "Ошибка во время печати.");
+            }
         }
     }
 }

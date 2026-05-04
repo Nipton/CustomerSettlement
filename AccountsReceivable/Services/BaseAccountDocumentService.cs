@@ -46,8 +46,8 @@ namespace AccountsReceivable.Services
         protected string GetFinalStatement(AccountHeader header)
         {
             decimal totalVat = header.Sum - header.AccountsList.Sum(x => x.AmountWithoutVat);
-            string finalStatement = $"Всего выполнено работ (оказано услуг) {header.AccountsList.Count}, на сумму {header.Sum:N2} руб. ({RusCurrency.Str(header.Sum)}).";
-            finalStatement += totalVat == 0 ? " НДС не облагается." : $" В том числе НДС - {totalVat:N2} руб. ({RusCurrency.Str(totalVat)})";
+            string finalStatement = $"Всего выполнено работ (оказано услуг) {header.AccountsList.Count}, на сумму {header.Sum:N2} руб. ({RublesSpellingConverter.Convert(header.Sum)}).";
+            finalStatement += totalVat == 0 ? " НДС не облагается." : $" В том числе НДС - {totalVat:N2} руб. ({RublesSpellingConverter.Convert(totalVat)})";
             return finalStatement;
         }
         protected (decimal totalWithoutVat, decimal totalVat) CalculateTotals(AccountHeader header)

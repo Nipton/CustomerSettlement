@@ -48,9 +48,9 @@ namespace AccountsReceivable.Services
         private string GetFinalDebtStatement(ReconciliationReport report)
         {
             if (report.ClosingBalance > 0)
-                return $"на {report.ToDate:d} задолженность в пользу {report.OurCompany.Name} {report.ClosingBalance:N2} руб. ({RusCurrency.Str(report.ClosingBalance)})";
+                return $"на {report.ToDate:d} задолженность в пользу {report.OurCompany.Name} {report.ClosingBalance:N2} руб. ({RublesSpellingConverter.Convert(report.ClosingBalance)})";
             else if (report.ClosingBalance < 0)
-                return $"на {report.ToDate:d} задолженность в пользу {report.Counterparty.Name} {Math.Abs(report.ClosingBalance):N2} руб. ({RusCurrency.Str(Math.Abs(report.ClosingBalance))})";
+                return $"на {report.ToDate:d} задолженность в пользу {report.Counterparty.Name} {Math.Abs(report.ClosingBalance):N2} руб. ({RublesSpellingConverter.Convert(Math.Abs(report.ClosingBalance))})";
             else
                 return $"на {report.ToDate:d} задолженность отсутствует";
         }

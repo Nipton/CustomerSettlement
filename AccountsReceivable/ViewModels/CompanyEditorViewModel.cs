@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml.Linq;
 
 namespace AccountsReceivable.ViewModels
 {
@@ -128,6 +129,8 @@ namespace AccountsReceivable.ViewModels
                 dialogService.ShowInfo("Ошибка", "Исправьте ошибки перед сохранением");
                 return;
             }
+            if (!CheckMinimumRequiredData())
+                return;
             try
             {
                 if (editedСompany.Id == 0)
@@ -141,6 +144,21 @@ namespace AccountsReceivable.ViewModels
             {
                 dialogService.ShowError("Ошибка", "Произошла ошибка во время сохранения.");
             }
+        }
+        private bool CheckMinimumRequiredData()
+        {
+            if(string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(ShortName))
+            {
+                dialogService.ShowInfo("Ошибка", "Названия обязательны к заполнению.");
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(Inn))
+            {
+                dialogService.ShowInfo("Ошибка", "ИНН обязателен к заполнению.");
+                return false;
+            }
+            return true;
+
         }
         #region Валидация
         public string Error => null!;
@@ -173,7 +191,7 @@ namespace AccountsReceivable.ViewModels
         private static string? ValidateName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return  "Название не может быть пустым";
+                return null;
             else if (name.Length < 5)
                 return "Слишком короткое название";
             else
@@ -182,7 +200,7 @@ namespace AccountsReceivable.ViewModels
         private static string? ValidateShortName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return "Это обязательное поле";
+                return null;
             if (name.Length < 3)
                 return "Слишком короткое название";
             return null;

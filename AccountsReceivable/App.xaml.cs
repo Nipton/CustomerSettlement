@@ -1,8 +1,8 @@
 ﻿using AccountsReceivable.Data;
 using AccountsReceivable.Data.Interfaces;
 using AccountsReceivable.Data.Repositories;
+using AccountsReceivable.Helpers;
 using AccountsReceivable.Interfaces;
-using AccountsReceivable.Models;
 using AccountsReceivable.Services;
 using AccountsReceivable.View;
 using AccountsReceivable.ViewModels;
@@ -10,9 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace AccountsReceivable
 {
@@ -23,15 +22,10 @@ namespace AccountsReceivable
         {
             base.OnStartup(e);
 
-            using (var context = new ApplicationContext())
-            {
-                //context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-                context.Companies.Any();
-            }
             var services = new ServiceCollection();
 
-            services.AddDbContextFactory<ApplicationContext>(option => option.UseSqlite("Data Source=accounts.db"));
+            services.AddDbContextFactory<ApplicationContext>(option => option.UseSqlite(Constants.DATABASE_CONNECTION_STRING));   
+
             services.AddSingleton<IViewModelFactory, ViewModelFactory>();
 
             services.AddSingleton<ICompanyRepository, CompanyRepository>();
@@ -74,9 +68,28 @@ namespace AccountsReceivable
             services.AddTransient<PrintPreviewView>();
 
             Services = services.BuildServiceProvider();
-
+            WarmupDatabase(Services);
             var mainWindow = Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
-        }        
+        }
+        private void WarmupDatabase(IServiceProvider provider)
+        {
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    var factory = provider.GetRequiredService<IDbContextFactory<ApplicationContext>>();
+
+                    using var context = await factory.CreateDbContextAsync();
+                    await context.Database.MigrateAsync();
+                    await context.Companies.AsNoTracking().AnyAsync();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show( $"Не удалось инициализировать базу данных","Ошибка запуска",MessageBoxButton.OK,MessageBoxImage.Error);
+                    Current.Dispatcher.Invoke(() => Current.Shutdown());
+                }
+            });
+        }
     }
 }
