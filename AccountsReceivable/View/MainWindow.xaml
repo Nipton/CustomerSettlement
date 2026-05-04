@@ -26,8 +26,12 @@
                                          RelativeSource="{RelativeSource Self}"/>
                                     </MultiBinding>
                                 </DataTrigger.Binding>
-                                <Setter TargetName="PopupBorder" Property="Background" Value="#65247F"/>
-                                <Setter Property="Foreground" Value="#E567F2"/>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="0" Color="BlueViolet" BlurRadius="20" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="Purple"/>
                             </DataTrigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="PopupBorder" Property="Background" Value="#65247F"/>
