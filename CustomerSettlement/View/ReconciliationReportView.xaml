@@ -1,0 +1,131 @@
+﻿<UserControl x:Class="CustomerSettlement.View.ReconciliationReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:viewmodels="clr-namespace:CustomerSettlement.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:ReconciliationReportViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="660" d:DesignWidth="1280" Background="#E5D9EA" x:Name="reconciliationReportView">
+    <UserControl.Resources>
+        <Style x:Key="HeaderTextBox" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="20 0 10 0"/>
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource HeaderTextBox}">
+            <Setter Property="Margin" Value="30 0 10 10"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Margin=" 10 10 10 20">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="10"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Style="{StaticResource HeaderTextBox}" Text="Контрагент"/>
+            <ComboBox Grid.Column="1" x:Name="CompanyComboBox" Style="{StaticResource MainComboBox}" StaysOpenOnEdit="True" MinWidth="200" IsEditable="True"
+                      VerticalContentAlignment="Center" FontSize="15" FontWeight="SemiBold" 
+                      ItemsSource="{Binding Companies}" SelectedItem="{Binding SelectedCompany}" DisplayMemberPath="ShortName"/>
+            <TextBlock Style="{StaticResource HeaderTextBox}"  Grid.Row="2" Text="Договор"/>
+            <ComboBox Grid.Row="2" Grid.Column="1" StaysOpenOnEdit="True" MinWidth="200" VerticalContentAlignment="Center" FontSize="15" FontWeight="SemiBold"
+                      ItemsSource="{Binding Contracts}" SelectedItem="{Binding SelectedContract}" DisplayMemberPath="Number" >
+                <ComboBox.Style>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource MainComboBox}">
+                        <Setter Property="IsEnabled" Value="True"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedItem, ElementName=CompanyComboBox}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ComboBox.Style>
+            </ComboBox>
+            <StackPanel Orientation="Horizontal"  Grid.Column="2">
+                <TextBlock Style="{StaticResource HeaderTextBox}"  Text="Период"/>
+                <DatePicker SelectedDate="{Binding FromDate}" Style="{StaticResource CustomDatepiker}" CalendarStyle="{DynamicResource DatePickerCalendarStyle1}" MinWidth="120" VerticalAlignment="Center"  FontSize="15"/>
+                <TextBlock Text="─" Margin="10 0"/>
+                <DatePicker SelectedDate="{Binding ToDate}" Style="{StaticResource CustomDatepiker}" CalendarStyle="{DynamicResource DatePickerCalendarStyle1}" MinWidth="120" VerticalAlignment="Center" FontSize="15" />
+            </StackPanel>
+            <Button Grid.Column="2" Grid.Row="2" Content="🔄 Очистить фильтры" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Center" Command="{Binding ClearFormCommand}"/>
+            <Button Grid.Column="3" Grid.Row="0" Content="📝 Сформировать акт" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding GenerateReportCommand}"/>
+            <Button Grid.Column="3" Grid.Row="2" Content="🖨️ Печать" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding PrintReportCommand}"/>
+        </Grid>
+        <Border BorderThickness="0 0 0 3" BorderBrush="#50026E" VerticalAlignment="Bottom" Height="2"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="220" Width="1.2*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition MinWidth="220" Width="0.7*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition MinWidth="220" Width="1.2*"/>
+            </Grid.ColumnDefinitions>
+            <DockPanel>
+                <TextBlock Style="{StaticResource HeaderTextBox}"  DockPanel.Dock="Top" FontSize="19" Margin="0 5 0 10" TextAlignment="Center" Text="Дебет"/>
+                <DataGrid Margin="5" Style="{StaticResource MainDataGrid}" ItemsSource="{Binding AccountLines}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Дата" Binding="{Binding Period, StringFormat=d}" ElementStyle="{StaticResource WrapText}"/>
+                        <DataGridTextColumn Header="Номер" Binding="{Binding AccountHeaderId}" ElementStyle="{StaticResource WrapText}"/>
+                        <DataGridTextColumn Header="Договор" Binding="{Binding AccountHeader.Contract.Number}" ElementStyle="{StaticResource WrapText}"/>
+                        <DataGridTextColumn Header="Услуга" Binding="{Binding Nomenclature.Name}" ElementStyle="{StaticResource WrapText}" Width="*"/>
+                        <DataGridTextColumn Header="Сумма" Binding="{Binding AmountWithVat, StringFormat=N2}" ElementStyle="{StaticResource WrapText}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+            <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" Background="#E5D9EA"/>
+            <DockPanel Grid.Row="1" Grid.Column="2">
+                <TextBlock Style="{StaticResource HeaderTextBox}"  DockPanel.Dock="Top" FontSize="19" Margin="0 5 0 10" TextAlignment="Center" Text="Кредит"/>
+                <DataGrid Margin="5" Style="{StaticResource MainDataGrid}" ItemsSource="{Binding Payments}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Дата"  Binding="{Binding Date, StringFormat=d}" ElementStyle="{StaticResource WrapText}"/>
+                        <DataGridTextColumn Header="Номер" Binding="{Binding Number}" ElementStyle="{StaticResource WrapText}"/>
+                        <DataGridTextColumn Header="Сумма" Binding="{Binding Sum, StringFormat=N2}" ElementStyle="{StaticResource WrapText}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+            <GridSplitter Grid.Column="3" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" Background="#E5D9EA"/>
+            <Border Grid.Column="4" BorderBrush="#50026E" BorderThickness="1" CornerRadius="8" Margin="5 5 10 5"/>
+            <Grid Grid.Column="4">
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Style="{StaticResource HeaderTextBox}"  Grid.ColumnSpan="2" FontSize="19" Margin="0 5 0 18" TextAlignment="Center" Text="Сводка" VerticalAlignment="Top"/>
+                <TextBlock Grid.Row="1" Text="Сальдо на начало"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding OpeningBalance, StringFormat=c}"/>
+                <TextBlock Grid.Row="2" Text="Начислено"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding ChargedTotal, StringFormat=c}"/>
+                <TextBlock Grid.Row="3" Text="Оплачено"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding PaymentsTotal, StringFormat=c}"/>
+                <Border Grid.Row="3" Grid.ColumnSpan="2" Margin="5 0 10 0" BorderThickness="0 0 0 3" BorderBrush="#50026E" VerticalAlignment="Bottom" Height="1"/>
+                <TextBlock Grid.Row="4" Text="Сальдо на конец" Margin="30 0 10 2"/>
+                <TextBlock Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding ClosingBalance, StringFormat=c}"/>
+                <TextBlock Grid.Row="5" Text="Изменение"/>
+                <TextBlock Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Change, StringFormat=c}"/>
+                <TextBlock Grid.Row="6" Text="📅 Период"/>
+                <TextBlock Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Period}"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

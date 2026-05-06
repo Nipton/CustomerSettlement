@@ -1,0 +1,95 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             x:Class="CustomerSettlement.View.ContractView"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:helpers="clr-namespace:CustomerSettlement.Helpers"
+             xmlns:viewmodels="clr-namespace:CustomerSettlement.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:ContractViewModel}"             
+             mc:Ignorable="d" d:DesignHeight="660" d:DesignWidth="1280" Background="#E5D9EA" MouseDown="OnBackgroundClick"> 
+    <UserControl.Resources>   
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="15 0 10 0"/>
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid Margin="2 10 0 2" x:Name="c">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="355"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Row="0" Grid.ColumnSpan="5" BorderBrush="#50026E" BorderThickness="0 0 0 3" VerticalAlignment="Bottom" Height="2"/>
+        <StackPanel >
+            <TextBlock Text="Добавление"/>
+            <TextBlock HorizontalAlignment="Center" Text="договора"/>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Right" Grid.Column="1" >
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 10" HorizontalAlignment ="Right">
+                <TextBlock Text="Номер договора"/>
+                <TextBox x:Name="numberTextBlock" Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseTextBox}" Width="200" MaxLength="22" TextWrapping="NoWrap"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment ="Right">
+                <TextBlock Text="Дата"/>
+                <DatePicker Style="{StaticResource CustomDatepiker}" CalendarStyle="{DynamicResource DatePickerCalendarStyle1}" Width="200" 
+                            SelectedDate="{Binding Date}"
+                            Height="{Binding ActualHeight, ElementName=numberTextBlock, Mode=OneWay}" FontSize="15"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Column="2">
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 10" HorizontalAlignment ="Right">
+                <TextBlock Text="Предмет договора"/>
+                <ComboBox ItemsSource="{Binding Subjects}" SelectedItem="{Binding SelectedContractSubject}"
+                          Style="{DynamicResource MainComboBox}" Width="200" Height="26" FontSize="16" FontWeight="SemiBold">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment ="Right">
+                <TextBlock Text="Контрагент"/>
+                <ComboBox ItemsSource="{Binding Companies}" DisplayMemberPath="ShortName" SelectedItem="{Binding SelectedCompany}" Style="{DynamicResource MainComboBox}" 
+                          Width="200" Height="26" FontSize="16" FontWeight="SemiBold" IsEditable="True">
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Column="3"  Margin="30 0 5 0">
+            <StackPanel Height="35">
+                <Button Style="{StaticResource SecondaryButtonStyle}" Content="➕ Добавить" Command="{Binding AddContractCommand}"/>
+            </StackPanel>
+            <Button Style="{StaticResource SecondaryButtonStyle}" Content="🗑 Удалить" Command="{Binding RemoveContractCommand}"/>
+        </StackPanel>
+        <StackPanel Grid.Column="4"  Margin="0 0 5 0">
+            <StackPanel Height="35">
+                <Button Style="{StaticResource SecondaryButtonStyle}" Content="🔄 Обновить" Command="{Binding RefreshDataCommand}"/>
+            </StackPanel>
+        </StackPanel>
+        <DataGrid Margin="10" ItemsSource="{Binding Contracts}" x:Name="ContractDataGrid" 
+                  Grid.Row="1" Background="Transparent" Style="{StaticResource MainDataGrid}" Grid.ColumnSpan="5" HorizontalAlignment="Left" >
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Копировать" Command="Copy"/>
+                    <MenuItem Header="Удалить" Command="{Binding RemoveContractCommand}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Number}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Номер" Width="100"/>
+                <DataGridTextColumn Binding="{Binding ContractSubject, Converter={StaticResource EnumDisplayConverter}}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Предмет договора" Width="300"/>
+                <DataGridTextColumn Binding="{Binding Company.Name}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Контрагент" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Date, StringFormat='dd.MM.yyyy'}" ElementStyle="{StaticResource AlwaysWrapText}" Header="Дата" Width="120"/>
+            </DataGrid.Columns>
+            <i:Interaction.Behaviors>
+                <helpers:DataGridSelectedItemsBehavior SelectedItems="{Binding SelectedContracts, Mode=OneWayToSource}"/>
+            </i:Interaction.Behaviors>
+        </DataGrid>
+    </Grid>
+</UserControl>

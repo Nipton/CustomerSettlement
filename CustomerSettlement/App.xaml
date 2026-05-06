@@ -1,0 +1,48 @@
+﻿<Application x:Class="CustomerSettlement.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:CustomerSettlement" xmlns:vm="clr-namespace:CustomerSettlement.ViewModels" xmlns:views="clr-namespace:CustomerSettlement.View">
+    <Application.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Resources/ResourceDictionaryColors.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Resources/ResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type vm:OrganizationViewModel}">
+                <views:OrganizationView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ReportViewModel}">
+                <views:ReportView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:CompanyEditorViewModel}">
+                <views:CompanyEditorView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:CounterpartiesViewModel}">
+                <views:CounterpartiesView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:NomenclatureViewModel}">
+                <views:NomenclatureView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ContractViewModel}">
+                <views:ContractView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:AccountsJournalViewModel}">
+                <views:AccountsView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:AccountEditorViewModel}">
+                <views:AccountEditorView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:PaymentViewModel}">
+                <views:PaymentView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ReconciliationReportViewModel}">
+                <views:ReconciliationReportView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:PrintPreviewViewModel}">
+                <views:PrintPreviewView/>
+            </DataTemplate>
+        </ResourceDictionary>
+        
+    </Application.Resources>
+</Application>

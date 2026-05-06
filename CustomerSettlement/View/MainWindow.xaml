@@ -1,0 +1,150 @@
+﻿<Window x:Class="CustomerSettlement.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodels="clr-namespace:CustomerSettlement.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
+        mc:Ignorable="d" xmlns:enums="clr-namespace:CustomerSettlement.Models.Enums"
+        Title="Расчёты с покупателями" Height="720" Width="1280" MinHeight="350" MinWidth="760" WindowStartupLocation ="CenterScreen" Background="#E5D9EA" Language="ru-RU">
+    <Window.Resources>
+        <Style x:Key="PopupButton" TargetType="Button">
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Foreground" Value="#16061C"/>
+            <Setter Property="MinHeight" Value="42"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="PopupBorder" Background="Transparent">
+                            <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource PageTypeToBooleanConverter}">
+                                        <Binding Path="DataContext.CurrentPageType" 
+                                         RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                        <Binding Path="Tag" 
+                                         RelativeSource="{RelativeSource Self}"/>
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="0" Color="BlueViolet" BlurRadius="20" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="Purple"/>
+                            </DataTrigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="PopupBorder" Property="Background" Value="#65247F"/>
+                                <Setter Property="Foreground" Value="#D87EFC"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="HeaderButtons" TargetType="Button">
+            <Grid Name="Btn" Margin="8 0 8 0">
+                <Border>
+                    <Grid>
+                        <Label Content="{TemplateBinding Content}" Background="Transparent" VerticalAlignment="Center" FontSize="23"  >
+                            <Label.Style>
+                                <Style TargetType="Label">
+                                    <Setter Property="Foreground" Value="#16061C"/>
+                                    <Style.Triggers>
+
+                                        <DataTrigger Value="True">
+                                            <DataTrigger.Binding>
+                                                <MultiBinding Converter="{StaticResource PageTypeToBooleanConverter}">
+                                                    <Binding Path="DataContext.CurrentPageType" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                                    <Binding Path="Tag" RelativeSource="{RelativeSource AncestorType=Button}"/>
+                                                </MultiBinding>
+                                            </DataTrigger.Binding>
+                                            <Setter Property="Effect">
+                                                <Setter.Value>
+                                                    <DropShadowEffect ShadowDepth="0" Color="BlueViolet" BlurRadius="20" />
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="Foreground" Value="#E567F2"/>
+                                        </DataTrigger>
+                                        
+                                        <DataTrigger Binding="{Binding ElementName=Btn, Path=IsMouseOver}" Value="true">
+                                            <Setter Property="Foreground" Value="#C197D2"/>
+                                            <Setter Property="Cursor" Value="Hand"/>
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=IsPressed}" Value="true">
+                                            <Setter Property="Foreground" Value="#8C6D98"/>
+                                        </DataTrigger>
+                                        
+                                    </Style.Triggers>
+                                </Style>
+                            </Label.Style>
+                        </Label>
+                    </Grid>
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource 
+                                            Mode=FindAncestor,
+                                            AncestorType={x:Type Button}},
+                                            Path = IsPressed}" Value="true">
+                                    <Setter Property="Margin" Value="0,2,0,0"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.Background>
+                <LinearGradientBrush  StartPoint="0.5,0" EndPoint="0.5,1">
+                    <GradientStop Color= "#50026E" Offset="0" />
+                    <GradientStop Color="#B564D4" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <StackPanel x:Name="Header" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowOrganizationViewCommand}" Tag="{x:Static enums:PageType.Organization}">Организация</Button>
+                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowAccointsViewCommand}" Tag="{x:Static enums:PageType.Accounts}">Счета</Button>
+                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReportViewCommand}" Tag="{x:Static enums:PageType.Report}">Отчет</Button>
+                <Button Content="Акт сверки" Template="{StaticResource ResourceKey=HeaderButtons}" Command="{Binding ShowReconciliationViewCommand}" Tag="{x:Static enums:PageType.Reconciliation}"/>
+                <Button Template="{StaticResource ResourceKey=HeaderButtons}" Name="ReferencesButton" Command="{Binding ToggleReferencesCommand}" Content="Справочники">
+                    <Button.Tag>
+                        <x:Array Type="{x:Type enums:PageType}">
+                            <x:Static Member="enums:PageType.Counterparties"/>
+                            <x:Static Member="enums:PageType.Contract"/>
+                            <x:Static Member="enums:PageType.Nomenclature"/>
+                        </x:Array>
+                    </Button.Tag>
+                </Button>
+                <Popup x:Name="popup"  MaxWidth="180" StaysOpen="False" IsOpen="{Binding IsDropdownOpen}"
+                    AllowsTransparency="True" Placement="Bottom" PlacementTarget="{Binding ElementName=ReferencesButton}">
+                    <StackPanel x:Name="st"   HorizontalAlignment="Center" Width="175">
+                        <StackPanel.Background>
+                            <LinearGradientBrush  StartPoint="0.5,0" EndPoint="0.5,1">
+                                <GradientStop Color= "#B564D4" Offset="0" />
+                                <GradientStop Color="#F5DCFF" Offset="1" />
+                            </LinearGradientBrush>
+                        </StackPanel.Background>
+                        <Button Style="{StaticResource PopupButton}" Command="{Binding ShowCounterpartyViewCommand}" Tag="{x:Static enums:PageType.Counterparties}">Контрагенты</Button>
+                        <Button Style="{StaticResource PopupButton}" Command="{Binding ShowContractViewCommand}" Tag="{x:Static enums:PageType.Contract}">Договоры</Button>
+                        <Button Style="{StaticResource PopupButton}" Command="{Binding ShowNomenclatureViewCommand}" Tag="{x:Static enums:PageType.Nomenclature}">Номенклатура</Button>
+                    </StackPanel>
+                </Popup>
+            </StackPanel>
+        </Grid>
+        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}"/>
+    </Grid>
+</Window>

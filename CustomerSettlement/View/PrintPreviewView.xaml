@@ -1,0 +1,34 @@
+﻿<Window x:Class="CustomerSettlement.View.PrintPreviewView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:viewmodels="clr-namespace:CustomerSettlement.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:PrintPreviewViewModel}"
+        mc:Ignorable="d"
+        Title="PrintPreviewView" Height="900"  Width="1000" Language="ru-RU" WindowStartupLocation ="CenterScreen" >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <wv2:WebView2 x:Name="Browser" Grid.Row="0" Height="Auto"/>
+        <Border BorderThickness="0" Grid.Row="1" Background="#E5D9EA"/>
+        <Grid Grid.Row="1" Margin=" 15"  x:Name="ButtonsGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+                <Button Command="{Binding CloseCommand}" Style="{StaticResource PrimaryButtonStyle}" Content="Закрыть"/>
+                <Button Style="{StaticResource PrimaryButtonStyle}" Content="Печать" Margin="10 0 10 0" Click="Print_Click"/>
+                <Button Style="{StaticResource PrimaryButtonStyle}" Content="Сохранить PDF" Click="SavePdf_Click"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Style="{StaticResource SecondaryButtonStyle}" Content="➖" Margin="5 0" Click="ZoomOut_Click"/>
+                <TextBlock x:Name="zoomTextBlock" Text="100%" FontSize="15" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" MouseLeftButtonUp="ResetZoomTextBlock"/>
+                <Button Style="{StaticResource SecondaryButtonStyle}" Content="➕" Margin="5 0" Click="ZoomIn_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

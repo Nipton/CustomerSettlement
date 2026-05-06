@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="CustomerSettlement.View.CounterpartiesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:helpers="clr-namespace:CustomerSettlement.Helpers"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:viewmodels="clr-namespace:CustomerSettlement.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:CounterpartiesViewModel}"
+             mc:Ignorable="d"
+             d:DesignHeight="660" d:DesignWidth="1280" Background="White">
+    <Grid  MouseDown="OnBackgroundClick">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <DockPanel Background="#E5D9EA">
+            <Button Style="{StaticResource SecondaryButtonStyle}" Command="{Binding AddCompanyCommand}">➕ Добавить</Button>
+            <Button Style="{StaticResource SecondaryButtonStyle}" Command="{Binding EditCompanyCommand}">✏️ Редактировать</Button>
+            <Button Style="{StaticResource SecondaryButtonStyle}" Command="{Binding RemoveCompaniesCommand}">🗑 Удалить</Button>
+            <Button Style="{StaticResource SecondaryButtonStyle}" Command="{Binding RefreshCompaniesCommand}">🔄 Обновить</Button>
+            <Grid>
+                <TextBox Style="{StaticResource SearchTextBox}" Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                     HorizontalAlignment="Right" Margin="0 0 40 0"  Width="170" />
+            </Grid>
+        </DockPanel>
+        <DataGrid Margin="0" x:Name="CompaniesGrid"  Grid.Row="1" Style="{StaticResource MainDataGrid}" ItemsSource="{Binding CompaniesView}">
+            <DataGrid.ContextMenu>
+                <ContextMenu Name="DataGridContextMenu">
+                    <MenuItem Header="Копировать" Command="Copy"></MenuItem>
+                    <MenuItem Header="Редактировать" Command="{Binding EditCompanyCommand}" ></MenuItem>
+                    <MenuItem Header="Обновить" Command="{Binding RefreshCompaniesCommand}" ></MenuItem>
+                    <MenuItem Header="Удалить" Command="{Binding RemoveCompaniesCommand}" ></MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Id}" ElementStyle="{StaticResource WrapText}" Header="ID"/>
+                <DataGridTextColumn Binding="{Binding Path=Name}" ElementStyle="{StaticResource WrapText}" Header="Наименование" Width="250"/>
+                <DataGridTextColumn Binding="{Binding Path=ShortName}" ElementStyle="{StaticResource WrapText}" Header="Краткое наименование" Width="190"/>
+                <DataGridTextColumn Binding="{Binding Path=Inn}" ElementStyle="{StaticResource WrapText}" Header="ИНН"/>
+                <DataGridTextColumn Binding="{Binding Path=Kpp}" ElementStyle="{StaticResource WrapText}" Header="КПП"/>
+                <DataGridTextColumn Binding="{Binding Path=LegalAddress}" ElementStyle="{StaticResource WrapText}" Header="Юр. адрес" Width="200"/>
+                <DataGridTextColumn Binding="{Binding Path=ActualAddress}" ElementStyle="{StaticResource WrapText}" Header="Физ. адрес" Width="200"/>
+                <DataGridTextColumn Binding="{Binding Path=Category, Converter={StaticResource EnumDisplayConverter}}" ElementStyle="{StaticResource WrapText}" Header="Категория" Width="150"/>
+                <DataGridTextColumn Binding="{Binding Path=Ogrn}" ElementStyle="{StaticResource WrapText}" Header="ОГРН"/>
+                <DataGridTextColumn Binding="{Binding Path=Bank}" ElementStyle="{StaticResource WrapText}" Header="Банк" Width="200"/>
+                <DataGridTextColumn Binding="{Binding Path=Rs}" ElementStyle="{StaticResource WrapText}" Header="р/с"/>
+                <DataGridTextColumn Binding="{Binding Path=Bik}" ElementStyle="{StaticResource WrapText}" Header="БИК"/>
+                <DataGridTextColumn Binding="{Binding Ks}" ElementStyle="{StaticResource WrapText}" Header="к/с"/>
+                <DataGridTextColumn Binding="{Binding Path=Phone}" ElementStyle="{StaticResource WrapText}" Header="Телефон"/>
+                <DataGridTextColumn Binding="{Binding Path=Position}" ElementStyle="{StaticResource WrapText}" Header="Должность" Width="200"/>
+                <DataGridTextColumn Binding="{Binding Path=DirectorFullName}" ElementStyle="{StaticResource WrapText}" Header="ФИО" MaxWidth="300" Width="200"/>
+            </DataGrid.Columns>
+            <i:Interaction.Behaviors>
+                <helpers:DataGridSelectedItemsBehavior SelectedItems="{Binding SelectedItems, Mode=OneWayToSource}"/>
+            </i:Interaction.Behaviors>
+        </DataGrid>
+    </Grid>
+</UserControl>
